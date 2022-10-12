@@ -1,9 +1,3 @@
-#NoEnv
-#SingleInstance, Force
-SendMode, Input
-SetBatchLines, -1
-SetWorkingDir, %A_ScriptDir%
-
 #1::moveToWorkspace(1)
 #2::moveToWorkspace(2)
 #3::moveToWorkspace(3)

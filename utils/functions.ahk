@@ -1,9 +1,3 @@
-#NoEnv
-#SingleInstance, Force
-SendMode, Input
-SetBatchLines, -1
-SetWorkingDir, %A_ScriptDir%
-
 Print(string){
     ToolTip `n%string%
 }

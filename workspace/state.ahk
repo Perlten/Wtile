@@ -1,9 +1,3 @@
-#NoEnv
-#SingleInstance, Force
-SendMode, Input
-SetBatchLines, -1
-SetWorkingDir, %A_ScriptDir%
-
 workspaceList := { 1: {lastWindow: 0, currentWindowIndex: 1, windowList: []}
 ,2: {lastWindow: 0, currentWindowIndex: 1, windowList: []}
 ,3: {lastWindow: 0, currentWindowIndex: 1, windowList: []}
