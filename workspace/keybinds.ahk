@@ -37,3 +37,5 @@
 !+7::changeWindowOrder(7)
 !+8::changeWindowOrder(8)
 !+9::changeWindowOrder(9)
+
+#Tab::switchToLastWorkspace()

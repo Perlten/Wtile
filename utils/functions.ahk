@@ -54,3 +54,8 @@ switchPlaceInArray(array, indexA, indexB){
     array[indexA] := array[indexB]
     array[indexB] := temp
 }
+
+switchToLastWorkspace(){
+    global lastWorkspace
+    moveToWorkspace(lastWorkspace)
+}
