@@ -1,0 +1,45 @@
+#NoEnv
+#SingleInstance, Force
+SendMode, Input
+SetBatchLines, -1
+SetWorkingDir, %A_ScriptDir%
+
+#1::moveToWorkspace(1)
+#2::moveToWorkspace(2)
+#3::moveToWorkspace(3)
+#4::moveToWorkspace(4)
+#5::moveToWorkspace(5)
+#6::moveToWorkspace(6)
+#7::moveToWorkspace(7)
+#8::moveToWorkspace(8)
+#9::moveToWorkspace(9)
+
+#+1::addWindowToWorkspace(1)
+#+2::addWindowToWorkspace(2)
+#+3::addWindowToWorkspace(3)
+#+4::addWindowToWorkspace(4)
+#+5::addWindowToWorkspace(5)
+#+6::addWindowToWorkspace(6)
+#+7::addWindowToWorkspace(7)
+#+8::addWindowToWorkspace(8)
+#+9::addWindowToWorkspace(9)
+
+!1::switchToWindow(1)
+!2::switchToWindow(2)
+!3::switchToWindow(3)
+!4::switchToWindow(4)
+!5::switchToWindow(5)
+!6::switchToWindow(6)
+!7::switchToWindow(7)
+!8::switchToWindow(8)
+!9::switchToWindow(9)
+
+!+1::changeWindowOrder(1)
+!+2::changeWindowOrder(2)
+!+3::changeWindowOrder(3)
+!+4::changeWindowOrder(4)
+!+5::changeWindowOrder(5)
+!+6::changeWindowOrder(6)
+!+7::changeWindowOrder(7)
+!+8::changeWindowOrder(8)
+!+9::changeWindowOrder(9)
