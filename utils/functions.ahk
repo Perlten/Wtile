@@ -59,3 +59,9 @@ switchToLastWorkspace(){
     global lastWorkspace
     moveToWorkspace(lastWorkspace)
 }
+
+switchIcon(index){
+    pathToIcon := A_ScriptDir "\icons\icon" index ".ico"
+    IfExist, %pathToIcon%
+        Menu, Tray, Icon, %pathToIcon%
+}

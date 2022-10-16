@@ -14,3 +14,5 @@ currentWorkspace := 1
 Gui, +LastFound
 DllCall("RegisterShellHookWindow", UInt,WinExist())
 OnMessage(DllCall("RegisterWindowMessage", Str,"SHELLHOOK"), "windowAlteration")
+
+switchIcon(1)

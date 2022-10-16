@@ -19,6 +19,7 @@ moveToWorkspace(toWorkspace){
         changeCurrentWindowToFirstAvailable(workspace)
     }
 
+    switchIcon(toWorkspace)
     activateCurrentWindow()
 }
 
