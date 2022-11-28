@@ -21,6 +21,7 @@ moveToWorkspace(toWorkspace){
 
     switchIcon(toWorkspace)
     activateCurrentWindow()
+    renderGui()
 }
 
 activateCurrentWindow(){
@@ -52,6 +53,7 @@ changeCurrentWindowToFirstAvailable(ByRef workspace){
             return windowList[index]
         }
     }
+    renderGui()
 }
 windowAlteration(wParam, lParam){
     global currentWorkspace
@@ -70,6 +72,7 @@ windowAlteration(wParam, lParam){
         }
 
         addWindowToWorkspace(currentWorkspace, lParam)
+        renderGui()
     }
 
     if (wParam == 2) { ; 2 == window deleted
@@ -80,6 +83,7 @@ windowAlteration(wParam, lParam){
         if (lParam == currentWindowID){
             changeCurrentWindowToFirstAvailable(workspace)
         }
+        renderGui()
     }
 
 }
@@ -124,11 +128,13 @@ addWindowToWorkspace(workspaceIndex, windowId := ""){
         ; set current window to be the new window just created
         workspace["currentWindowIndex"] := workspace["windowList"].MaxIndex()
     }
+    renderGui()
 }
 
 activateWindow(windowID){
     WinActivate, ahk_id %windowID%
     centerMouseOnActiveWindow()
+    renderGui()
 }
 
 getCurrentWindow() {
@@ -141,6 +147,7 @@ switchToWindow(index){
 
     if (workspace["currentWindowIndex"] == index) {
         activateCurrentWindow()
+        renderGui()
         return
     }
 
@@ -156,6 +163,7 @@ switchToWindow(index){
 
     activateWindow(toSwitchId)
     workspace["currentWindowIndex"] := index
+    renderGui()
 
     return
 }
@@ -170,4 +178,10 @@ changeWindowOrder(newIndex) {
 
     index := getIndexInArray(windowList, currentWindowId)
     switchPlaceInArray(windowList, index, newIndex)
+    renderGui()
+}
+
+getWorkspaceIndex(){
+    global currentWorkspace
+    return currentWorkspace
 }

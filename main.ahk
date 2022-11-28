@@ -8,6 +8,7 @@ SetWorkingDir, %A_ScriptDir%
 startGui()
 
 #Persistent
+SetTimer, setOnTop, 16
 
 #Include, workspace/state.ahk
 
