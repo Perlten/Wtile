@@ -4,6 +4,9 @@ SendMode, Input
 SetBatchLines, -1
 SetWorkingDir, %A_ScriptDir%
 
+#Include, gui/main.ahk
+startGui()
+
 #Persistent
 
 #Include, workspace/state.ahk
