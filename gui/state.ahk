@@ -1,0 +1,2 @@
+hideGui := false
+guiHidden := false

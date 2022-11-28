@@ -1,9 +1,3 @@
-#NoEnv
-#SingleInstance, Force
-SendMode, Input
-SetBatchLines, -1
-SetWorkingDir, %A_ScriptDir%
-
 startGui(){
     Gui, +toolwindow +LabelTaskbar -caption +alwaysontop -dpiscale +Resize
     Gui, color , 000000
@@ -65,6 +59,14 @@ wCal(title,fSize=10) {											; use title/font size
     Return "w"width
 }
 
-setOnTop(){
+guiTick(){
+    global guiHidden
+    if(hideGui) {
+        Gui, Hide
+        guiHidden := true
+    }else if(guiHidden) {
+        Gui, Show
+        guiHidden := false
+    }
     WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
 }
