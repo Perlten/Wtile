@@ -30,7 +30,7 @@ renderGui(){
         if (v == "") {
             Continue
         }
-        windowStr := windowStr . k ": " v " "
+        windowStr := windowStr . k ": " v " / " 
     }
 
     currentWorkspaceIndex := getWorkspaceIndex()
