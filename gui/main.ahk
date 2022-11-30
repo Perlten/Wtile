@@ -5,8 +5,9 @@ startGui(){
     Gui, Font, S10 Cffffff
     addLabel("Main", "")
 
-    startY := A_ScreenHeight - 50
-    Gui, show, x0 y%startY%, WtileGui
+    startY := A_ScreenHeight - 40
+    startX := 0 - 20
+    Gui, show, x%startX% y%startY%, WtileGui
     WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
     OnMessage(0x201,"WM_LBUTTONDOWN")
 }
@@ -68,5 +69,8 @@ guiTick(){
         Gui, Show
         guiHidden := false
     }
-    WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
+
+    if (not guiHidden) {
+        WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
+    }
 }
