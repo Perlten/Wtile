@@ -8,4 +8,4 @@
 
 
 ## Bugs
-For some reason Terminal created to windows inside a workspace
+- [ ] For some reason Terminal created to windows inside a workspace
