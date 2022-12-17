@@ -17,6 +17,7 @@ startGui(){
 }
 
 renderGui(){
+    global cpuStr, ramStr
     workspace := getCurrentWorkspace()
     windowList := workspace.windowList
 
@@ -41,9 +42,14 @@ renderGui(){
     currentWindowIndex := workspace.currentWindowIndex
 
     leftString = Workspace: %currentWorkspaceIndex% | Window: %currentWindowIndex% | %windowStr%
+    ; --------- Right align
+
+    SoundGet, masterVolume
+    masterVolume := Floor(masterVolume)
+    soundString = Volume: %masterVolume%/100
 
     timeString = %A_DDD% - %A_DD%/%A_MM%/%A_YYYY% - %A_Hour%:%A_Min%:%A_Sec%
-    rightString = %timeString%
+    rightString = %cpuStr% | %ramStr% | %soundString% | %timeString%
 
     updateTextGui(leftString, "LMain", "left")
     updateTextGui(rightString, "RMain", "right")
@@ -58,7 +64,7 @@ updateTextGui(str, guiID, align="left"){
         strWidth := wCal(str, true)
         Gui, +LastFound
         WinGetPos,x,y,w,h
-        offset := w - strWidth + 30
+        offset := w - strWidth -30
         GuiControl, move, %guiID%, w%strWidth% x%offset%
     }
 }
@@ -76,14 +82,26 @@ WM_LBUTTONDOWN(wParam,lParam,msg,hwnd){
 wCal(title, asNumber) {											; use title/font size
     global fontSize
     t := StrSplit(title,A_Space)							; get number of space characters
-    Loop, Parse, title										; get number of characters
-        width := (fontSize/1.3*A_Index) + fontSize*1.3-t.Length()	; doing some "math" (far from being exact, just t&e)
+    StringLen, titleLength, title
+    width := (fontSize/1.5*titleLength) + fontSize*1.5-t.Length()	; doing some "math" (far from being exact, just t&e)
     width := width * (A_ScreenDPI / 100) ; needs to scale with dpi
     if (asNumber == true) {
         return width
     }
     Return "w"width
 }
+
+; wCal(title, asNumber) {											; use title/font size
+;     global fontSize
+;     t := StrSplit(title,A_Space)							; get number of space characters
+;     Loop, Parse, title										; get number of characters
+;         width := (fontSize/1.3*A_Index) + fontSize*1.3-t.Length()	; doing some "math" (far from being exact, just t&e)
+;     width := width * (A_ScreenDPI / 100) ; needs to scale with dpi
+;     if asNumber {
+;         return width
+;     }
+;     return "w"width
+; }
 
 guiTick(){
     global guiHidden, fontSize
@@ -151,4 +169,38 @@ saveGuiSettings() {
     jf.startH := h
     jf.startW := w
     jf.Save(Prettify := true)
+}
+
+updateSystemInformation(){
+    updateCpuStr()
+    updateRamStr()
+}
+
+updateCpuStr() {
+    global cpuStr
+    Static PIT, PKT, PUT ;
+    IfEqual, PIT,, Return 0, DllCall( "GetSystemTimes", "Int64P",PIT, "Int64P",PKT, "Int64P",PUT )
+
+    DllCall( "GetSystemTimes", "Int64P",CIT, "Int64P",CKT, "Int64P",CUT )
+        , IdleTime := PIT - CIT, KernelTime := PKT - CKT, UserTime := PUT - CUT
+        , SystemTime := KernelTime + UserTime
+
+    load := ( ( SystemTime - IdleTime ) * 100 ) // SystemTime, PIT := CIT, PKT := CKT, PUT := CUT
+
+    if (load){
+        cpuStr := "CPU: " . load . "%"
+    }
+}
+
+updateRamStr() {
+    global ramStr
+    static MSEX, init := NumPut(VarSetCapacity(MSEX, 64, 0), MSEX, "uint")
+    if !(DllCall("GlobalMemoryStatusEx", "ptr", &MSEX))
+        throw Exception("Call to GlobalMemoryStatusEx failed: " A_LastError, -1)
+
+    ; get ram usage in mb
+    totalPhys := NumGet(MSEX, 8, "uint64") / 1000000
+    availPhys := NumGet(MSEX, 16, "uint64") / 1000000
+    ramUsage := { availPhys: Floor(availPhys), totalPhys: Floor(totalPhys) }
+    ramStr := "RAM: " . ramUsage["availPhys"] . "/" . ramUsage["totalPhys"] . " MB"
 }

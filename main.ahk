@@ -18,6 +18,7 @@ SetWorkingDir, %A_ScriptDir%
 loadGuiSettings()
 startGui()
 SetTimer, guiTick, 500
+SetTimer, updateSystemInformation, 5000
 
 return
 
