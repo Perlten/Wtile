@@ -14,5 +14,15 @@ return
 return
 
 #^3::
+    global resizeEnable
+    resizeEnable := !resizeEnable
+    if resizeEnable {
+        Gui +Resize
+    }else {
+        Gui -Resize
+    }
+return
+
+#^0::
     saveGuiSettings()
 return

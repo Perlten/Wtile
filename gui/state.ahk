@@ -1,6 +1,7 @@
 hideGui := false
 guiHidden := false
 fontSize := 15
+resizeEnable := true
 
 startX := 0
 startY := 0

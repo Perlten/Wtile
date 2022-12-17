@@ -1,11 +1,12 @@
 startGui(){
-    global fontSize, startX, startY, startW, startH
-    Gui, +toolwindow +LabelTaskbar -caption +alwaysontop -dpiscale +Resize
+    global fontSize, startX, startY, startW, startH, resizeEnable
+    Gui, +E0x02000000 +E0x00080000 +toolwindow +LabelTaskbar -caption +alwaysontop -dpiscale +Resize
+
     Gui, color , 000000
 
     Gui, Font, S%fontSize% Cffffff
-    addLabel("LMain", "hsjdsad")
-    addLabel("RMain", "hjejk med asgi")
+    addLabel("LMain", "")
+    addLabel("RMain", "")
 
     startW := startW - 16 ; For some reason it adds 16 every time the programs starts
     startH := startH - 16
@@ -14,6 +15,10 @@ startGui(){
     WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
     OnMessage(0x201,"WM_LBUTTONDOWN")
     renderGui()
+
+    if !resizeEnable {
+        Gui -Resize
+    }
 }
 
 renderGui(){
@@ -91,18 +96,6 @@ wCal(title, asNumber) {											; use title/font size
     Return "w"width
 }
 
-; wCal(title, asNumber) {											; use title/font size
-;     global fontSize
-;     t := StrSplit(title,A_Space)							; get number of space characters
-;     Loop, Parse, title										; get number of characters
-;         width := (fontSize/1.3*A_Index) + fontSize*1.3-t.Length()	; doing some "math" (far from being exact, just t&e)
-;     width := width * (A_ScreenDPI / 100) ; needs to scale with dpi
-;     if asNumber {
-;         return width
-;     }
-;     return "w"width
-; }
-
 guiTick(){
     global guiHidden, fontSize
     if(hideGui) {
@@ -124,7 +117,7 @@ guiTick(){
 }
 
 loadGuiSettings() {
-    global fontSize, startX, startY, startH, startW
+    global fontSize, startX, startY, startH, startW, resizeEnable
 
     EnvGet, homedrive, homedrive
     EnvGet, homepath, homepath
@@ -137,6 +130,7 @@ loadGuiSettings() {
         startY := 0
         startW := 100
         startH := 30
+        resizeEnable := true
     } else {
         jf := new JSONFile(path)
         fontSize := jf.fontSize
@@ -144,11 +138,12 @@ loadGuiSettings() {
         startY := jf.startY
         startW := jf.startW
         startH := jf.startH
+        resizeEnable := jf.resizeEnable
     }
 }
 
 saveGuiSettings() {
-    global fontSize
+    global fontSize, resizeEnable
 
     EnvGet, homedrive, homedrive
     EnvGet, homepath, homepath
@@ -164,6 +159,7 @@ saveGuiSettings() {
     path := homedrive homepath "\.wtile\settings.json"
     jf := new JSONFile(path)
     jf.fontSize := fontSize
+    jf.resizeEnable := resizeEnable
     jf.startX := x
     jf.startY := y
     jf.startH := h
