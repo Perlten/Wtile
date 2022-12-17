@@ -4,14 +4,16 @@ startGui(){
     Gui, color , 000000
 
     Gui, Font, S%fontSize% Cffffff
-    addLabel("Main", "")
+    addLabel("LMain", "hsjdsad")
+    addLabel("RMain", "hjejk med asgi")
 
-    startW := startW - 16
+    startW := startW - 16 ; For some reason it adds 16 every time the programs starts
     startH := startH - 16
 
     Gui, show, w%startW% h%startH% x%startX% y%startY%, WtileGui
     WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
     OnMessage(0x201,"WM_LBUTTONDOWN")
+    renderGui()
 }
 
 renderGui(){
@@ -38,28 +40,48 @@ renderGui(){
     currentWorkspaceIndex := getWorkspaceIndex()
     currentWindowIndex := workspace.currentWindowIndex
 
-    str = Workspace: %currentWorkspaceIndex% | Window: %currentWindowIndex% | %windowStr%
-    GuiControl, Text, Main, %str%
-    strWidth := wCal(str)
-    GuiControl, move, Main, %strWidth% h1000
+    leftString = Workspace: %currentWorkspaceIndex% | Window: %currentWindowIndex% | %windowStr%
+
+    timeString = %A_DDD% - %A_DD%/%A_MM%/%A_YYYY% - %A_Hour%:%A_Min%:%A_Sec%
+    rightString = %timeString%
+
+    updateTextGui(leftString, "LMain", "left")
+    updateTextGui(rightString, "RMain", "right")
+}
+
+updateTextGui(str, guiID, align="left"){
+    GuiControl, Text, %guiID%, %str%
+    if (align == "left") {
+        strWidth := wCal(str, false)
+        GuiControl, move, %guiID%, %strWidth%
+    }else if (align == "right") {
+        strWidth := wCal(str, true)
+        Gui, +LastFound
+        WinGetPos,x,y,w,h
+        offset := w - strWidth + 30
+        GuiControl, move, %guiID%, w%strWidth% x%offset%
+    }
 }
 
 addLabel(labelID, labelText = ""){
     global
     labelID := "v" . labelID
-    Gui, Add, Text, %labelID%, %labelText%
+    Gui, Add, Text, y8 %labelID%, %labelText%
 }
 
 WM_LBUTTONDOWN(wParam,lParam,msg,hwnd){
     PostMessage, 0xA1, 2
 }
 
-wCal(title,fSize=10) {											; use title/font size
+wCal(title, asNumber) {											; use title/font size
     global fontSize
     t := StrSplit(title,A_Space)							; get number of space characters
     Loop, Parse, title										; get number of characters
-        width := (fontSize/1.3*A_Index) + fSize*1.3-t.Length()	; doing some "math" (far from being exact, just t&e)
+        width := (fontSize/1.3*A_Index) + fontSize*1.3-t.Length()	; doing some "math" (far from being exact, just t&e)
     width := width * (A_ScreenDPI / 100) ; needs to scale with dpi
+    if (asNumber == true) {
+        return width
+    }
     Return "w"width
 }
 
@@ -76,7 +98,10 @@ guiTick(){
     if (not guiHidden) {
         WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
         Gui, Font, s%fontSize%
-        GuiControl, Font, Main
+        GuiControl, Font, LMain
+        GuiControl, Font, RMain
+
+        renderGui()
     }
 }
 

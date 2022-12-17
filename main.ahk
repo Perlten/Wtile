@@ -17,7 +17,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include, gui/main.ahk
 loadGuiSettings()
 startGui()
-SetTimer, guiTick, 16
+SetTimer, guiTick, 500
 
 return
 
