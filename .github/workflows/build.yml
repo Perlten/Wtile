@@ -21,7 +21,7 @@ jobs:
           in: main.ahk
           out: wtile.exe
       
-      - name: Ahk2Exe Main
+      - name: Ahk2Exe Setup
         uses: nekocodeX/GitHub-Action-Ahk2Exe@main
         with:
           in: Setup.ahk
