@@ -21,13 +21,15 @@ jobs:
           in: main.ahk
           out: wtile.exe
       
-      - name: Ps2Exe
+      - name: Install Ps2Exe
         shell: pwsh
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module ps2exe 
-          Import-Module -Name C:\Users\runneradmin\Documents\PowerShell\Modules\ps2exe
-          ps2exe -inputFile .\Setup.ps1 -outputFile .\Setup.exe
+        
+      - name: Run Ps2Exe
+        shell: pwsh
+        run: ps2exe -inputFile .\Setup.ps1 -outputFile .\Setup.exe
 
       - name: Release
         uses: softprops/action-gh-release@v1
