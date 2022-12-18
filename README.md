@@ -5,6 +5,7 @@
 - [ ] Control scroll speeds (windows-utils)
 - [x] Alt tab for windows switch (rebind req alt tab to alt + q or something)
 - [ ] Deploy to winget
+- [ ] Pull out always on top from guitick and run at more
 
 
 ## Bugs
