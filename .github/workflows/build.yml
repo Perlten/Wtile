@@ -20,10 +20,18 @@ jobs:
         with:
           in: main.ahk
           out: wtile.exe
+      
+      - name: Ps2Exe
+        shell: pwsh
+        run: |
+          Install-Module ps2exe
+          ps2exe .\Setup.ps1 .\Setup.exe
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: wtile.exe
+          files: |
+           wtile.exe
+           Setup.exe
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
