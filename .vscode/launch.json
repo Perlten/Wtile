@@ -10,6 +10,13 @@
             "name": "AutoHotkey Debugger",
             "program": "${workspaceFolder}/main.ahk",
             "stopOnEntry": true
+        },
+        {
+            "type": "ahk",
+            "request": "launch",
+            "name": "Debug Setup",
+            "program": "${workspaceFolder}/Setup.ahk",
+            "stopOnEntry": false
         }
     ]
 }

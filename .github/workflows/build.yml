@@ -15,21 +15,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Ahk2Exe
+      - name: Ahk2Exe Main
         uses: nekocodeX/GitHub-Action-Ahk2Exe@main
         with:
           in: main.ahk
           out: wtile.exe
       
-      - name: Install Ps2Exe
-        shell: pwsh
-        continue-on-error: true
-        run: |
-          Set-PSRepository PSGallery -InstallationPolicy Trusted
-          Install-Module ps2exe 
-          Get-Module  ps2exe -ListAvailable
-          ps2exe -inputFile .\Setup.ps1 -outputFile .\Setup.exe
-
+      - name: Ahk2Exe Main
+        uses: nekocodeX/GitHub-Action-Ahk2Exe@main
+        with:
+          in: Setup.ahk
+          out: Setup.exe
+      
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
