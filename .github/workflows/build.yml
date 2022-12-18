@@ -23,6 +23,7 @@ jobs:
       
       - name: Install Ps2Exe
         shell: pwsh
+        continue-on-error: true
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module ps2exe 
