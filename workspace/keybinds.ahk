@@ -39,3 +39,6 @@
 !+9::changeWindowOrder(9)
 
 #Tab::switchToLastWorkspace()
+!+w::removeWindowFromWorkspace()
+!Tab::switchToLastWindow()
+LAlt & q::AltTab

@@ -101,7 +101,7 @@ addWindowToWorkspace(workspaceIndex, windowId := ""){
         windowList := workspace["windowList"]
         for j, currentWindowId in windowList {
             if (currentWindowId == windowId){
-                windowList.Remove(j)
+                windowList.RemoveAt(j)
                 newWindowID := changeCurrentWindowToFirstAvailable(workspace)
                 activateWindow(newWindowID)
             }
@@ -159,7 +159,7 @@ switchToWindow(index){
     }
 
     currentWindowIndex := workspace["currentWindowIndex"]
-    workspace["lastWindow"] := workspace["windowList", currentWindowIndex]
+    workspace["lastWindow"] := currentWindowIndex
 
     activateWindow(toSwitchId)
     workspace["currentWindowIndex"] := index
@@ -169,8 +169,6 @@ switchToWindow(index){
 }
 
 changeWindowOrder(newIndex) {
-    global currentWorkspace
-
     workspace := getCurrentWorkspace()
     currentWindowId := getCurrentWindow()
 
@@ -179,6 +177,16 @@ changeWindowOrder(newIndex) {
     index := getIndexInArray(windowList, currentWindowId)
     switchPlaceInArray(windowList, index, newIndex)
     renderGui()
+}
+
+removeWindowFromWorkspace() {
+    workspace := getCurrentWorkspace()
+    workspace["windowList"].RemoveAt(workspace["currentWindowIndex"])
+}
+
+switchToLastWindow() {
+    workspace := getCurrentWorkspace()
+    switchToWindow(workspace["lastWindow"])
 }
 
 getWorkspaceIndex(){

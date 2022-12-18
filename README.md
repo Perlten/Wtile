@@ -1,9 +1,9 @@
 # Wtile
 
 ## Features 
-- [ ] Remove window from workspace
-- [ ] Control scroll speeds
-- [ ] Alt tab for windows switch (rebind req alt tab to alt + q or something)
+- [x] Remove window from workspace
+- [ ] Control scroll speeds (windows-utils)
+- [x] Alt tab for windows switch (rebind req alt tab to alt + q or something)
 - [ ] Deploy to winget
 
 
