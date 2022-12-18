@@ -27,7 +27,7 @@ jobs:
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module ps2exe 
           Import-Module -Name ps2exe
-          ps2exe .\Setup.ps1 .\Setup.exe
+          Invoke-ps2exe .\Setup.ps1 .\Setup.exe
 
       - name: Release
         uses: softprops/action-gh-release@v1
