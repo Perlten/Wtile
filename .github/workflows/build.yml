@@ -25,7 +25,7 @@ jobs:
         shell: pwsh
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
-          Install-Module ps2exe
+          Install-Module ps2exe -Scope CurrentUser
           ps2exe .\Setup.ps1 .\Setup.exe
 
       - name: Release
