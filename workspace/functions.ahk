@@ -182,11 +182,13 @@ changeWindowOrder(newIndex) {
 removeWindowFromWorkspace() {
     workspace := getCurrentWorkspace()
     workspace["windowList"].RemoveAt(workspace["currentWindowIndex"])
+    renderGui()
 }
 
 switchToLastWindow() {
     workspace := getCurrentWorkspace()
     switchToWindow(workspace["lastWindow"])
+    renderGui()
 }
 
 getWorkspaceIndex(){
