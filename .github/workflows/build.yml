@@ -26,8 +26,8 @@ jobs:
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module ps2exe 
-          Import-Module -Name ps2exe
-          Invoke-ps2exe -inputFile .\Setup.ps1 -outputFile .\Setup.exe
+          Import-Module -Name C:\Users\runneradmin\Documents\PowerShell\Modules\ps2exe
+          ps2exe -inputFile .\Setup.ps1 -outputFile .\Setup.exe
 
       - name: Release
         uses: softprops/action-gh-release@v1
