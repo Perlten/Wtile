@@ -26,10 +26,8 @@ jobs:
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module ps2exe 
-        
-      - name: Run Ps2Exe
-        shell: pwsh
-        run: ps2exe -inputFile .\Setup.ps1 -outputFile .\Setup.exe
+          Get-Module  ps2exe -ListAvailable
+          run: ps2exe -inputFile .\Setup.ps1 -outputFile .\Setup.exe
 
       - name: Release
         uses: softprops/action-gh-release@v1
