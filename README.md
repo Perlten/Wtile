@@ -14,7 +14,7 @@ In this image the gui element has been placed on top of the regular taskbar. Thi
 - [ ] Control scroll speeds (windows-utils)
 - [x] Alt tab for windows switch (rebind req alt tab to alt + q or something)
 - [x] Deploy to winget
-- [ ] Make winget part of pipeline
+- [x] Make winget part of pipeline
 - [ ] Pull out always on top from guitick and run at more
 - [ ] Change ram to show usage instead of remaining 
 
