@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Build
+name: Build&Deploy
 
 on: 
   push:
@@ -20,12 +20,19 @@ jobs:
         with:
           in: main.ahk
           out: wtile.exe
+          icon: icons/wtile.ico
+
+      - name: Set Setup version
+        shell: pwsh
+        run: |
+          (Get-Content -path ./Setup.ahk -Raw) -replace '__VERSION__','${{github.ref_name}}'  | Set-Content -Path ./Setup.ahk
       
       - name: Ahk2Exe Setup
         uses: nekocodeX/GitHub-Action-Ahk2Exe@main
         with:
           in: Setup.ahk
           out: Setup.exe
+          icon: icons/wtile.ico
       
       - name: Make Github Release
         uses: softprops/action-gh-release@v1
@@ -35,8 +42,9 @@ jobs:
            Setup.exe
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      # - name: Make Winget release
-      #   shell: pwsh
-      #   run: |
-      #     iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-      #     .\wingetcreate.exe update perlt.wtile -u https://github.com/Perlten/Wtile/releases/download/${{github.ref_name}}/Setup.exe -v ${{github.ref_name}} -t ${{ secrets.WINGET_DEPLOY_PAT }}
+
+      - name: Make Winget release
+        shell: pwsh
+        run: |
+          iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+          .\wingetcreate.exe update perlt.wtile -u https://github.com/Perlten/Wtile/releases/download/${{github.ref_name}}/Setup.exe -v ${{github.ref_name}} -t ${{ secrets.WINGET_DEPLOY_PAT }}
