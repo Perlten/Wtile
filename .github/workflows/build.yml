@@ -47,4 +47,4 @@ jobs:
         shell: pwsh
         run: |
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-          .\wingetcreate.exe update perlt.wtile -u https://github.com/Perlten/Wtile/releases/download/${{github.ref_name}}/Setup.exe -v ${{github.ref_name}} -t ${{ secrets.WINGET_DEPLOY_PAT }}
+          .\wingetcreate.exe update perlt.wtile --submit -u https://github.com/Perlten/Wtile/releases/download/${{github.ref_name}}/Setup.exe -v ${{github.ref_name}} -t ${{ secrets.WINGET_DEPLOY_PAT }}
