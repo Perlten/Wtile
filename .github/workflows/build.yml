@@ -22,12 +22,10 @@ jobs:
           out: wtile.exe
           icon: icons/wtile.ico
 
-      - name: Set version Setup
-        uses: jacobtomlinson/gha-find-replace@v2
-        with:
-          find: "{{VERSION}}"
-          replace: "${{github.ref_name}}"
-          include: "Setup.ahk"
+      - name: Set Setup version
+        shell: pwsh
+        run: |
+          (Get-Content -path ./Setup.ahk -Raw) -replace '__VERSION__','${{github.ref_name}}'  | Set-Content -Path ./Setup.ahk
       
       - name: Ahk2Exe Setup
         uses: nekocodeX/GitHub-Action-Ahk2Exe@main
