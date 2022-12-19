@@ -27,7 +27,7 @@ downloadFile(url, dir := ".", filename := "") {
     FileOpen(dir "\" filename, "w").RawWrite(data + 0, size)
 }
 
-version := "v1.3"
+version := {{VERSION}}
 
 EnvGet, homedrive, homedrive
 EnvGet, homepath, homepath

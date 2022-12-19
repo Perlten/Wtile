@@ -11,7 +11,7 @@ isWindowFullscreen(WinID) {
     ;use WinExist of another means to get the Unique ID (HWND) of the desired window
 
     if ( !WinID )
-        return
+        return false
 
     WinGet, WinMinMax, MinMax, ahk_id %WinID%
     WinGetPos, WinX, WinY, WinW, WinH, ahk_id %WinID%
