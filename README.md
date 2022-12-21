@@ -15,8 +15,9 @@ In this image the gui element has been placed on top of the regular taskbar. Thi
 - [x] Alt tab for windows switch (rebind req alt tab to alt + q or something)
 - [x] Deploy to winget
 - [x] Make winget part of pipeline
-- [ ] Pull out always on top from guitick and run at more
-- [ ] Change ram to show usage instead of remaining 
+- [x] Pull out always on top from guitick and run at more
+- [x] Change ram to show usage instead of remaining 
+- [x] Show battery usage 
 
 
 ## Bugs

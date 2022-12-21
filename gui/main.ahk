@@ -15,6 +15,7 @@ startGui(){
     WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
     OnMessage(0x201,"WM_LBUTTONDOWN")
     renderGui()
+    updateSystemInformation()
 
     if !resizeEnable {
         Gui -Resize
@@ -22,7 +23,7 @@ startGui(){
 }
 
 renderGui(){
-    global cpuStr, ramStr
+    global cpuStr, ramStr, batteryStr
     workspace := getCurrentWorkspace()
     windowList := workspace.windowList
 
@@ -54,7 +55,7 @@ renderGui(){
     soundString = Volume: %masterVolume%/100
 
     timeString = %A_DDD% - %A_DD%/%A_MM%/%A_YYYY% - %A_Hour%:%A_Min%:%A_Sec%
-    rightString = %cpuStr% | %ramStr% | %soundString% | %timeString%
+    rightString = %batteryStr% | %cpuStr% | %ramStr% | %soundString% | %timeString%
 
     updateTextGui(leftString, "LMain", "left")
     updateTextGui(rightString, "RMain", "right")
@@ -107,12 +108,18 @@ guiTick(){
     }
 
     if (not guiHidden) {
-        WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
         Gui, Font, s%fontSize%
         GuiControl, Font, LMain
         GuiControl, Font, RMain
 
         renderGui()
+    }
+}
+
+setAlwaysOnTop(){
+    global guiHidden
+    if not guiHidden {
+        WinSet, AlwaysOnTop, On, WtileGui ahk_class AutoHotkeyGUI
     }
 }
 
@@ -170,6 +177,7 @@ saveGuiSettings() {
 updateSystemInformation(){
     updateCpuStr()
     updateRamStr()
+    updateBatteryStr()
 }
 
 updateCpuStr() {
@@ -197,6 +205,20 @@ updateRamStr() {
     ; get ram usage in mb
     totalPhys := NumGet(MSEX, 8, "uint64") / 1000000
     availPhys := NumGet(MSEX, 16, "uint64") / 1000000
+    remainingPhys := Floor( totalPhys - availPhys )
     ramUsage := { availPhys: Floor(availPhys), totalPhys: Floor(totalPhys) }
-    ramStr := "RAM: " . ramUsage["availPhys"] . "/" . ramUsage["totalPhys"] . " MB"
+
+    ramStr := "RAM: " . remainingPhys . "/" . ramUsage["totalPhys"] . " MB"
 }
+
+updateBatteryStr() {
+    global batteryStr
+
+    VarSetCapacity(powerstatus, 1+1+1+1+4+4)
+    success := DllCall("kernel32.dll\GetSystemPowerStatus", "uint", &powerstatus)
+
+    batteryPercentage := ReadInteger(&powerstatus,2,1,false)
+
+    batteryStr := "Bat: " batteryPercentage "%"
+}
+

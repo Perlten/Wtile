@@ -19,6 +19,7 @@ loadGuiSettings()
 startGui()
 SetTimer, guiTick, 500
 SetTimer, updateSystemInformation, 5000
+SetTimer, setAlwaysOnTop, 32
 
 return
 

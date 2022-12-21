@@ -10,3 +10,4 @@ startH := 50
 
 cpuStr := "CPU: Unknown"
 ramStr := "RAM: ?/?"
+batteryStr := ""
