@@ -33,7 +33,7 @@ namespace Wtile.Core.Utils
             var newWindows = windowPtr
                 .Where(x => !lastWindowPtr.Contains(x))
                 .Select(x => new Window(x))
-                .Where(x => x.Name != "").ToList();
+                .Where(x => x.Name != "" && x.Name != "Task Switching").ToList();
 
             lastWindowPtr = windowPtr;
 

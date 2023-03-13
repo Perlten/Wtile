@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using Wtile.Core.Utils;
 
 namespace Wtile.Core.Hotkey;
 
@@ -6,20 +8,49 @@ public static class HotKeyManager
 {
     private static volatile MessageWindow _wnd;
     private static volatile IntPtr _hwnd;
-    private static ManualResetEvent _windowReadyEvent = new ManualResetEvent(false);
-    private static int _id = 0;
+    private static ManualResetEvent _windowReadyEvent = new(false);
 
-    public static event EventHandler<HotKeyEventArgs> HotKeyPressed;
+    private const int WM_HOTKEY = 0x312;
 
-    public static int RegisterHotKey(Keys key, KeyModifiers modifiers)
+
+
+    private static Dictionary<int, Action> actionMap = new();
+
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    static HotKeyManager()
     {
-        _windowReadyEvent.WaitOne();
-        int id = Interlocked.Increment(ref _id);
-        _wnd.Invoke(new RegisterHotKeyDelegate(RegisterHotKeyInternal), _hwnd, id, (uint)modifiers, (uint)key);
+        Thread messageLoop = new(delegate ()
+          {
+              Application.Run(new MessageWindow());
+          });
+        messageLoop.Name = "WtileHotkeyMessageLoopThread";
+        messageLoop.IsBackground = true;
+        messageLoop.Start();
+    }
+
+
+    public static bool AddHotKey(WtileKey key, WtileKeyModifiers modifiers, Action action)
+    {
+        int id = CreateId(key, modifiers);
+        RegisterHotKey(key, modifiers, id);
+        actionMap[id] = action;
+        return true;
+    }
+
+    private static int CreateId(WtileKey key, WtileKeyModifiers modifier)
+    {
+        var id = key.GetHashCode() + modifier.GetHashCode();
         return id;
     }
 
-    public static void UnregisterHotKey(int id)
+    private static void RegisterHotKey(WtileKey key, WtileKeyModifiers modifiers, int id)
+    {
+        _windowReadyEvent.WaitOne();
+        _wnd.Invoke(new RegisterHotKeyDelegate(RegisterHotKeyInternal), _hwnd, id, (uint)modifiers, (uint)key);
+    }
+
+    public static void RemoveHotkey(int id)
     {
         _wnd.Invoke(new UnRegisterHotKeyDelegate(UnRegisterHotKeyInternal), _hwnd, id);
     }
@@ -29,32 +60,21 @@ public static class HotKeyManager
 
     private static void RegisterHotKeyInternal(IntPtr hwnd, int id, uint modifiers, uint key)
     {
-        RegisterHotKey(hwnd, id, modifiers, key);
+        ExternalFunctions.RegisterHotKey(hwnd, id, modifiers, key);
     }
 
     private static void UnRegisterHotKeyInternal(IntPtr hwnd, int id)
     {
-        UnregisterHotKey(_hwnd, id);
+        ExternalFunctions.UnregisterHotKey(_hwnd, id);
     }
 
     private static void OnHotKeyPressed(HotKeyEventArgs e)
     {
-        if (HotKeyPressed != null)
-        {
-            HotKeyPressed(null, e);
-        }
+        var id = CreateId(e.Key, e.Modifiers);
+        var HotKeyPressed = actionMap[id];
+        HotKeyPressed();
     }
 
-    static HotKeyManager()
-    {
-        Thread messageLoop = new Thread(delegate ()
-          {
-              Application.Run(new MessageWindow());
-          });
-        messageLoop.Name = "MessageLoopThread";
-        messageLoop.IsBackground = true;
-        messageLoop.Start();
-    }
 
     private class MessageWindow : Form
     {
@@ -69,7 +89,7 @@ public static class HotKeyManager
         {
             if (m.Msg == WM_HOTKEY)
             {
-                HotKeyEventArgs e = new HotKeyEventArgs(m.LParam);
+                HotKeyEventArgs e = new(m.LParam);
                 OnHotKeyPressed(e);
             }
 
@@ -82,23 +102,16 @@ public static class HotKeyManager
             base.SetVisibleCore(false);
         }
 
-        private const int WM_HOTKEY = 0x312;
     }
-
-    [DllImport("user32", SetLastError = true)]
-    private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
-
-    [DllImport("user32", SetLastError = true)]
-    private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 }
 
 
 public class HotKeyEventArgs : EventArgs
 {
-    public readonly Keys Key;
-    public readonly KeyModifiers Modifiers;
+    public readonly WtileKey Key;
+    public readonly WtileKeyModifiers Modifiers;
 
-    public HotKeyEventArgs(Keys key, KeyModifiers modifiers)
+    public HotKeyEventArgs(WtileKey key, WtileKeyModifiers modifiers, int id)
     {
         Key = key;
         Modifiers = modifiers;
@@ -107,17 +120,7 @@ public class HotKeyEventArgs : EventArgs
     public HotKeyEventArgs(IntPtr hotKeyParam)
     {
         uint param = (uint)hotKeyParam.ToInt64();
-        Key = (Keys)((param & 0xffff0000) >> 16);
-        Modifiers = (KeyModifiers)(param & 0x0000ffff);
+        Key = (WtileKey)((param & 0xffff0000) >> 16);
+        Modifiers = (WtileKeyModifiers)(param & 0x0000ffff);
     }
-}
-
-[Flags]
-public enum KeyModifiers
-{
-    Alt = 1,
-    Control = 2,
-    Shift = 4,
-    Windows = 8,
-    NoRepeat = 0x4000
 }

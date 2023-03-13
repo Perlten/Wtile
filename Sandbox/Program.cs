@@ -8,15 +8,20 @@ using Wtile.Core.Hotkey;
 
 public class Program
 {
-    static void HotKeyManager_HotKeyPressed(object? sender, HotKeyEventArgs e)
+    static void HotKeyManager_HotKeyPressed()
     {
-        Console.WriteLine("Hit me!");
+        Console.WriteLine("Perlt222 me!");
     }
+    static void HotKeyManager_HotKeyPressed2()
+    {
+        Console.WriteLine("Perlt333 me!");
+    }
+
     public static void Main()
     {
 
-        HotKeyManager.RegisterHotKey(Keys.A, KeyModifiers.Alt);
-        HotKeyManager.HotKeyPressed += new EventHandler<HotKeyEventArgs>(HotKeyManager_HotKeyPressed);
+        //HotKeyManager.AddHotKey(WtileKey.A, WtileKeyModifiers.Alt, HotKeyManager_HotKeyPressed);
+        //HotKeyManager.AddHotKey(WtileKey.B, WtileKeyModifiers.Alt, HotKeyManager_HotKeyPressed2);
 
 
         var wtile = new Core.Wtile();

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 using Wtile.Core.Entities;
+using Wtile.Core.Hotkey;
 using Wtile.Core.Utils;
 
 namespace Wtile.Core;
@@ -9,7 +10,7 @@ namespace Wtile.Core;
 public class Wtile
 {
     private List<Workspace> workspaces = new();
-    private Workspace current_workspace;
+    private Workspace currentWorkspace;
 
     public Wtile()
     {
@@ -17,25 +18,42 @@ public class Wtile
         {
             workspaces.Add(new Workspace());
         }
-        current_workspace = workspaces[0];
+        currentWorkspace = workspaces[0];
     }
 
     public void Start()
     {
-        var watch = new System.Diagnostics.Stopwatch();
+        SetupKeybinds();
+        _ = WindowHandler.GetNewWindows();
         while (true)
         {
-            watch.Start();
-
             var newWindows = WindowHandler.GetNewWindows();
-            current_workspace.AddWindows(newWindows);
-
-            watch.Stop();
-            Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
-            watch.Reset();
-
+            currentWorkspace.AddWindows(newWindows);
+            Console.WriteLine(currentWorkspace.ToString());
 
             Thread.Sleep(16);
         }
     }
+
+    private void SetupKeybinds()
+    {
+        //HotKeyManager.AddHotKey(WtileKey.A, WtileKeyModifiers.Windows,
+        //    () => SwitchWorkspace(0));
+        //HotKeyManager.AddHotKey(WtileKey.B, WtileKeyModifiers.Windows,
+        //    () => SwitchWorkspace(1));
+
+        // Windows
+        //HotKeyManager.AddHotKey(WtileKey.A, WtileKeyModifiers.Alt,
+        //    () => currentWorkspace.SwitchWindow(0));
+        //HotKeyManager.AddHotKey(WtileKey.B, WtileKeyModifiers.Alt,
+        //    () => currentWorkspace.SwitchWindow(1));
+    }
+
+    private void SwitchWorkspace(int index)
+    {
+        Console.WriteLine(index);
+        if (index < workspaces.Count) return;
+        currentWorkspace = workspaces[index];
+    }
+
 }
