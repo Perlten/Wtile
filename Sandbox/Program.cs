@@ -4,25 +4,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Wtile.Core.Entities;
-using Wtile.Core.Hotkey;
+using Wtile.Core.Keybind;
 
 public class Program
 {
-    static void HotKeyManager_HotKeyPressed()
-    {
-        Console.WriteLine("Perlt222 me!");
-    }
-    static void HotKeyManager_HotKeyPressed2()
-    {
-        Console.WriteLine("Perlt333 me!");
-    }
 
     public static void Main()
     {
-
-        //HotKeyManager.AddHotKey(WtileKey.A, WtileKeyModifiers.Alt, HotKeyManager_HotKeyPressed);
-        //HotKeyManager.AddHotKey(WtileKey.B, WtileKeyModifiers.Alt, HotKeyManager_HotKeyPressed2);
-
 
         var wtile = new Core.Wtile();
         wtile.Start();
