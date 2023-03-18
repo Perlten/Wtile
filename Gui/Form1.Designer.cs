@@ -35,7 +35,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaptionText;
-            ClientSize = new Size(800, 797);
+            ClientSize = new Size(1087, 87);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);

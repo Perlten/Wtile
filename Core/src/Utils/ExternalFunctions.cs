@@ -6,7 +6,7 @@ namespace Wtile.Core.Utils
     internal class ExternalFunctions
     {
         public delegate bool EnumWindowsProc(IntPtr IntPtr, int lParam);
-        private delegate int HookProc(int code, IntPtr wParam, IntPtr lParam);
+        public delegate IntPtr HookProc(int code, IntPtr wParam, IntPtr lParam);
 
 
         [DllImport("user32.dll")]
@@ -34,9 +34,13 @@ namespace Wtile.Core.Utils
         [DllImport("user32", SetLastError = true)]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hMod, uint dwThreadId);
 
         [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hMod, uint dwThreadId);
+        public static extern int CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
+        [DllImport("kernel32.dll")]
+        public static extern uint GetLastError();
     }
 }

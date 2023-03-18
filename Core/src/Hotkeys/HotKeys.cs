@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Wtile.Core.Utils;
 
@@ -15,6 +16,7 @@ public static class HotKeyManager
 
 
     private static Dictionary<int, Action> actionMap = new();
+    private static int threadId;
 
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -24,18 +26,62 @@ public static class HotKeyManager
           {
               Application.Run(new MessageWindow());
           });
+        threadId = messageLoop.ManagedThreadId;
         messageLoop.Name = "WtileHotkeyMessageLoopThread";
         messageLoop.IsBackground = true;
         messageLoop.Start();
     }
 
+    delegate void TestDelegate();
+
 
     public static bool AddHotKey(WtileKey key, WtileKeyModifiers modifiers, Action action)
     {
-        int id = CreateId(key, modifiers);
-        RegisterHotKey(key, modifiers, id);
-        actionMap[id] = action;
+        //int id = CreateId(key, modifiers);
+        //RegisterHotKey(key, modifiers, id);
+        //actionMap[id] = action;
+        //return true;
+
+        _windowReadyEvent.WaitOne();
+        _wnd.Invoke(new TestDelegate(TestFunc));
+
+
+
         return true;
+    }
+
+    public static void TestFunc()
+    {
+        var hHook = ExternalFunctions.SetWindowsHookEx(13, PaintHookProc, 0, 0);
+        var error = Marshal.GetLastWin32Error();
+        if (error != 0)
+        {
+            string errorMessage = new Win32Exception(error).Message;
+            Console.WriteLine(error);
+            Console.WriteLine(errorMessage);
+        }
+    }
+
+    const int WM_KEYDOWN = 0x100;
+
+
+    private static IntPtr PaintHookProc(int code, IntPtr wParam, IntPtr lParam)
+    {
+        //Console.WriteLine($"C: {code} --- W: {wParam} --- L:{lParam}");
+        if (code >= 0 && wParam == (IntPtr)WM_KEYDOWN)
+        {
+            int vkCode = Marshal.ReadInt32(lParam);
+            if (vkCode == (int)VKeys.LWIN)
+            {
+                Console.WriteLine("You pressed the control key");
+                return (IntPtr)1; // stops registering the key stroke
+            }
+
+            return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
+
+        }
+        else
+            return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
 
     private static int CreateId(WtileKey key, WtileKeyModifiers modifier)

@@ -9,10 +9,9 @@ namespace Wtile.Gui
         [STAThread]
         static void Main()
         {
-            HotKeyManager.RegisterHotKey(Keys.A, KeyModifiers.Alt);
-            HotKeyManager.HotKeyPressed += new EventHandler<HotKeyEventArgs>(HotKeyManager_HotKeyPressed);
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
+
 
         }
         static void HotKeyManager_HotKeyPressed(object sender, HotKeyEventArgs e)

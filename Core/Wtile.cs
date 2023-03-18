@@ -29,7 +29,7 @@ public class Wtile
         {
             var newWindows = WindowHandler.GetNewWindows();
             currentWorkspace.AddWindows(newWindows);
-            Console.WriteLine(currentWorkspace.ToString());
+            //Console.WriteLine(currentWorkspace.ToString());
 
             Thread.Sleep(16);
         }
@@ -37,8 +37,8 @@ public class Wtile
 
     private void SetupKeybinds()
     {
-        //HotKeyManager.AddHotKey(WtileKey.A, WtileKeyModifiers.Windows,
-        //    () => SwitchWorkspace(0));
+        HotKeyManager.AddHotKey(WtileKey.A, WtileKeyModifiers.Windows,
+            () => SwitchWorkspace(0));
         //HotKeyManager.AddHotKey(WtileKey.B, WtileKeyModifiers.Windows,
         //    () => SwitchWorkspace(1));
 
