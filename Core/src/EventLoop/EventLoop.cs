@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
+using Wtile.Core.Utils;
 
 namespace Wtile.Core.EventLoop;
 
@@ -38,11 +40,33 @@ internal static class EventLoop
 
     public class MessageWindow : Form
     {
+        private readonly int msgNotify;
         public MessageWindow()
         {
             _wnd = this;
-            _hwnd = this.Handle;
+            _hwnd = Handle;
             _windowReadyEvent.Set();
+
+
+            msgNotify = ExternalFunctions.RegisterWindowMessage("SHELLHOOK");
+            ExternalFunctions.RegisterShellHookWindow(Handle);
+
+        }
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == msgNotify)
+            {
+                var windowName = Window.GetName(m.LParam);
+                if (m.WParam == 1 && windowName != "")
+                {
+                    Wtile.AddWindow(m.LParam);
+                }
+                if (m.WParam == 2 && windowName != "")
+                {
+                    Wtile.RemoveWindow(m.LParam);
+                }
+            }
+            base.WndProc(ref m);
         }
 
         protected override void SetVisibleCore(bool value)

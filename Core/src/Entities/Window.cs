@@ -25,7 +25,7 @@ public class Window
         return $"{WindowPtr} -> {Name}";
     }
 
-    private static string GetName(IntPtr windowPtr)
+    internal static string GetName(IntPtr windowPtr)
     {
         int length = ExternalFunctions.GetWindowTextLength(windowPtr);
         var builder = new StringBuilder(length);

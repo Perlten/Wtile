@@ -9,12 +9,12 @@ using Wtile.Core.Utils;
 
 namespace Wtile.Core;
 
-public class Wtile
+public static class Wtile
 {
-    private List<Workspace> _workspaces = new();
-    private Workspace _currentWorkspace;
+    private static List<Workspace> _workspaces = new();
+    private static Workspace _currentWorkspace;
 
-    public Wtile()
+    static Wtile()
     {
         for (int i = 0; i < 10; i++)
         {
@@ -23,7 +23,7 @@ public class Wtile
         _currentWorkspace = _workspaces[0];
     }
 
-    private void SetupKeybinds()
+    private static void SetupKeybinds()
     {
         var keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };
         KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(0)));
@@ -48,7 +48,7 @@ public class Wtile
 
     }
 
-    public void Start()
+    public static void Start()
     {
         KeybindManager.AddToEventLoop();
         SetupKeybinds();
@@ -60,20 +60,20 @@ public class Wtile
         }
     }
 
-    private void SwitchWorkspace(int index)
+    private static void SwitchWorkspace(int index)
     {
         if (index > _workspaces.Count) return;
         Console.WriteLine(index);
         _currentWorkspace = _workspaces[index];
     }
 
-    public bool AddWindow(IntPtr windowPtr)
+    public static bool AddWindow(IntPtr windowPtr)
     {
         _currentWorkspace.AddWindow(new Window(windowPtr));
         return true;
     }
 
-    public bool RemoveWindow(IntPtr windowPtr)
+    public static bool RemoveWindow(IntPtr windowPtr)
     {
         foreach (var workspace in _workspaces)
         {
@@ -89,7 +89,7 @@ public class Wtile
         return true;
     }
 
-    public string GetWtileString()
+    public static string GetWtileString()
     {
         int workspaceIndex = _currentWorkspace.Index + 1;
         int windowIndex = _currentWorkspace.WindowIndex + 1;
