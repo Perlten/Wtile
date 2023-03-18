@@ -17,7 +17,7 @@ public class Wtile
     {
         for (int i = 0; i < 10; i++)
         {
-            _workspaces.Add(new Workspace());
+            _workspaces.Add(new Workspace(i));
         }
         _currentWorkspace = _workspaces[0];
     }
@@ -25,21 +25,19 @@ public class Wtile
     private void SetupKeybinds()
     {
         var l = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };
-        //KeybindManager.AddKeybind(new WtileKeybind(l, () => SwitchWorkspace(0)));
+        KeybindManager.AddKeybind(new WtileKeybind(l, () => SwitchWorkspace(0)));
 
-        //l = new List<WtileKey> { WtileKey.LWin, WtileKey.D2 };
-        //KeybindManager.AddKeybind(new WtileKeybind(l, () => SwitchWorkspace(1)));
+        l = new List<WtileKey> { WtileKey.LWin, WtileKey.D2 };
+        KeybindManager.AddKeybind(new WtileKeybind(l, () => SwitchWorkspace(1)));
 
         l = new List<WtileKey> { WtileKey.LAlt, WtileKey.D1 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => Console.WriteLine("test")));
+        KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(0)));
 
+        l = new List<WtileKey> { WtileKey.LAlt, WtileKey.D2 };
+        KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(1)));
 
-        //l = new List<WtileKey> { WtileKey.Alt, WtileKey.D1 };
-        //KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(0)));
-
-
-        //l = new List<WtileKey> { WtileKey.Alt, WtileKey.D2 };
-        //KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(1)));
+        l = new List<WtileKey> { WtileKey.LAlt, WtileKey.D3 };
+        KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(2)));
 
     }
 
@@ -63,6 +61,11 @@ public class Wtile
         if (index > _workspaces.Count) return;
         Console.WriteLine(index);
         _currentWorkspace = _workspaces[index];
+    }
+
+    public string GetWtileString()
+    {
+        return $"Workspace: {_currentWorkspace._index}";
     }
 
 }

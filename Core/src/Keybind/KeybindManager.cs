@@ -63,7 +63,7 @@ public static class KeybindManager
     {
         if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
         int vkCode = Marshal.ReadInt32(lParam);
-        Console.WriteLine($"Key: {vkCode} --- W: {wParam} --- L:{lParam}");
+        //Console.WriteLine($"Key: {vkCode} --- W: {wParam} --- L:{lParam}");
 
         if (code >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
         {
@@ -73,12 +73,6 @@ public static class KeybindManager
         {
             _keymap[vkCode] = false;
         }
-
-        //if (_keymap[(int)WtileKey.D1])
-        //{
-        //    Console.WriteLine("KEYBIND");
-        //    return (IntPtr)1; // stops registering the key stroke
-        //}
 
         foreach (var keybind in _keybinds)
         {

@@ -5,10 +5,11 @@ public class Workspace
 {
     private List<Window> _windows = new();
     private Window? currentWindow;
+    public readonly int _index;
 
-    public Workspace()
+    public Workspace(int index)
     {
-
+        _index = index;
     }
 
     public void AddWindow(Window window)

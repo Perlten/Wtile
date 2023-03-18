@@ -9,7 +9,6 @@ namespace Wtile.Core.Keybind
 {
     public class WtileKeybind
     {
-        private bool _continuous = false;
         private List<WtileKey> _keys;
         private Action _action;
         public bool _blocking = true;
@@ -36,8 +35,8 @@ namespace Wtile.Core.Keybind
         {
             foreach (var key in _keys)
             {
-                var i = (int)key;
-                if (!keymap[i])
+                var keyCode = (int)key;
+                if (!keymap[keyCode])
                 {
                     return false;
                 }
