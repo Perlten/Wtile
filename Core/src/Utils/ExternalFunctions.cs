@@ -63,5 +63,7 @@ namespace Wtile.Core.Utils
 
         [DllImport("user32.dll", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         public static extern int RegisterWindowMessage(string lpString);
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
     }
 }

@@ -1,9 +1,11 @@
-﻿using System.Transactions;
+﻿using System.Diagnostics;
+using System.Transactions;
+using Wtile.Core.Utils;
 
 namespace Wtile.Core.Entities;
 public class Workspace
 {
-    private List<Window> _windows = new();
+    internal List<Window> Windows = new();
     private Window? currentWindow;
     public readonly int Index;
     public int WindowIndex { get; private set; }
@@ -11,24 +13,24 @@ public class Workspace
     public Workspace(int index)
     {
         Index = index;
-        WindowIndex = 1;
+        WindowIndex = 0;
     }
 
     public void AddWindow(Window window)
     {
-        _windows.Add(window);
+        Windows.Add(window);
     }
     public void AddWindows(IList<Window> windows)
     {
-        _windows.AddRange(windows);
+        Windows.AddRange(windows);
     }
 
 
     public void SwitchWindow(int index)
     {
-        if (_windows.Count - 1 < index) return;
-        WindowIndex = index + 1;
-        currentWindow = _windows[index];
+        if (Windows.Count - 1 < index) return;
+        WindowIndex = index;
+        currentWindow = Windows[index];
         currentWindow.Activate();
     }
 
@@ -38,10 +40,18 @@ public class Workspace
         currentWindow.Activate();
     }
 
+    public void AddActiveWindow()
+    {
+        Debug.WriteLine("ADdded");
+        var windowPtr = ExternalFunctions.GetForegroundWindow();
+        var window = new Window(windowPtr);
+        Windows.Add(window);
+    }
+
     public override string ToString()
     {
         string str = string.Empty;
-        foreach (Window window in _windows)
+        foreach (Window window in Windows)
         {
             str += window.ToString();
         }

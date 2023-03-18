@@ -40,6 +40,12 @@ public class Wtile
         keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D3 };
         KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(2)));
 
+
+        // TODO Bug because LWin + D1 gets triggered first
+        keys = new List<WtileKey> { WtileKey.LWin, WtileKey.LShiftKey, WtileKey.D1 };
+        KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.AddActiveWindow()));
+
+
     }
 
     public void Start()
@@ -49,10 +55,7 @@ public class Wtile
         _ = WindowHandler.GetNewWindows();
         while (true)
         {
-            //var newWindows = WindowHandler.GetNewWindows();
-            //_currentWorkspace.AddWindows(newWindows);
             Debug.WriteLine(_currentWorkspace.ToString());
-
             Thread.Sleep(16);
         }
     }
@@ -72,14 +75,24 @@ public class Wtile
 
     public bool RemoveWindow(IntPtr windowPtr)
     {
-
+        foreach (var workspace in _workspaces)
+        {
+            foreach (var window in workspace.Windows)
+            {
+                if (window.WindowPtr == windowPtr)
+                {
+                    workspace.Windows.Remove(window);
+                    break;
+                }
+            }
+        }
         return true;
     }
 
     public string GetWtileString()
     {
-        int workspaceIndex = _currentWorkspace.Index;
-        int windowIndex = _currentWorkspace.WindowIndex;
+        int workspaceIndex = _currentWorkspace.Index + 1;
+        int windowIndex = _currentWorkspace.WindowIndex + 1;
         return $"Workspace: {workspaceIndex} | Window: {windowIndex}";
     }
 

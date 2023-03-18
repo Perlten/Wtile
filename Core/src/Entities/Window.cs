@@ -6,23 +6,23 @@ namespace Wtile.Core.Entities;
 
 public class Window
 {
-    private readonly IntPtr _windowPtr;
+    public readonly IntPtr WindowPtr;
     public string Name { get; }
 
     public Window(IntPtr windowPtr)
     {
-        _windowPtr = windowPtr;
-        Name = GetName(_windowPtr);
+        WindowPtr = windowPtr;
+        Name = GetName(WindowPtr);
     }
 
     public void Activate()
     {
-        ExternalFunctions.SetForegroundWindow(_windowPtr);
+        ExternalFunctions.SetForegroundWindow(WindowPtr);
     }
 
     public override string ToString()
     {
-        return $"{_windowPtr} -> {Name}";
+        return $"{WindowPtr} -> {Name}";
     }
 
     private static string GetName(IntPtr windowPtr)
