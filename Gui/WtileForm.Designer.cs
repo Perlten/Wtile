@@ -33,11 +33,10 @@
             // 
             // leftLabel
             // 
-            leftLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             leftLabel.AutoSize = true;
             leftLabel.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
             leftLabel.ForeColor = SystemColors.ButtonFace;
-            leftLabel.Location = new Point(12, 5);
+            leftLabel.Location = new Point(12, 9);
             leftLabel.Name = "leftLabel";
             leftLabel.Size = new Size(143, 30);
             leftLabel.TabIndex = 0;
@@ -49,7 +48,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaptionText;
-            ClientSize = new Size(1087, 44);
+            ClientSize = new Size(1087, 111);
             Controls.Add(leftLabel);
             FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;

@@ -65,7 +65,9 @@ public class Wtile
 
     public string GetWtileString()
     {
-        return $"Workspace: {_currentWorkspace._index}";
+        int workspaceIndex = _currentWorkspace.Index;
+        int windowIndex = _currentWorkspace.WindowIndex;
+        return $"Workspace: {workspaceIndex} | Window: {windowIndex}";
     }
 
 }

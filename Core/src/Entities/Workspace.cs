@@ -5,11 +5,13 @@ public class Workspace
 {
     private List<Window> _windows = new();
     private Window? currentWindow;
-    public readonly int _index;
+    public readonly int Index;
+    public int WindowIndex { get; private set; }
 
     public Workspace(int index)
     {
-        _index = index;
+        Index = index;
+        WindowIndex = 1;
     }
 
     public void AddWindow(Window window)
@@ -25,7 +27,7 @@ public class Workspace
     public void SwitchWindow(int index)
     {
         if (_windows.Count - 1 < index) return;
-
+        WindowIndex = index + 1;
         currentWindow = _windows[index];
         currentWindow.Activate();
     }

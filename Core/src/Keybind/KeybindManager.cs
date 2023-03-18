@@ -36,6 +36,12 @@ public static class KeybindManager
         messageLoop.Start();
     }
 
+    public static bool IsKeyPressed(WtileKey key)
+    {
+        int keyCode = (int)key;
+        return _keymap[keyCode];
+    }
+
     public static void AddKeybind(WtileKeybind keybind)
     {
         _keybinds.Add(keybind);
@@ -84,6 +90,7 @@ public static class KeybindManager
         }
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
+
 
     private class MessageWindow : Form
     {
