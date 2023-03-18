@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
@@ -43,14 +44,14 @@ public class Wtile
 
     public void Start()
     {
-        KeybindManager.StartEventLoop();
+        KeybindManager.AddToEventLoop();
         SetupKeybinds();
         _ = WindowHandler.GetNewWindows();
         while (true)
         {
-            var newWindows = WindowHandler.GetNewWindows();
-            _currentWorkspace.AddWindows(newWindows);
-            Console.WriteLine(_currentWorkspace.ToString());
+            //var newWindows = WindowHandler.GetNewWindows();
+            //_currentWorkspace.AddWindows(newWindows);
+            Debug.WriteLine(_currentWorkspace.ToString());
 
             Thread.Sleep(16);
         }
@@ -61,6 +62,18 @@ public class Wtile
         if (index > _workspaces.Count) return;
         Console.WriteLine(index);
         _currentWorkspace = _workspaces[index];
+    }
+
+    public bool AddWindow(IntPtr windowPtr)
+    {
+        _currentWorkspace.AddWindow(new Window(windowPtr));
+        return true;
+    }
+
+    public bool RemoveWindow(IntPtr windowPtr)
+    {
+
+        return true;
     }
 
     public string GetWtileString()

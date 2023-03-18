@@ -1,17 +1,14 @@
 ﻿using System.CodeDom;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Wtile.Core.EventLoop;
 using Wtile.Core.Utils;
 
 namespace Wtile.Core.Keybind;
 
 public static class KeybindManager
 {
-    private static volatile MessageWindow _wnd;
-    private static ManualResetEvent _windowReadyEvent = new(false);
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Exception otherwise")]
-    private static volatile IntPtr _hwnd;
-
     private static Dictionary<int, bool> _keymap = new();
     private static List<WtileKeybind> _keybinds = new();
 
@@ -20,20 +17,13 @@ public static class KeybindManager
     const int WM_KEYUP = 0x101;
     const int WM_SYSKEYUP = 0x0105;
 
-    delegate void KeyboardDelegate();
+    delegate void EventDelegate();
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     static KeybindManager()
     {
         var keyMaxValue = Enum.GetValues(typeof(WtileKey)).Cast<int>().Max() + 1;
         for (int i = 0; i < keyMaxValue; i++) _keymap.Add(i, false);
-        Thread messageLoop = new(delegate ()
-          {
-              Application.Run(new MessageWindow());
-          });
-        messageLoop.Name = "WtileHotkeyMessageLoopThread";
-        messageLoop.IsBackground = true;
-        messageLoop.Start();
     }
 
     public static bool IsKeyPressed(WtileKey key)
@@ -42,21 +32,19 @@ public static class KeybindManager
         return _keymap[keyCode];
     }
 
+    public static void AddToEventLoop()
+    {
+        EventLoop.EventLoop.AddToEventLoop(new EventDelegate(SetupEvent));
+    }
+
     public static void AddKeybind(WtileKeybind keybind)
     {
         _keybinds.Add(keybind);
     }
 
-    public static bool StartEventLoop()
+    private static void SetupEvent()
     {
-        _windowReadyEvent.WaitOne();
-        _wnd.Invoke(new KeyboardDelegate(StartKeyboardEventLoop));
-        return true;
-    }
-
-    private static void StartKeyboardEventLoop()
-    {
-        var hHook = ExternalFunctions.SetWindowsHookEx(13, HandleKeyboardEvent, 0, 0);
+        var hHook = ExternalFunctions.SetWindowsHookEx(13, HandleEvent, 0, 0);
         var error = Marshal.GetLastWin32Error();
         if (error != 0)
         {
@@ -65,11 +53,11 @@ public static class KeybindManager
         }
     }
 
-    private static IntPtr HandleKeyboardEvent(int code, IntPtr wParam, IntPtr lParam)
+    private static IntPtr HandleEvent(int code, IntPtr wParam, IntPtr lParam)
     {
         if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
         int vkCode = Marshal.ReadInt32(lParam);
-        //Console.WriteLine($"Key: {vkCode} --- W: {wParam} --- L:{lParam}");
+        //Debug.WriteLine($"Key: {vkCode} --- W: {wParam} --- L:{lParam}");
 
         if (code >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
         {
@@ -89,21 +77,5 @@ public static class KeybindManager
             }
         }
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
-    }
-
-
-    private class MessageWindow : Form
-    {
-        public MessageWindow()
-        {
-            _wnd = this;
-            _hwnd = this.Handle;
-            _windowReadyEvent.Set();
-        }
-
-        protected override void SetVisibleCore(bool value)
-        {
-            base.SetVisibleCore(false);
-        }
     }
 }
