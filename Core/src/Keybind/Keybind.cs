@@ -11,7 +11,8 @@ namespace Wtile.Core.Keybind
     {
         private List<WtileKey> _keys;
         private Action _action;
-        public bool _blocking = true;
+
+        public bool Blocking = true;
 
 
         public WtileKeybind(List<WtileKey> keys, Action action)

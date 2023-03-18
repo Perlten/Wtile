@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using Wtile.Core.Keybind;
 
 namespace Wtile.Gui
@@ -31,19 +32,28 @@ namespace Wtile.Gui
             TopMost = true;
             leftLabel.Text = _wtile.GetWtileString();
             ToggleResize();
+            ShowInTaskbar = false;
         }
 
         private void ToggleResize()
         {
             if (_resizable)
-                FormBorderStyle = FormBorderStyle.Sizable;
+                FormBorderStyle = FormBorderStyle.SizableToolWindow;
             else
                 FormBorderStyle = FormBorderStyle.None;
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        protected override CreateParams CreateParams
         {
-
+            // Ensures that the window does not show in alt+tab
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x80;
+                return cp;
+            }
         }
+        private void LeftLabelClick(object sender, EventArgs e) { }
     }
+
 }

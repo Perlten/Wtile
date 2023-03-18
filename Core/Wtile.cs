@@ -24,20 +24,20 @@ public class Wtile
 
     private void SetupKeybinds()
     {
-        var l = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => SwitchWorkspace(0)));
+        var keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };
+        KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(0)));
 
-        l = new List<WtileKey> { WtileKey.LWin, WtileKey.D2 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => SwitchWorkspace(1)));
+        keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D2 };
+        KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(1)));
 
-        l = new List<WtileKey> { WtileKey.LAlt, WtileKey.D1 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(0)));
+        keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D1 };
+        KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(0)));
 
-        l = new List<WtileKey> { WtileKey.LAlt, WtileKey.D2 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(1)));
+        keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D2 };
+        KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(1)));
 
-        l = new List<WtileKey> { WtileKey.LAlt, WtileKey.D3 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(2)));
+        keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D3 };
+        KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(2)));
 
     }
 

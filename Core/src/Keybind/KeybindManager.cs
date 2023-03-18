@@ -84,7 +84,7 @@ public static class KeybindManager
         {
             if (keybind.HandleTriggering(_keymap))
             {
-                if (keybind._blocking) return (IntPtr)1; // stops registering the key stroke
+                if (keybind.Blocking) return (IntPtr)1; // stops registering the key stroke
                 break;
             }
         }

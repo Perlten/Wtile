@@ -41,7 +41,7 @@
             leftLabel.Size = new Size(143, 30);
             leftLabel.TabIndex = 0;
             leftLabel.Text = "Workspace: 0";
-            leftLabel.Click += label1_Click;
+            leftLabel.Click += LeftLabelClick;
             // 
             // WtileForm
             // 
