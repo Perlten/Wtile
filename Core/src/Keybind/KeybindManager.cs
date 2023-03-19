@@ -61,11 +61,11 @@ public static class KeybindManager
         int vkCode = Marshal.ReadInt32(lParam);
         //Debug.WriteLine($"Key: {vkCode} --- W: {wParam} --- L:{lParam}");
 
-        if (code >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
+        if (code >= 0 && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN))
         {
             _keymap[vkCode] = true;
         }
-        if (code >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
+        if (code >= 0 && (wParam == WM_KEYUP || wParam == WM_SYSKEYUP))
         {
             _keymap[vkCode] = false;
         }

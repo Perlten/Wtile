@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             leftLabel = new Label();
+            rightLabel = new Label();
             SuspendLayout();
             // 
             // leftLabel
@@ -43,12 +44,26 @@
             leftLabel.Text = "Workspace: 0";
             leftLabel.Click += LeftLabelClick;
             // 
+            // rightLabel
+            // 
+            rightLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            rightLabel.AutoSize = true;
+            rightLabel.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
+            rightLabel.ForeColor = SystemColors.ButtonFace;
+            rightLabel.Location = new Point(1049, 9);
+            rightLabel.Name = "rightLabel";
+            rightLabel.Size = new Size(26, 30);
+            rightLabel.TabIndex = 1;
+            rightLabel.Text = "X";
+            rightLabel.Click += RightLabelClick;
+            // 
             // WtileForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaptionText;
             ClientSize = new Size(1087, 111);
+            Controls.Add(rightLabel);
             Controls.Add(leftLabel);
             FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;
@@ -67,5 +82,6 @@
         #endregion
 
         private Label leftLabel;
+        private Label rightLabel;
     }
 }

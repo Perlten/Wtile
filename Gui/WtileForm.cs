@@ -1,6 +1,5 @@
+using NAudio.CoreAudioApi;
 using System.Diagnostics;
-using System.Text;
-using Wtile.Core;
 using Wtile.Core.Config;
 using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
@@ -10,37 +9,51 @@ namespace Wtile.Gui
     public partial class WtileForm : Form
     {
         private bool _resizable = false;
+        private PerformanceCounter _cpuCounter;
 
         public WtileForm()
         {
             InitializeComponent();
 
+            _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+
             StartPosition = FormStartPosition.Manual;
             Top = ConfigManager.Config.Top;
             Left = ConfigManager.Config.Left;
             Width = ConfigManager.Config.Width;
-
+            Height = ConfigManager.Config.Height;
 
             var keys = new List<WtileKey> { WtileKey.LWin, WtileKey.H };
             var keybind = new WtileKeybind(keys, () => _resizable = !_resizable);
             KeybindManager.AddKeybind(keybind);
 
-            System.Windows.Forms.Timer tmr = new()
+            System.Windows.Forms.Timer mainTimer = new()
             {
                 Interval = 16
             };
-            tmr.Tick += Update;
-            tmr.Start();
+            mainTimer.Tick += MainUpdate;
+            mainTimer.Start();
+
+            System.Windows.Forms.Timer rightLabelTimer = new()
+            {
+                Interval = 1000
+            };
+            rightLabelTimer.Tick += UpdateRightLabel;
+            rightLabelTimer.Start();
+
+            leftLabel.Text = Core.Wtile.GetWtileString();
+            rightLabel.Text = GetRightLabelText();
         }
 
-        private void Update(object? sender, EventArgs e)
+        private void MainUpdate(object? sender, EventArgs e)
         {
             TopMost = true;
-            leftLabel.Text = Core.Wtile.GetWtileString();
             ToggleResize();
             ShowInTaskbar = false;
-            var config = ConfigManager.Config;
 
+            leftLabel.Text = Core.Wtile.GetWtileString();
+
+            var config = ConfigManager.Config;
             config.X = Location.X;
             config.Y = Location.Y;
             config.Width = Width;
@@ -49,6 +62,23 @@ namespace Wtile.Gui
             config.Left = Left;
         }
 
+        private void UpdateRightLabel(object? sender, EventArgs e)
+        {
+            rightLabel.Text = GetRightLabelText();
+        }
+
+        private string GetRightLabelText()
+        {
+            var timeString = DateTime.Now.ToString("ddd dd/MM/yyyy HH:mm:ss"); ;
+
+            var deviceEnumerator = new MMDeviceEnumerator();
+            var defaultDevice = deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia); int volume = (int)(defaultDevice.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
+
+            int cpuUsage = (int)_cpuCounter.NextValue();
+
+
+            return $"CPU: {cpuUsage}% | Volume: {volume} | {timeString}";
+        }
 
         private void ToggleResize()
         {
@@ -69,6 +99,7 @@ namespace Wtile.Gui
             }
         }
         private void LeftLabelClick(object sender, EventArgs e) { }
+        private void RightLabelClick(object sender, EventArgs e) { }
     }
 
 }
