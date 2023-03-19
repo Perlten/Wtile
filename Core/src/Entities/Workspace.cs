@@ -42,7 +42,6 @@ public class Workspace
 
     public void AddActiveWindow()
     {
-        Debug.WriteLine("ADdded");
         var windowPtr = ExternalFunctions.GetForegroundWindow();
         var window = new Window(windowPtr);
         Windows.Add(window);

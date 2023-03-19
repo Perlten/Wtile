@@ -41,19 +41,19 @@ public static class Wtile
         keys = new List<WtileKey> { WtileKey.LWin, WtileKey.W };
         KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.AddActiveWindow()));
 
+        keys = new List<WtileKey> { WtileKey.LWin, WtileKey.LControlKey, WtileKey.LShiftKey, WtileKey.S };
+        KeybindManager.AddKeybind(new WtileKeybind(keys, () => ConfigManager.SaveConfig()));
 
     }
 
     public static void Start()
     {
-        //KeybindManager.AddToEventLoop();
-        //SetupKeybinds();
+        KeybindManager.AddToEventLoop();
+        SetupKeybinds();
 
-        ConfigManager.LoadConfig();
-        var t = ConfigManager.Config.TestString;
         while (true)
         {
-            Debug.WriteLine(_currentWorkspace.ToString());
+            //Debug.WriteLine(_currentWorkspace.ToString());
             Thread.Sleep(16);
         }
     }
@@ -91,7 +91,8 @@ public static class Wtile
     {
         int workspaceIndex = _currentWorkspace.Index + 1;
         int windowIndex = _currentWorkspace.WindowIndex + 1;
-        return $"Workspace: {workspaceIndex} | Window: {windowIndex}";
+        string windowNames = string.Join(" / ", _currentWorkspace.Windows.Select((x, i) => $"{i + 1}: {x.ApplicationName}").ToArray());
+        return $"Workspace: {workspaceIndex} | Window: {windowIndex} | {windowNames}";
     }
 
 }

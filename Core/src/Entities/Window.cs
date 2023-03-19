@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 using Wtile.Core.Utils;
 
@@ -7,12 +8,24 @@ namespace Wtile.Core.Entities;
 public class Window
 {
     public readonly IntPtr WindowPtr;
+    public readonly string ApplicationName;
     public string Name { get; }
+    public readonly uint Id;
+
 
     public Window(IntPtr windowPtr)
     {
         WindowPtr = windowPtr;
         Name = GetName(WindowPtr);
+
+        ExternalFunctions.GetWindowThreadProcessId(WindowPtr, out uint processId);
+        Id = processId;
+        ApplicationName = Process.GetProcessById((int)Id).ProcessName.ToString();
+    }
+
+    public void Quit()
+    {
+        Process.GetProcessById((int)WindowPtr).Kill();
     }
 
     public void Activate()
@@ -30,6 +43,7 @@ public class Window
         int length = ExternalFunctions.GetWindowTextLength(windowPtr);
         var builder = new StringBuilder(length);
         ExternalFunctions.GetWindowText(windowPtr, builder, length + 1);
-        return builder.ToString();
+        var name = builder.ToString();
+        return name.Length > 10 ? name[..10] : name;
     }
 }

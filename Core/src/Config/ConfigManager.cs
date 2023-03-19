@@ -1,8 +1,30 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
+using Wtile.Core.Keybind;
 
 namespace Wtile.Core.Config
 {
+
+    public class WtileConfig
+    {
+        public int X { get; set; } = 0;
+        public int Y { get; set; } = 0;
+        public int Width { get; set; } = 0;
+        public int Height { get; set; } = 0;
+        public int Left { get; set; } = 0;
+        public int Top { get; set; } = 0;
+        public List<ConfigKeybinds> Keybinds { get; set; } = new();
+
+
+        public class ConfigKeybinds
+        {
+            public List<WtileKey> Keys { get; set; } = new();
+            public string Action { get; set; } = "";
+        }
+
+    }
+
     public static class ConfigManager
     {
         public static WtileConfig Config { get; private set; }
@@ -20,7 +42,8 @@ namespace Wtile.Core.Config
             string configPath = Path.Combine(configDir, "config.json");
 
             string json = JsonConvert.SerializeObject(Config);
-            System.IO.File.WriteAllText(configPath, json);
+            File.WriteAllText(configPath, json);
+            Debug.WriteLine("Saved config");
         }
         public static WtileConfig LoadConfig()
         {
@@ -41,9 +64,4 @@ namespace Wtile.Core.Config
 
     }
 
-    public class WtileConfig
-    {
-        [JsonPropertyName("testString")]
-        public string TestString { get; set; } = "";
-    }
 }
