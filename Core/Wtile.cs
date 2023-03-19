@@ -1,8 +1,6 @@
 ﻿
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using Wtile.Core.Config;
 using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
@@ -40,9 +38,7 @@ public static class Wtile
         keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D3 };
         KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(2)));
 
-
-        // TODO Bug because LWin + D1 gets triggered first
-        keys = new List<WtileKey> { WtileKey.LWin, WtileKey.LShiftKey, WtileKey.D1 };
+        keys = new List<WtileKey> { WtileKey.LWin, WtileKey.W };
         KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.AddActiveWindow()));
 
 
@@ -50,9 +46,11 @@ public static class Wtile
 
     public static void Start()
     {
-        KeybindManager.AddToEventLoop();
-        SetupKeybinds();
-        _ = WindowHandler.GetNewWindows();
+        //KeybindManager.AddToEventLoop();
+        //SetupKeybinds();
+
+        ConfigManager.LoadConfig();
+        var t = ConfigManager.Config.TestString;
         while (true)
         {
             Debug.WriteLine(_currentWorkspace.ToString());

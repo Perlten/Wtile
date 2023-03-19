@@ -40,6 +40,8 @@ public static class KeybindManager
     public static void AddKeybind(WtileKeybind keybind)
     {
         _keybinds.Add(keybind);
+        _keybinds.Sort();
+        _keybinds.Reverse();
     }
 
     private static void SetupEvent()
