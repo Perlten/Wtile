@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,9 @@ namespace Wtile.Core.Keybind
             _action = action;
         }
 
-        internal bool HandleTriggering(Dictionary<int, bool> keymap)
+        internal bool HandleTriggering(Dictionary<int, bool> keymap, int keypressCounter)
         {
-            if (ShouldTrigger(keymap))
+            if (ShouldTrigger(keymap) && _keys.Count == keypressCounter)
             {
                 _action();
                 return true;

@@ -25,6 +25,8 @@ public static class Wtile
     private static void SetupKeybinds()
     {
         var keys = new List<WtileKey> { WtileKey.LWin };
+        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => { Debug.WriteLine("TEST"); }));
+
 
         //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };
         //KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(0)));

@@ -17,6 +17,9 @@ public static class KeybindManager
     const int WM_KEYUP = 0x101;
     const int WM_SYSKEYUP = 0x0105;
 
+    private volatile static int _keyPressCounter = 0;
+    private static bool _inputsReserved = false;
+
     delegate void EventDelegate();
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -61,23 +64,34 @@ public static class KeybindManager
         int vkCode = Marshal.ReadInt32(lParam);
         //Debug.WriteLine($"Key: {vkCode} --- W: {wParam} --- L:{lParam}");
 
+        if (_keyPressCounter == 0)
+        {
+            _inputsReserved = false;
+        }
+
         if (code >= 0 && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN))
         {
+            if (!_keymap[vkCode]) _keyPressCounter++;
             _keymap[vkCode] = true;
         }
         if (code >= 0 && (wParam == WM_KEYUP || wParam == WM_SYSKEYUP))
         {
+            if (_keymap[vkCode]) _keyPressCounter--;
             _keymap[vkCode] = false;
         }
 
+
         foreach (var keybind in _keybinds)
         {
-            if (keybind.HandleTriggering(_keymap))
+            if (keybind.HandleTriggering(_keymap, _keyPressCounter))
             {
-                if (keybind.Blocking) return (IntPtr)1; // stops registering the key stroke
+                _inputsReserved = true;
+                if (keybind.Blocking)
+                    return (IntPtr)1; // stops registering the key stroke
                 break;
             }
         }
+        if (_inputsReserved) return (IntPtr)1; // stops registering the key stroke
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
 }
