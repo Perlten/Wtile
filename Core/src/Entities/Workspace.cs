@@ -19,14 +19,19 @@ public class Workspace
     public void AddWindow(Window window)
     {
         Windows.Add(window);
+        currentWindow ??= window;
     }
     public void AddWindows(IList<Window> windows)
     {
         Windows.AddRange(windows);
+        if (currentWindow == null && windows.Count != 0)
+        {
+            currentWindow = windows[0];
+        }
     }
 
 
-    public void SwitchWindow(int index)
+    public void ChangeWindow(int index)
     {
         if (Windows.Count - 1 < index) return;
         WindowIndex = index;
@@ -45,6 +50,7 @@ public class Workspace
         var windowPtr = ExternalFunctions.GetForegroundWindow();
         var window = new Window(windowPtr);
         Windows.Add(window);
+        currentWindow ??= window;
     }
 
     public override string ToString()

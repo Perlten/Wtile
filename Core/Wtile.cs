@@ -1,5 +1,6 @@
 ﻿
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 using Wtile.Core.Config;
 using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
@@ -9,8 +10,8 @@ namespace Wtile.Core;
 
 public static class Wtile
 {
-    private static List<Workspace> _workspaces = new();
-    private static Workspace _currentWorkspace;
+    internal static List<Workspace> _workspaces = new();
+    internal static Workspace _currentWorkspace;
 
     static Wtile()
     {
@@ -23,26 +24,28 @@ public static class Wtile
 
     private static void SetupKeybinds()
     {
-        var keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };
-        KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(0)));
+        var keys = new List<WtileKey> { WtileKey.LWin };
 
-        keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D2 };
-        KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(1)));
+        //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };
+        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(0)));
 
-        keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D1 };
-        KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(0)));
+        //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D2 };
+        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(1)));
 
-        keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D2 };
-        KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(1)));
+        //keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D1 };
+        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(0)));
 
-        keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D3 };
-        KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(2)));
+        //keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D2 };
+        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(1)));
 
-        keys = new List<WtileKey> { WtileKey.LWin, WtileKey.W };
-        KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.AddActiveWindow()));
+        //keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D3 };
+        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(2)));
 
-        keys = new List<WtileKey> { WtileKey.LWin, WtileKey.LControlKey, WtileKey.LShiftKey, WtileKey.S };
-        KeybindManager.AddKeybind(new WtileKeybind(keys, () => ConfigManager.SaveConfig()));
+        //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.W };
+        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.AddActiveWindow()));
+
+        //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.LControlKey, WtileKey.LShiftKey, WtileKey.S };
+        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => ConfigManager.SaveConfig()));
 
     }
 
@@ -53,16 +56,20 @@ public static class Wtile
 
         while (true)
         {
-            //Debug.WriteLine(_currentWorkspace.ToString());
             Thread.Sleep(16);
         }
     }
 
-    private static void SwitchWorkspace(int index)
+    public static void ChangeWorkspace(int index)
     {
-        if (index > _workspaces.Count) return;
-        Console.WriteLine(index);
+        if (index >= _workspaces.Count) return;
         _currentWorkspace = _workspaces[index];
+        _currentWorkspace.ActivateCurrentWindow();
+    }
+
+    internal static Workspace GetCw()
+    {
+        return _currentWorkspace;
     }
 
     public static bool AddWindow(IntPtr windowPtr)

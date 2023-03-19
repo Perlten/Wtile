@@ -32,6 +32,7 @@ namespace Wtile.Core.Config
         static ConfigManager()
         {
             Config = LoadConfig();
+            SetupKeybindings(Config.Keybinds);
         }
 
         public static void SaveConfig()
@@ -41,7 +42,7 @@ namespace Wtile.Core.Config
 
             string configPath = Path.Combine(configDir, "config.json");
 
-            string json = JsonConvert.SerializeObject(Config);
+            string json = JsonConvert.SerializeObject(Config, Formatting.Indented);
             File.WriteAllText(configPath, json);
             Debug.WriteLine("Saved config");
         }
@@ -60,6 +61,19 @@ namespace Wtile.Core.Config
             }
             else
                 return new WtileConfig();
+        }
+
+
+        private static void SetupKeybindings(List<WtileConfig.ConfigKeybinds> Keybinds)
+        {
+            var actionMap = FunctionMapping.FunctionMap;
+            foreach (var Configkeybind in Keybinds)
+            {
+                var action = actionMap[Configkeybind.Action];
+                var keybind = new WtileKeybind(Configkeybind.Keys, actionMap[Configkeybind.Action]);
+                KeybindManager.AddKeybind(keybind);
+            }
+
         }
 
     }

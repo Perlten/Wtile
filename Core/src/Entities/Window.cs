@@ -10,7 +10,7 @@ public class Window
     public readonly IntPtr WindowPtr;
     public readonly string ApplicationName;
     public string Name { get; }
-    public readonly uint Id;
+    public readonly int Id;
 
 
     public Window(IntPtr windowPtr)
@@ -19,8 +19,8 @@ public class Window
         Name = GetName(WindowPtr);
 
         ExternalFunctions.GetWindowThreadProcessId(WindowPtr, out uint processId);
-        Id = processId;
-        ApplicationName = Process.GetProcessById((int)Id).ProcessName.ToString();
+        Id = (int)processId;
+        ApplicationName = Process.GetProcessById(Id).ProcessName.ToString();
     }
 
     public void Quit()
