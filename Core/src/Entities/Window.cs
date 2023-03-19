@@ -12,8 +12,10 @@ public class Window
     public string Name { get; }
     public readonly int Id;
 
+    internal Workspace Workspace { get; set; }
 
-    public Window(IntPtr windowPtr)
+
+    public Window(IntPtr windowPtr, Workspace workspace)
     {
         WindowPtr = windowPtr;
         Name = GetName(WindowPtr);
@@ -21,11 +23,13 @@ public class Window
         ExternalFunctions.GetWindowThreadProcessId(WindowPtr, out uint processId);
         Id = (int)processId;
         ApplicationName = Process.GetProcessById(Id).ProcessName.ToString();
+        Workspace = workspace;
     }
 
     public void Quit()
     {
-        Process.GetProcessById((int)WindowPtr).Kill();
+        Workspace.RemoveWindow(this);
+        Process.GetProcessById(Id).Kill();
     }
 
     public void Activate()

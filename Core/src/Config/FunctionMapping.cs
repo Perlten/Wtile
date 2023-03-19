@@ -23,5 +23,6 @@ internal static class FunctionMapping
         }
         fm.Add("SaveConfig()", ConfigManager.SaveConfig);
         fm.Add("AddActiveWindow()", () => Wtile.GetCw().AddActiveWindow());
+        fm.Add("QuitCurrentWindow()", () => Wtile.GetCw().CurrentWindow?.Quit());
     }
 }

@@ -66,7 +66,7 @@ public static class Wtile
     {
         if (index >= _workspaces.Count) return;
         _currentWorkspace = _workspaces[index];
-        _currentWorkspace.ActivateCurrentWindow();
+        _currentWorkspace.CurrentWindow?.Activate();
     }
 
     internal static Workspace GetCw()
@@ -76,7 +76,7 @@ public static class Wtile
 
     public static bool AddWindow(IntPtr windowPtr)
     {
-        _currentWorkspace.AddWindow(new Window(windowPtr));
+        _currentWorkspace.AddWindow(windowPtr);
         return true;
     }
 

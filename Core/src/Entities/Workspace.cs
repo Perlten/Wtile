@@ -6,7 +6,7 @@ namespace Wtile.Core.Entities;
 public class Workspace
 {
     internal List<Window> Windows = new();
-    private Window? currentWindow;
+    internal Window? CurrentWindow { get; private set; }
     public readonly int Index;
     public int WindowIndex { get; private set; }
 
@@ -16,41 +16,32 @@ public class Workspace
         WindowIndex = 0;
     }
 
-    public void AddWindow(Window window)
+    public void AddWindow(IntPtr windowPtr)
     {
+        var window = new Window(windowPtr, this);
         Windows.Add(window);
-        currentWindow ??= window;
+        CurrentWindow ??= window;
     }
-    public void AddWindows(IList<Window> windows)
+    public void RemoveWindow(Window window)
     {
-        Windows.AddRange(windows);
-        if (currentWindow == null && windows.Count != 0)
-        {
-            currentWindow = windows[0];
-        }
+        Windows.Remove(window);
     }
-
 
     public void ChangeWindow(int index)
     {
         if (Windows.Count - 1 < index) return;
         WindowIndex = index;
-        currentWindow = Windows[index];
-        currentWindow.Activate();
+        CurrentWindow = Windows[index];
+        CurrentWindow.Activate();
     }
 
-    public void ActivateCurrentWindow()
-    {
-        if (currentWindow == null) return;
-        currentWindow.Activate();
-    }
 
     public void AddActiveWindow()
     {
         var windowPtr = ExternalFunctions.GetForegroundWindow();
-        var window = new Window(windowPtr);
+        var window = new Window(windowPtr, this);
         Windows.Add(window);
-        currentWindow ??= window;
+        CurrentWindow ??= window;
     }
 
     public override string ToString()

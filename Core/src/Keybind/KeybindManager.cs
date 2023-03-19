@@ -91,7 +91,7 @@ public static class KeybindManager
                 break;
             }
         }
-        if (_inputsReserved) return (IntPtr)1; // stops registering the key stroke
+        //if (_inputsReserved) return (IntPtr)1; // stops registering the key stroke TODO
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
 }
