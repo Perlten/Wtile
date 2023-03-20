@@ -27,7 +27,6 @@ namespace Wtile.Core.Utils
         internal const int KEYEVENTF_KEYUP = 0x0002;
 
 
-
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetForegroundWindow(IntPtr IntPtr);
@@ -75,7 +74,6 @@ namespace Wtile.Core.Utils
 
         [DllImport("winmm.dll")]
         public static extern int waveOutGetVolume(IntPtr hwo, out uint dwVolume);
-
 
         [DllImport("user32.dll")]
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);

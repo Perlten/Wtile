@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using Wtile.Core.EventLoop;
 using Wtile.Core.Utils;
 
@@ -19,6 +20,7 @@ public static class KeybindManager
 
     private volatile static int _keyPressCounter = 0;
     private static WtileModKey? _currentModKey = null;
+    private static bool _ignoreEvents = false;
 
     delegate void EventDelegate();
 
@@ -62,48 +64,74 @@ public static class KeybindManager
     {
         if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
         int vkCode = Marshal.ReadInt32(lParam);
+
         bool modKeyEvent = Enum.IsDefined(typeof(WtileModKey), vkCode);
 
         if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
         {
-            if (modKeyEvent)
+            if (!_keymap[vkCode]) _keyPressCounter++;
+            _keymap[vkCode] = true;
+            if (modKeyEvent && !_ignoreEvents)
             {
                 _currentModKey = (WtileModKey)vkCode;
-            }
-            else
-            {
-                if (!_keymap[vkCode]) _keyPressCounter++;
-                _keymap[vkCode] = true;
+                return 1;
             }
         }
         if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
         {
-            if (modKeyEvent)
+            if (_keymap[vkCode]) _keyPressCounter--;
+            _keymap[vkCode] = false;
+            if (modKeyEvent && !_ignoreEvents)
             {
                 _currentModKey = null;
-            }
-            else
-            {
-                if (_keymap[vkCode]) _keyPressCounter--;
-                _keymap[vkCode] = false;
+                return 1;
             }
         }
 
-        if (_currentModKey != null)
+        if (_currentModKey != null && !_ignoreEvents)
         {
+            WtileKey key = (WtileKey)vkCode;
+            bool excludedKey = true;
             foreach (var keybind in _keybinds)
             {
                 if (keybind.ModKey == _currentModKey && keybind.ShouldTrigger(_keymap, _keyPressCounter))
                 {
                     keybind.Action();
                     if (keybind.Blocking)
-                        return (IntPtr)1; // stops registering the key stroke
-                    break;
+                        return 1; // stops registering the key stroke
+                    else
+                        return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
                 }
+                if (keybind.IsKeyPartOfKeybind(key))
+                {
+                    excludedKey = false;
+                }
+            }
+            if (excludedKey)
+            {
+                _ignoreEvents = true;
+                SendKeyPress((int)_currentModKey);
+                SendKeyPress((int)key);
+                _currentModKey = null;
+                return 1;
             }
         }
 
-        if (_currentModKey != null) return 1;
+        if (_keyPressCounter == 0)
+        {
+            _ignoreEvents = false;
+        }
+
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
+
+    private static void SendKeyPress(int key, bool ignore = true)
+    {
+        ExternalFunctions.keybd_event((byte)key, 0, ExternalFunctions.KEYEVENTF_KEYDOWN, 0);
+    }
+    private static void SendKeyRelease(int key, bool ignore = true)
+    {
+        ExternalFunctions.keybd_event((byte)key, 0, ExternalFunctions.KEYEVENTF_KEYUP, 0);
+    }
+
 }

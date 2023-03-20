@@ -24,9 +24,14 @@ namespace Wtile.Core.Keybind
             ModKey = modKey;
         }
 
+        internal bool IsKeyPartOfKeybind(WtileKey key)
+        {
+            return _keys.Contains(key);
+        }
+
         internal bool ShouldTrigger(Dictionary<int, bool> keymap, int keypressCounter)
         {
-            if (_keys.Count == keypressCounter)
+            if (_keys.Count + 1 == keypressCounter)
             {
                 foreach (var key in _keys)
                 {

@@ -60,6 +60,7 @@ public static class Wtile
 
         while (true)
         {
+            //Debug.WriteLine(KeybindManager._keyPressCounter);
             Thread.Sleep(16);
         }
     }
