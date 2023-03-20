@@ -1,6 +1,7 @@
 ﻿
 using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using Wtile.Core.Config;
 using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
@@ -22,10 +23,11 @@ public static class Wtile
         _currentWorkspace = _workspaces[0];
     }
 
+
     private static void SetupKeybinds()
     {
-        var keys = new List<WtileKey> { WtileKey.LWin };
-        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => { Debug.WriteLine("TEST"); }));
+        //var keys = new List<WtileKey> { WtileKey.LWin };
+        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => { })); // TODO: This is not meant to be
 
 
         //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };

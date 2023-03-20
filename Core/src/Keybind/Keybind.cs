@@ -10,40 +10,37 @@ namespace Wtile.Core.Keybind
 {
     public class WtileKeybind : IComparable<WtileKeybind>
     {
+        public WtileModKey ModKey { get; }
         private List<WtileKey> _keys;
-        private Action _action;
+        public Action Action { get; }
 
         public bool Blocking = true;
 
 
-        public WtileKeybind(List<WtileKey> keys, Action action)
+        public WtileKeybind(List<WtileKey> keys, WtileModKey modKey, Action action)
         {
             _keys = keys;
-            _action = action;
+            Action = action;
+            ModKey = modKey;
         }
 
-        internal bool HandleTriggering(Dictionary<int, bool> keymap, int keypressCounter)
+        internal bool ShouldTrigger(Dictionary<int, bool> keymap, int keypressCounter)
         {
-            if (ShouldTrigger(keymap) && _keys.Count == keypressCounter)
+            if (_keys.Count == keypressCounter)
             {
-                _action();
+                foreach (var key in _keys)
+                {
+                    var keyCode = (int)key;
+                    if (!keymap[keyCode])
+                    {
+                        return false;
+                    }
+                }
                 return true;
             }
             return false;
         }
 
-        private bool ShouldTrigger(Dictionary<int, bool> keymap)
-        {
-            foreach (var key in _keys)
-            {
-                var keyCode = (int)key;
-                if (!keymap[keyCode])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
 
         public int CompareTo(WtileKeybind? other)
         {

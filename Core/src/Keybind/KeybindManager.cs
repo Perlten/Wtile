@@ -18,7 +18,7 @@ public static class KeybindManager
     const int WM_SYSKEYUP = 0x0105;
 
     private volatile static int _keyPressCounter = 0;
-    private static bool _inputsReserved = false;
+    private static WtileModKey? _currentModKey = null;
 
     delegate void EventDelegate();
 
@@ -62,36 +62,48 @@ public static class KeybindManager
     {
         if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
         int vkCode = Marshal.ReadInt32(lParam);
-        //Debug.WriteLine($"Key: {vkCode} --- W: {wParam} --- L:{lParam}");
+        bool modKeyEvent = Enum.IsDefined(typeof(WtileModKey), vkCode);
 
-        if (_keyPressCounter == 0)
+        if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
         {
-            _inputsReserved = false;
-        }
-
-        if (code >= 0 && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN))
-        {
-            if (!_keymap[vkCode]) _keyPressCounter++;
-            _keymap[vkCode] = true;
-        }
-        if (code >= 0 && (wParam == WM_KEYUP || wParam == WM_SYSKEYUP))
-        {
-            if (_keymap[vkCode]) _keyPressCounter--;
-            _keymap[vkCode] = false;
-        }
-
-
-        foreach (var keybind in _keybinds)
-        {
-            if (keybind.HandleTriggering(_keymap, _keyPressCounter))
+            if (modKeyEvent)
             {
-                _inputsReserved = true;
-                if (keybind.Blocking)
-                    return (IntPtr)1; // stops registering the key stroke
-                break;
+                _currentModKey = (WtileModKey)vkCode;
+            }
+            else
+            {
+                if (!_keymap[vkCode]) _keyPressCounter++;
+                _keymap[vkCode] = true;
             }
         }
-        //if (_inputsReserved) return (IntPtr)1; // stops registering the key stroke TODO
+        if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
+        {
+            if (modKeyEvent)
+            {
+                _currentModKey = null;
+            }
+            else
+            {
+                if (_keymap[vkCode]) _keyPressCounter--;
+                _keymap[vkCode] = false;
+            }
+        }
+
+        if (_currentModKey != null)
+        {
+            foreach (var keybind in _keybinds)
+            {
+                if (keybind.ModKey == _currentModKey && keybind.ShouldTrigger(_keymap, _keyPressCounter))
+                {
+                    keybind.Action();
+                    if (keybind.Blocking)
+                        return (IntPtr)1; // stops registering the key stroke
+                    break;
+                }
+            }
+        }
+
+        if (_currentModKey != null) return 1;
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
 }

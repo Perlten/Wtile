@@ -4,6 +4,15 @@ using System.Runtime.Serialization;
 
 namespace Wtile.Core.Keybind;
 
+[JsonConverter(typeof(StringEnumConverter))]
+public enum WtileModKey
+{
+    [EnumMember(Value = "LWin")]
+    LWin = Keys.LWin,
+    [EnumMember(Value = "LAlt")]
+    LAlt = Keys.LMenu,
+}
+
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum WtileKey
@@ -181,8 +190,6 @@ public enum WtileKey
     Y = Keys.Y,
     [EnumMember(Value = "Z")]
     Z = Keys.Z,
-    [EnumMember(Value = "LWin")]
-    LWin = Keys.LWin,
     [EnumMember(Value = "RWin")]
     RWin = Keys.RWin,
     [EnumMember(Value = "Apps")]
@@ -281,8 +288,6 @@ public enum WtileKey
     LControlKey = Keys.LControlKey,
     [EnumMember(Value = "RControlKey")]
     RControlKey = Keys.RControlKey,
-    [EnumMember(Value = "LAlt")]
-    LAlt = Keys.LMenu,
     [EnumMember(Value = "RAlt")]
     RAlt = Keys.LMenu,
     [EnumMember(Value = "BrowserBack")]

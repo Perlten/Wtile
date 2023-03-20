@@ -19,6 +19,7 @@ namespace Wtile.Core.Config
 
         public class ConfigKeybinds
         {
+            public WtileModKey ModKey { get; set; }
             public List<WtileKey> Keys { get; set; } = new();
             public string Action { get; set; } = "";
         }
@@ -70,7 +71,7 @@ namespace Wtile.Core.Config
             foreach (var Configkeybind in Keybinds)
             {
                 var action = actionMap[Configkeybind.Action];
-                var keybind = new WtileKeybind(Configkeybind.Keys, actionMap[Configkeybind.Action]);
+                var keybind = new WtileKeybind(Configkeybind.Keys, Configkeybind.ModKey, actionMap[Configkeybind.Action]);
                 KeybindManager.AddKeybind(keybind);
             }
 

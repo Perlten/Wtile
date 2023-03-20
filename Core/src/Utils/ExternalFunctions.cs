@@ -23,6 +23,10 @@ namespace Wtile.Core.Utils
             HSHELL_APPCOMMAND = 12
         }
 
+        internal const int KEYEVENTF_KEYDOWN = 0x0000;
+        internal const int KEYEVENTF_KEYUP = 0x0002;
+
+
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -71,6 +75,10 @@ namespace Wtile.Core.Utils
 
         [DllImport("winmm.dll")]
         public static extern int waveOutGetVolume(IntPtr hwo, out uint dwVolume);
+
+
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
     }
 }
