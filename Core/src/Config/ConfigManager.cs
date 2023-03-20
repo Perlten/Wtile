@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Text.Json.Serialization;
 using Wtile.Core.Keybind;
 
 namespace Wtile.Core.Config

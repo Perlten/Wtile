@@ -1,11 +1,5 @@
-﻿
-using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.InteropServices;
-using Wtile.Core.Config;
-using Wtile.Core.Entities;
+﻿using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
-using Wtile.Core.Utils;
 
 namespace Wtile.Core;
 

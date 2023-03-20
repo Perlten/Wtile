@@ -2,7 +2,6 @@ using NAudio.CoreAudioApi;
 using System.Diagnostics;
 using Wtile.Core.Config;
 using Wtile.Core.Keybind;
-using Wtile.Core.Utils;
 
 namespace Wtile.Gui
 {

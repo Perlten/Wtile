@@ -2,9 +2,6 @@
 
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
-using Wtile.Core.Entities;
-using Wtile.Core.Keybind;
 
 public class Program
 {
@@ -58,7 +55,7 @@ public class Program
             int length = GetWindowTextLength(IntPtr);
             if (length == 0) return true;
 
-            StringBuilder builder = new StringBuilder(length);
+            StringBuilder builder = new(length);
             GetWindowText(IntPtr, builder, length + 1);
 
             windows[IntPtr] = builder.ToString();

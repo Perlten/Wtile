@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Wtile.Core.Config;
+﻿namespace Wtile.Core.Config;
 
 internal static class FunctionMapping
 {

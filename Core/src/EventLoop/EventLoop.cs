@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Wtile.Core.Entities;
-using Wtile.Core.Keybind;
+﻿using Wtile.Core.Entities;
 using Wtile.Core.Utils;
 
 namespace Wtile.Core.EventLoop;

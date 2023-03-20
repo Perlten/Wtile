@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 
 class Program
@@ -24,7 +22,7 @@ class Program
     private static IntPtr ShellHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
     {
         Console.WriteLine("It worked");
-        if (nCode >= 0 && wParam == (IntPtr)NativeMethods.HSHELL_WINDOWCREATED)
+        if (nCode >= 0 && wParam == NativeMethods.HSHELL_WINDOWCREATED)
         {
             IntPtr hWnd = lParam;
             Console.WriteLine($"New window created with handle {hWnd}");
