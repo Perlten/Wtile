@@ -27,8 +27,13 @@ public class Window
 
     public void Quit()
     {
-        Workspace.RemoveWindow(this);
-        Process.GetProcessById(Id).Kill();
+        ExternalFunctions.SendMessage(WindowPtr, ExternalFunctions.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+        var newWindow = Workspace.Windows.FirstOrDefault();
+        if (newWindow != null)
+        {
+            Workspace.ChangeWindow(newWindow);
+        }
+        Workspace.SetWindowIndex();
     }
 
     public void Activate()

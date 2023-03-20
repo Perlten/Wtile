@@ -7,6 +7,7 @@ public static class Wtile
 {
     internal static List<Workspace> _workspaces = new();
     internal static Workspace _currentWorkspace;
+    internal static Workspace? _previousWorkspace;
 
     static Wtile()
     {
@@ -20,31 +21,6 @@ public static class Wtile
 
     private static void SetupKeybinds()
     {
-        //var keys = new List<WtileKey> { WtileKey.LWin };
-        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => { })); // TODO: This is not meant to be
-
-
-        //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };
-        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(0)));
-
-        //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.D2 };
-        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => SwitchWorkspace(1)));
-
-        //keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D1 };
-        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(0)));
-
-        //keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D2 };
-        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(1)));
-
-        //keys = new List<WtileKey> { WtileKey.LAlt, WtileKey.D3 };
-        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.SwitchWindow(2)));
-
-        //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.W };
-        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => _currentWorkspace.AddActiveWindow()));
-
-        //keys = new List<WtileKey> { WtileKey.LWin, WtileKey.LControlKey, WtileKey.LShiftKey, WtileKey.S };
-        //KeybindManager.AddKeybind(new WtileKeybind(keys, () => ConfigManager.SaveConfig()));
-
     }
 
     public static void Start()
@@ -62,9 +38,17 @@ public static class Wtile
     public static void ChangeWorkspace(int index)
     {
         if (index >= _workspaces.Count) return;
-        _currentWorkspace = _workspaces[index];
+        var workspace = _workspaces[index];
+        ChangeWorkspace(workspace);
+    }
+
+    public static void ChangeWorkspace(Workspace workspace)
+    {
+        _previousWorkspace = _currentWorkspace;
+        _currentWorkspace = workspace;
         _currentWorkspace.CurrentWindow?.Activate();
     }
+
 
     internal static Workspace GetCw()
     {
@@ -75,6 +59,12 @@ public static class Wtile
     {
         _currentWorkspace.AddWindow(windowPtr);
         return true;
+    }
+
+    public static void ChangeToPreviousWorkspace()
+    {
+        if (_previousWorkspace == null) return;
+        ChangeWorkspace(_previousWorkspace);
     }
 
     public static bool RemoveWindow(IntPtr windowPtr)
