@@ -8,6 +8,7 @@ namespace Wtile.Gui
     public partial class WtileForm : Form
     {
         private bool _resizable = false;
+        private bool _visible = true;
         private PerformanceCounter _cpuCounter;
 
         public WtileForm()
@@ -22,9 +23,14 @@ namespace Wtile.Gui
             Width = ConfigManager.Config.Width;
             Height = ConfigManager.Config.Height;
 
-            var keys = new List<WtileKey> { WtileKey.H };
-            var keybind = new WtileKeybind(keys, WtileModKey.LWin, () => _resizable = !_resizable);
-            KeybindManager.AddKeybind(keybind);
+            var resizeKeys = new List<WtileKey> { WtileKey.H, WtileKey.LControlKey, WtileKey.LShiftKey };
+            var resizeKeybind = new WtileKeybind(resizeKeys, WtileModKey.LWin, () => _resizable = !_resizable);
+            KeybindManager.AddKeybind(resizeKeybind);
+
+            var visibilityKeys = new List<WtileKey> { WtileKey.H };
+            var visibilityKeybind = new WtileKeybind(visibilityKeys, WtileModKey.LWin, () => _visible = !_visible);
+            KeybindManager.AddKeybind(visibilityKeybind);
+
 
             System.Windows.Forms.Timer mainTimer = new()
             {
@@ -42,6 +48,7 @@ namespace Wtile.Gui
 
             leftLabel.Text = Core.Wtile.GetWtileString();
             rightLabel.Text = GetRightLabelText();
+
         }
 
         private void MainUpdate(object? sender, EventArgs e)
@@ -59,6 +66,10 @@ namespace Wtile.Gui
             config.Height = Height;
             config.Top = Top;
             config.Left = Left;
+            if (_visible != Visible)
+            {
+                Visible = _visible;
+            }
         }
 
         private void UpdateRightLabel(object? sender, EventArgs e)
