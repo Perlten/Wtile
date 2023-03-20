@@ -21,6 +21,7 @@ public static class KeybindManager
     private volatile static int _keyPressCounter = 0;
     private static WtileModKey? _currentModKey = null;
     private static bool _ignoreEvents = false;
+    private static int _keysSinceModPress = 0;
 
     delegate void EventDelegate();
 
@@ -73,9 +74,12 @@ public static class KeybindManager
             _keymap[vkCode] = true;
             if (modKeyEvent && !_ignoreEvents)
             {
+                _keysSinceModPress = 0;
                 _currentModKey = (WtileModKey)vkCode;
                 return 1;
             }
+            else
+                _keysSinceModPress++;
         }
         if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
         {
@@ -83,6 +87,12 @@ public static class KeybindManager
             _keymap[vkCode] = false;
             if (modKeyEvent && !_ignoreEvents)
             {
+                if (_keysSinceModPress == 0 && _currentModKey != null)
+                {
+                    _ignoreEvents = true;
+                    SendKeyPress((int)_currentModKey);
+                    SendKeyRelease((int)_currentModKey);
+                }
                 _currentModKey = null;
                 return 1;
             }
@@ -125,11 +135,11 @@ public static class KeybindManager
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
 
-    private static void SendKeyPress(int key, bool ignore = true)
+    private static void SendKeyPress(int key)
     {
         ExternalFunctions.keybd_event((byte)key, 0, ExternalFunctions.KEYEVENTF_KEYDOWN, 0);
     }
-    private static void SendKeyRelease(int key, bool ignore = true)
+    private static void SendKeyRelease(int key)
     {
         ExternalFunctions.keybd_event((byte)key, 0, ExternalFunctions.KEYEVENTF_KEYUP, 0);
     }
