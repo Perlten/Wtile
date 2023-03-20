@@ -20,7 +20,7 @@ public static class KeybindManager
 
     private volatile static int _keyPressCounter = 0;
     private static WtileModKey? _currentModKey = null;
-    private static bool _ignoreEvents = false;
+    private static bool _ignoreEvents = false; // Indicates if Wtile should ignore events
     private static int _keysSinceModPress = 0;
 
     delegate void EventDelegate();
@@ -87,7 +87,7 @@ public static class KeybindManager
             _keymap[vkCode] = false;
             if (modKeyEvent && !_ignoreEvents)
             {
-                if (_keysSinceModPress == 0 && _currentModKey != null)
+                if (_keysSinceModPress == 0 && _currentModKey != null) // If a mod key is pressed alone just pres that mod key
                 {
                     _ignoreEvents = true;
                     SendKeyPress((int)_currentModKey);
@@ -114,10 +114,10 @@ public static class KeybindManager
                 }
                 if (keybind.IsKeyPartOfKeybind(key))
                 {
-                    excludedKey = false;
+                    excludedKey = false; // this happens if the user presses a key that is no longer part of any keybind
                 }
             }
-            if (excludedKey)
+            if (excludedKey) // If keypresses is not part of any keybind backtrack and press the previous keys
             {
                 _ignoreEvents = true;
                 SendKeyPress((int)_currentModKey);
@@ -127,7 +127,7 @@ public static class KeybindManager
             }
         }
 
-        if (_keyPressCounter == 0)
+        if (_keyPressCounter == 0) // Once all keys have been released Wtile can start processing events again
         {
             _ignoreEvents = false;
         }
