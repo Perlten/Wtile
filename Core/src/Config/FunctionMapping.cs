@@ -1,4 +1,6 @@
-﻿namespace Wtile.Core.Config;
+﻿using Wtile.Core.KeyMouse;
+
+namespace Wtile.Core.Config;
 
 public static class FunctionMapping
 {

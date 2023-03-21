@@ -35,23 +35,21 @@ public class Workspace
     public void ChangeToPreviousWindow()
     {
         if (PreviousWindow == null || CurrentWindow == null) return;
-        (PreviousWindow, CurrentWindow) = (CurrentWindow, PreviousWindow);
-        CurrentWindow.Activate();
+        ChangeWindow(PreviousWindow);
     }
 
     public void ChangeWindow(int index)
     {
         if (Windows.Count - 1 < index) return;
-        WindowIndex = index;
-        PreviousWindow = CurrentWindow;
-        CurrentWindow = Windows[index];
-        CurrentWindow.Activate();
+        var window = Windows[index];
+        ChangeWindow(window);
     }
     public void ChangeWindow(Window window)
     {
         PreviousWindow = CurrentWindow;
         CurrentWindow = window;
         CurrentWindow.Activate();
+        SetWindowIndex();
     }
 
     public void MoveCurrentWindowToWorkspace(int workspaceIndex)

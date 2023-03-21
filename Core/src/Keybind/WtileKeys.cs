@@ -11,6 +11,8 @@ public enum WtileModKey
     LWin = Keys.LWin,
     [EnumMember(Value = "LAlt")]
     LAlt = Keys.LMenu,
+    [EnumMember(Value = "AE")]
+    AE = 192
 }
 
 

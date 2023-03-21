@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Wtile.Core.Utils;
 
@@ -19,6 +20,8 @@ public static class KeybindManager
     private static bool _ignoreEvents = false; // Indicates if Wtile should ignore events
     private static int _keysSinceModPress = 0;
 
+    private static bool _keymouseMode = false;
+
     delegate void EventDelegate();
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -29,6 +32,12 @@ public static class KeybindManager
     }
 
     public static bool IsKeyPressed(WtileKey key)
+    {
+        int keyCode = (int)key;
+        return _keymap[keyCode];
+    }
+
+    public static bool IsKeyPressed(WtileModKey key)
     {
         int keyCode = (int)key;
         return _keymap[keyCode];
@@ -61,8 +70,53 @@ public static class KeybindManager
     {
         if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
         int vkCode = Marshal.ReadInt32(lParam);
-
         bool modKeyEvent = Enum.IsDefined(typeof(WtileModKey), vkCode);
+
+        if (_keymouseMode)
+        {
+            if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
+            {
+                if (!_keymap[vkCode]) _keyPressCounter++;
+                _keymap[vkCode] = true;
+            }
+            if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
+            {
+                if (modKeyEvent)
+                {
+                    var mk = (WtileModKey)vkCode;
+                    if (mk == KeyMouse.KeyMouse.Config.ModKey)
+                    {
+                        _keymouseMode = false;
+                    }
+                }
+                if (_keymap[vkCode]) _keyPressCounter--;
+                _keymap[vkCode] = false;
+            }
+            // TODO : send event if not part of keymouse
+            return 1;
+        }
+
+        if (modKeyEvent)
+        {
+            var mk = (WtileModKey)vkCode;
+            if (mk == KeyMouse.KeyMouse.Config.ModKey)
+            {
+                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
+                {
+                    if (!_keymap[vkCode]) _keyPressCounter++;
+                    _keymap[vkCode] = true;
+                }
+                if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
+                {
+                    if (_keymap[vkCode]) _keyPressCounter--;
+                    _keymap[vkCode] = false;
+                }
+                _keymouseMode = true;
+                return 1;
+            }
+        }
+
+
 
         if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
         {
@@ -126,6 +180,7 @@ public static class KeybindManager
         if (_keyPressCounter == 0) // Once all keys have been released Wtile can start processing events again
         {
             _ignoreEvents = false;
+            _keymouseMode = false;
         }
 
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
