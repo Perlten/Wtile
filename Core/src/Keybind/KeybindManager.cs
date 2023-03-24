@@ -66,20 +66,20 @@ public static class KeybindManager
         }
     }
 
-    private static IntPtr HandleEvent(int code, IntPtr wParam, IntPtr lParam)
+    private static bool IsWparamDown(IntPtr wParam)
     {
-        if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
-        int vkCode = Marshal.ReadInt32(lParam);
-        bool modKeyEvent = Enum.IsDefined(typeof(WtileModKey), vkCode);
+        return wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN;
+    }
+    private static bool IsWparamUp(IntPtr wParam)
+    {
+        return wParam == WM_KEYUP || wParam == WM_SYSKEYUP;
+    }
 
+    private static int HandleKeyMouseEvents(int vkCode, bool modKeyEvent, IntPtr wParam)
+    {
         if (_keymouseMode)
         {
-            if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
-            {
-                if (!_keymap[vkCode]) _keyPressCounter++;
-                _keymap[vkCode] = true;
-            }
-            if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
+            if (IsWparamUp(wParam))
             {
                 if (modKeyEvent)
                 {
@@ -89,10 +89,7 @@ public static class KeybindManager
                         _keymouseMode = false;
                     }
                 }
-                if (_keymap[vkCode]) _keyPressCounter--;
-                _keymap[vkCode] = false;
             }
-            // TODO : send event if not part of keymouse
             return 1;
         }
 
@@ -101,27 +98,34 @@ public static class KeybindManager
             var mk = (WtileModKey)vkCode;
             if (mk == KeyMouse.KeyMouse.Config.ModKey)
             {
-                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
-                {
-                    if (!_keymap[vkCode]) _keyPressCounter++;
-                    _keymap[vkCode] = true;
-                }
-                if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
-                {
-                    if (_keymap[vkCode]) _keyPressCounter--;
-                    _keymap[vkCode] = false;
-                }
                 _keymouseMode = true;
                 return 1;
             }
         }
+        return 0;
+    }
 
+    private static IntPtr HandleEvent(int code, IntPtr wParam, IntPtr lParam)
+    {
+        if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
+        int vkCode = Marshal.ReadInt32(lParam);
+        bool modKeyEvent = Enum.IsDefined(typeof(WtileModKey), vkCode);
 
-
-        if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
+        if (IsWparamDown(wParam))
         {
             if (!_keymap[vkCode]) _keyPressCounter++;
             _keymap[vkCode] = true;
+        }
+        else if (IsWparamUp(wParam))
+        {
+            if (_keymap[vkCode]) _keyPressCounter--;
+            _keymap[vkCode] = false;
+        }
+
+        if (HandleKeyMouseEvents(vkCode, modKeyEvent, wParam) != 0) return 1;
+
+        if (IsWparamDown(wParam))
+        {
             if (modKeyEvent && !_ignoreEvents)
             {
                 _keysSinceModPress = 0;
@@ -131,10 +135,8 @@ public static class KeybindManager
             else
                 _keysSinceModPress++;
         }
-        if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
+        if (IsWparamUp(wParam))
         {
-            if (_keymap[vkCode]) _keyPressCounter--;
-            _keymap[vkCode] = false;
             if (modKeyEvent && !_ignoreEvents)
             {
                 if (_keysSinceModPress == 0 && _currentModKey != null) // If a mod key is pressed alone just pres that mod key
