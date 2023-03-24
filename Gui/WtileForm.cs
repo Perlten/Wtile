@@ -2,13 +2,14 @@ using NAudio.CoreAudioApi;
 using System.Diagnostics;
 using Wtile.Core.Config;
 using Wtile.Core.Keybind;
+using Wtile.Core.Utils;
 
 namespace Wtile.Gui
 {
     public partial class WtileForm : Form
     {
         private bool _resizable = false;
-        private bool _visible = true;
+        private bool _visibility = State.RUNNING;
         private PerformanceCounter _cpuCounter;
 
         public WtileForm()
@@ -26,11 +27,6 @@ namespace Wtile.Gui
             var resizeKeys = new List<WtileKey> { WtileKey.H, WtileKey.LControlKey, WtileKey.LShiftKey };
             var resizeKeybind = new WtileKeybind(resizeKeys, WtileModKey.LWin, () => _resizable = !_resizable);
             KeybindManager.AddKeybind(resizeKeybind);
-
-            var visibilityKeys = new List<WtileKey> { WtileKey.H };
-            var visibilityKeybind = new WtileKeybind(visibilityKeys, WtileModKey.LWin, () => _visible = !_visible);
-            KeybindManager.AddKeybind(visibilityKeybind);
-
 
             System.Windows.Forms.Timer mainTimer = new()
             {
@@ -66,9 +62,10 @@ namespace Wtile.Gui
             config.Height = Height;
             config.Top = Top;
             config.Left = Left;
-            if (_visible != Visible)
+            if (State.RUNNING != _visibility)
             {
-                Visible = _visible;
+                Opacity = 0;
+                _visibility = State.RUNNING;
             }
         }
 

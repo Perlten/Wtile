@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Newtonsoft.Json.Linq;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Wtile.Core.Utils;
@@ -7,6 +8,22 @@ namespace Wtile.Core.Keybind;
 
 public static class KeybindManager
 {
+    public class IgnoreKey
+    {
+        public bool Pressed { get; set; } = false;
+        public bool Relased { get; set; } = false;
+        public readonly int KeyCode;
+        public IgnoreKey(int keyCode)
+        {
+            KeyCode = keyCode;
+        }
+
+        public override string? ToString()
+        {
+            return $"P: {Pressed} -- R: {Relased} -- K: {KeyCode}";
+        }
+    }
+
     private static Dictionary<int, bool> _keymap = new();
     private static List<WtileKeybind> _keybinds = new();
 
@@ -17,8 +34,9 @@ public static class KeybindManager
 
     private volatile static int _keyPressCounter = 0;
     private static WtileModKey? _currentModKey = null;
-    private static bool _ignoreEvents = false; // Indicates if Wtile should ignore events
     private static int _keysSinceModPress = 0;
+
+    internal static bool _ignoreEvents = false; // Indicates if Wtile should ignore events
 
     private static bool _keymouseMode = false;
 
@@ -95,19 +113,75 @@ public static class KeybindManager
 
         if (modKeyEvent)
         {
-            var mk = (WtileModKey)vkCode;
-            if (mk == KeyMouse.KeyMouse.Config.ModKey)
+            if (IsWparamDown(wParam))
             {
-                _keymouseMode = true;
-                return 1;
+                var mk = (WtileModKey)vkCode;
+                if (mk == KeyMouse.KeyMouse.Config.ModKey)
+                {
+                    _keymouseMode = true;
+                    return 1;
+                }
             }
         }
         return 0;
     }
 
+    private static int HandleKeybindEvent(int vkCode, bool modKeyEvent, IntPtr wParam)
+    {
+        if (IsWparamDown(wParam))
+        {
+            if (modKeyEvent)
+            {
+                _keysSinceModPress = 0;
+                _currentModKey = (WtileModKey)vkCode;
+                return 1;
+            }
+            else
+                _keysSinceModPress++;
+        }
+        if (IsWparamUp(wParam))
+        {
+            if (modKeyEvent)
+            {
+                if (_keysSinceModPress == 0 && _currentModKey != null) // If a mod key is pressed alone just pres that mod key
+                {
+                    SendKeyPress((int)_currentModKey);
+                    SendKeyRelease((int)_currentModKey);
+                }
+                _currentModKey = null;
+                return 1;
+            }
+        }
+
+        if (_currentModKey != null)
+        {
+            WtileKey key = (WtileKey)vkCode;
+            foreach (var keybind in _keybinds)
+            {
+                if (keybind.ModKey == _currentModKey && keybind.ShouldTrigger(_keymap, _keyPressCounter))
+                {
+                    keybind.Action();
+                    if (keybind.Blocking)
+                        return 1; // stops registering the key stroke
+                    else
+                        return 0;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+
     private static IntPtr HandleEvent(int code, IntPtr wParam, IntPtr lParam)
     {
         if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
+        if (_ignoreEvents || !State.RUNNING)
+        {
+            _ignoreEvents = false;
+            return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
+        }
+
         int vkCode = Marshal.ReadInt32(lParam);
         bool modKeyEvent = Enum.IsDefined(typeof(WtileModKey), vkCode);
 
@@ -123,77 +197,19 @@ public static class KeybindManager
         }
 
         if (HandleKeyMouseEvents(vkCode, modKeyEvent, wParam) != 0) return 1;
-
-        if (IsWparamDown(wParam))
-        {
-            if (modKeyEvent && !_ignoreEvents)
-            {
-                _keysSinceModPress = 0;
-                _currentModKey = (WtileModKey)vkCode;
-                return 1;
-            }
-            else
-                _keysSinceModPress++;
-        }
-        if (IsWparamUp(wParam))
-        {
-            if (modKeyEvent && !_ignoreEvents)
-            {
-                if (_keysSinceModPress == 0 && _currentModKey != null) // If a mod key is pressed alone just pres that mod key
-                {
-                    _ignoreEvents = true;
-                    SendKeyPress((int)_currentModKey);
-                    SendKeyRelease((int)_currentModKey);
-                }
-                _currentModKey = null;
-                return 1;
-            }
-        }
-
-        if (_currentModKey != null && !_ignoreEvents)
-        {
-            WtileKey key = (WtileKey)vkCode;
-            bool excludedKey = true;
-            foreach (var keybind in _keybinds)
-            {
-                if (keybind.ModKey == _currentModKey && keybind.ShouldTrigger(_keymap, _keyPressCounter))
-                {
-                    keybind.Action();
-                    if (keybind.Blocking)
-                        return 1; // stops registering the key stroke
-                    else
-                        return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
-                }
-                if (keybind.IsKeyPartOfKeybind(key))
-                {
-                    excludedKey = false; // this happens if the user presses a key that is no longer part of any keybind
-                }
-            }
-            if (excludedKey) // If keypresses is not part of any keybind backtrack and press the previous keys
-            {
-                _ignoreEvents = true;
-                SendKeyPress((int)_currentModKey);
-                SendKeyPress((int)key);
-                _currentModKey = null;
-                return 1;
-            }
-        }
-
-        if (_keyPressCounter == 0) // Once all keys have been released Wtile can start processing events again
-        {
-            _ignoreEvents = false;
-            _keymouseMode = false;
-        }
+        if (HandleKeybindEvent(vkCode, modKeyEvent, wParam) != 0) return 1;
 
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
 
-    private static void SendKeyPress(int key)
+    internal static void SendKeyPress(int key)
     {
+        _ignoreEvents = true;
         ExternalFunctions.keybd_event((byte)key, 0, ExternalFunctions.KEYEVENTF_KEYDOWN, 0);
     }
-    private static void SendKeyRelease(int key)
+    internal static void SendKeyRelease(int key)
     {
+        _ignoreEvents = true;
         ExternalFunctions.keybd_event((byte)key, 0, ExternalFunctions.KEYEVENTF_KEYUP, 0);
     }
 

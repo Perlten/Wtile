@@ -1,4 +1,5 @@
-﻿using Wtile.Core.Entities;
+﻿using Microsoft.VisualBasic.Devices;
+using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
 
 namespace Wtile.Core;
@@ -18,9 +19,18 @@ public static class Wtile
         _currentWorkspace = _workspaces[0];
     }
 
-
     private static void SetupKeybinds()
     {
+        var keys = new List<WtileKey> { WtileKey.LShiftKey, WtileKey.D };
+        var keybind = new WtileKeybind(keys, WtileModKey.LAlt, () =>
+        {
+            KeybindManager.SendKeyPress((int)WtileKey.LShiftKey);
+            KeybindManager.SendKeyPress((int)WtileKey.D8);
+            KeybindManager.SendKeyRelease((int)WtileKey.D8);
+            KeybindManager.SendKeyRelease((int)WtileKey.LShiftKey);
+        }
+        );
+        KeybindManager.AddKeybind(keybind);
     }
 
     public static void Start()

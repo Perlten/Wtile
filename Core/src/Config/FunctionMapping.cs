@@ -1,4 +1,5 @@
 ﻿using Wtile.Core.KeyMouse;
+using Wtile.Core.Utils;
 
 namespace Wtile.Core.Config;
 
@@ -23,5 +24,6 @@ public static class FunctionMapping
         fm.Add("RemoveCurrentWindow()", () => Wtile.GetCw().RemoveCurrentWindow());
         fm.Add("ChangeToPreviousWindow()", () => Wtile.GetCw().ChangeToPreviousWindow());
         fm.Add("ChangeToPreviousWorkspace()", () => Wtile.ChangeToPreviousWorkspace());
+        fm.Add("ToggleRunning()", () => State.RUNNING = !State.RUNNING);
     }
 }
