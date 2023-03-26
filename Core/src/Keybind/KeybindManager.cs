@@ -19,6 +19,7 @@ public static class KeybindManager
 
     private static bool _keymouseMode = false;
     private static bool _ignoreEvent = false;
+    private static int _keySinceLastLwin = 0;
 
 
     delegate void EventDelegate();
@@ -78,6 +79,24 @@ public static class KeybindManager
         return 0;
     }
 
+    private static int HandleLWinKey(int vkCode, IntPtr wParam)
+    {
+        if (vkCode == (int)WtileModKey.LWin)
+        {
+            if (IsWparamDown(wParam))
+            {
+                _keySinceLastLwin = 0;
+            }
+            else if (IsWparamUp(wParam) && _keySinceLastLwin == 0)
+            {
+                SendKeyPress((int)WtileModKey.LWin);
+                SendKeyRelease((int)WtileModKey.LWin);
+            }
+            return 1;
+        }
+        return 0;
+    }
+
     private static void PrintPressedKeys()
     {
         foreach (var key in _keymap.Keys)
@@ -102,15 +121,20 @@ public static class KeybindManager
         }
 
         if (IsWparamDown(wParam))
+        {
             _keymap[vkCode] = true;
+            _keySinceLastLwin++;
+        }
         else if (IsWparamUp(wParam))
             _keymap.Remove(vkCode);
 
         if (HandleKeyMouseEvents() != 0) return 1;
         if (HandleKeybindEvent() != 0) return 1;
+        if (HandleLWinKey(vkCode, wParam) != 0) return 1;
 
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
+
 
     public static bool IsKeyPressed(WtileKey key)
     {

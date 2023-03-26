@@ -151,7 +151,4 @@ internal class KeyMouse
             RightClick(MouseClickState.UP);
         }
     }
-
-
-
 }
