@@ -13,8 +13,8 @@ Switch to last workspace function [x]
 Hide gui Function [x]
 
 Keymouse [x]
-Rebinds[]
-Move mouse to middle of the screen on window change []
+Rebinds[x]
+Move mouse to middle of the screen on window change [x]
 
 Quit Function []
 
