@@ -36,10 +36,10 @@ public static class FunctionMapping
         rm.Add("[", CreateAltGrRebind(WtileKey.D8));
         rm.Add("]", CreateAltGrRebind(WtileKey.D9));
         rm.Add("$", CreateAltGrRebind(WtileKey.D4));
-        rm.Add("Enter", CreateSingleKeybind(WtileKey.Enter));
+        rm.Add("Enter", CreateSingleKeyRebind(WtileKey.Enter));
     }
 
-    private static Action CreateSingleKeybind(WtileKey key)
+    private static Action CreateSingleKeyRebind(WtileKey key)
     {
         return () =>
         {

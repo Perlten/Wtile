@@ -22,6 +22,8 @@ internal class KeyMouse
     private const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
     private const int MOUSEEVENTF_RIGHTUP = 0x0010;
     private const int MOUSEEVENTF_WHEEL = 0x0800;
+    private const int MOUSEEVENTF_MIDDLEDOWN = 0x0020;
+    private const int MOUSEEVENTF_MIDDLEUP = 0x0040;
 
     internal static ConfigKeyMouse Config { get; set; } = new();
     private static bool _leftHeld = false;
@@ -41,12 +43,30 @@ internal class KeyMouse
         }
     }
 
+    private static void MiddleClick(MouseClickState state)
+    {
+        if (state == MouseClickState.DOWN)
+            ExternalFunctions.mouse_event(MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0);
+        else
+            ExternalFunctions.mouse_event(MOUSEEVENTF_MIDDLEUP, 0, 0, 0, 0);
+    }
+
     private static void LeftClick(MouseClickState state)
     {
         if (state == MouseClickState.DOWN)
-            ExternalFunctions.mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+        {
+            if (KeybindManager.IsKeyPressed(WtileModKey.LControlKey))
+                ExternalFunctions.mouse_event(MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0);
+            else
+                ExternalFunctions.mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+        }
         else
-            ExternalFunctions.mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        {
+            if (KeybindManager.IsKeyPressed(WtileModKey.LControlKey))
+                ExternalFunctions.mouse_event(MOUSEEVENTF_MIDDLEUP, 0, 0, 0, 0);
+            else
+                ExternalFunctions.mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        }
     }
     private static void RightClick(MouseClickState state)
     {
@@ -107,6 +127,7 @@ internal class KeyMouse
     private static void HandleMouseClick()
     {
         bool leftClicked = KeybindManager.IsKeyPressed(Config.LeftClick);
+
         if (leftClicked && !_leftHeld)
         {
             _leftHeld = true;
