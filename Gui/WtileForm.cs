@@ -9,7 +9,6 @@ namespace Wtile.Gui
     public partial class WtileForm : Form
     {
         private bool _resizable = false;
-        private bool _visibility = State.RUNNING;
         private PerformanceCounter _cpuCounter;
 
         public WtileForm()
@@ -62,11 +61,11 @@ namespace Wtile.Gui
             config.Height = Height;
             config.Top = Top;
             config.Left = Left;
-            if (State.RUNNING != _visibility)
-            {
+            if (!State.RUNNING)
                 Opacity = 0;
-                _visibility = State.RUNNING;
-            }
+            else
+                Opacity = 100;
+
         }
 
         private void UpdateRightLabel(object? sender, EventArgs e)

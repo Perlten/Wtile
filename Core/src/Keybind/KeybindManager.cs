@@ -35,6 +35,8 @@ public static class KeybindManager
     private volatile static int _keyPressCounter = 0;
     private static WtileModKey? _currentModKey = null;
     private static int _keysSinceModPress = 0;
+    private static bool _ignoreTilNoKeys = false;
+    private static bool _skipTikNoKeys = false;
 
     internal static bool _ignoreEvents = false; // Indicates if Wtile should ignore events
 
@@ -156,34 +158,57 @@ public static class KeybindManager
         if (_currentModKey != null)
         {
             WtileKey key = (WtileKey)vkCode;
+            bool excludedKey = true;
             foreach (var keybind in _keybinds)
             {
                 if (keybind.ModKey == _currentModKey && keybind.ShouldTrigger(_keymap, _keyPressCounter))
                 {
                     keybind.Action();
+                    _ignoreEvents = true;
                     if (keybind.Blocking)
                         return 1; // stops registering the key stroke
                     else
                         return 0;
                 }
+                if (keybind.IsKeyPartOfKeybind(key))
+                    excludedKey = false; // this happens if the user presses a key that is no longer part of any keybind
             }
+            if (excludedKey || IsWparamUp(wParam)) // If keypresses is not part of any keybind backtrack and press the previous keys
+            {
+                SendKeyPress((int)_currentModKey);
+                SendKeyPress((int)key);
+                SendKeyRelease((int)key);
+                SendKeyRelease((int)_currentModKey);
+                _currentModKey = null;
+            }
+            return 1;
         }
-
         return 0;
+    }
+
+    private static void PrintPressedKeys()
+    {
+        foreach (var k in _keymap.Keys)
+        {
+            if (_keymap[k])
+                Debug.Print(k.ToString());
+
+        }
     }
 
 
     private static IntPtr HandleEvent(int code, IntPtr wParam, IntPtr lParam)
     {
         if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
-        if (_ignoreEvents || !State.RUNNING)
-        {
-            _ignoreEvents = false;
-            return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
-        }
 
         int vkCode = Marshal.ReadInt32(lParam);
         bool modKeyEvent = Enum.IsDefined(typeof(WtileModKey), vkCode);
+
+        if (_keyPressCounter == 0)
+        {
+            _skipTikNoKeys = false;
+            _ignoreTilNoKeys = false;
+        }
 
         if (IsWparamDown(wParam))
         {
@@ -196,8 +221,25 @@ public static class KeybindManager
             _keymap[vkCode] = false;
         }
 
+        if (!_ignoreTilNoKeys && IsKeyPressed(WtileModKey.LWin) && IsKeyPressed(WtileKey.H))
+        {
+            State.RUNNING = !State.RUNNING;
+            _ignoreTilNoKeys = true;
+            return 1;
+        }
+
+        if (_skipTikNoKeys)
+            return 1;
+
+        if (_ignoreEvents || !State.RUNNING || _ignoreTilNoKeys)
+        {
+            _ignoreEvents = false;
+            return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
+        }
+
         if (HandleKeyMouseEvents(vkCode, modKeyEvent, wParam) != 0) return 1;
         if (HandleKeybindEvent(vkCode, modKeyEvent, wParam) != 0) return 1;
+
 
         return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
     }
