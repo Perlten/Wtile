@@ -25,6 +25,8 @@ public enum WtileKey
 {
     [EnumMember(Value = "None")]
     None = Keys.None,
+    [EnumMember(Value = "Pauase")]
+    Pause = Keys.Pause,
     [EnumMember(Value = "Enter")]
     Enter = Keys.Enter,
     [EnumMember(Value = "Escape")]
