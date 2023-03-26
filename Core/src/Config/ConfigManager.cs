@@ -16,12 +16,13 @@ namespace Wtile.Core.Config
         public int Top { get; set; } = 0;
         public ConfigKeyMouse KeyMouse { get; set; } = new();
         public List<ConfigKeybinds> Keybinds { get; set; } = new();
+        public List<ConfigKeybinds> Rebinds { get; set; } = new();
 
 
         public class ConfigKeybinds
         {
-            public WtileModKey ModKey { get; set; }
-            public List<WtileKey> Keys { get; set; } = new();
+            public List<WtileModKey> ModKeys { get; set; } = new();
+            public WtileKey Key { get; set; } = new();
             public string Action { get; set; } = "";
         }
 
@@ -36,7 +37,7 @@ namespace Wtile.Core.Config
             public WtileKey LeftClick { get; set; } = WtileKey.Space;
             public WtileKey RightClick { get; set; } = WtileKey.K;
             public WtileKey SlowDown { get; set; } = WtileKey.J;
-            public WtileKey SpeedUp { get; set; } = WtileKey.LShiftKey;
+            public WtileModKey SpeedUp { get; set; } = WtileModKey.LShiftKey;
             public WtileModKey ScrollMode { get; set; } = WtileModKey.LAlt;
             public int ScrollSpeed { get; set; } = 30;
 
@@ -55,6 +56,7 @@ namespace Wtile.Core.Config
         {
             Config = LoadConfig();
             SetupKeybindings(Config.Keybinds);
+            SetupRebinds(Config.Rebinds);
             KeyMouse.KeyMouse.Config = Config.KeyMouse;
         }
 
@@ -85,7 +87,16 @@ namespace Wtile.Core.Config
             else
                 return new WtileConfig();
         }
-
+        private static void SetupRebinds(List<WtileConfig.ConfigKeybinds> Keybinds)
+        {
+            var rebindMap = FunctionMapping.RebindMap;
+            foreach (var rebindConfig in Keybinds)
+            {
+                var action = rebindMap[rebindConfig.Action];
+                var keybind = new WtileKeybind(rebindConfig.Key, rebindConfig.ModKeys, rebindMap[rebindConfig.Action]);
+                KeybindManager.AddKeybind(keybind);
+            }
+        }
 
         private static void SetupKeybindings(List<WtileConfig.ConfigKeybinds> Keybinds)
         {
@@ -93,7 +104,7 @@ namespace Wtile.Core.Config
             foreach (var Configkeybind in Keybinds)
             {
                 var action = actionMap[Configkeybind.Action];
-                var keybind = new WtileKeybind(Configkeybind.Keys, Configkeybind.ModKey, actionMap[Configkeybind.Action]);
+                var keybind = new WtileKeybind(Configkeybind.Key, Configkeybind.ModKeys, actionMap[Configkeybind.Action]);
                 KeybindManager.AddKeybind(keybind);
             }
         }

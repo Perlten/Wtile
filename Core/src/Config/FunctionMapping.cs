@@ -1,14 +1,16 @@
-﻿using Wtile.Core.KeyMouse;
-using Wtile.Core.Utils;
+﻿using System.Security.AccessControl;
+using Wtile.Core.Keybind;
 
 namespace Wtile.Core.Config;
 
 public static class FunctionMapping
 {
     public static readonly Dictionary<string, Action> FunctionMap = new();
+    public static readonly Dictionary<string, Action> RebindMap = new();
 
     static FunctionMapping()
     {
+        // Keybinds
         var fm = FunctionMap;
         for (int i = 0; i < 10; i++)
         {
@@ -24,5 +26,51 @@ public static class FunctionMapping
         fm.Add("RemoveCurrentWindow()", () => Wtile.GetCw().RemoveCurrentWindow());
         fm.Add("ChangeToPreviousWindow()", () => Wtile.GetCw().ChangeToPreviousWindow());
         fm.Add("ChangeToPreviousWorkspace()", () => Wtile.ChangeToPreviousWorkspace());
+
+        // Rebinds
+        var rm = RebindMap;
+        rm.Add("(", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D8));
+        rm.Add(")", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D9));
+        rm.Add("{", CreateAltGrRebind(WtileKey.D7));
+        rm.Add("}", CreateAltGrRebind(WtileKey.D0));
+        rm.Add("[", CreateAltGrRebind(WtileKey.D8));
+        rm.Add("]", CreateAltGrRebind(WtileKey.D9));
+        rm.Add("$", CreateAltGrRebind(WtileKey.D4));
+        rm.Add("Enter", CreateSingleKeybind(WtileKey.Enter));
+    }
+
+    private static Action CreateSingleKeybind(WtileKey key)
+    {
+        return () =>
+        {
+            KeybindManager.ReleaseAllKeys();
+            KeybindManager.SendKeyPress((int)key);
+            KeybindManager.SendKeyRelease((int)key);
+        };
+    }
+
+    private static Action CreateSimpleRebind(WtileModKey modkey, WtileKey key)
+    {
+        return () =>
+        {
+            KeybindManager.ReleaseAllKeys();
+            KeybindManager.SendKeyPress((int)modkey);
+            KeybindManager.SendKeyPress((int)key);
+            KeybindManager.SendKeyRelease((int)key);
+            KeybindManager.SendKeyRelease((int)modkey);
+        };
+    }
+    private static Action CreateAltGrRebind(WtileKey key)
+    {
+        return () =>
+        {
+            KeybindManager.ReleaseAllKeys();
+            KeybindManager.SendKeyPress((int)WtileModKey.LAlt);
+            KeybindManager.SendKeyPress((int)WtileModKey.LControlKey);
+            KeybindManager.SendKeyPress((int)key);
+            KeybindManager.SendKeyRelease((int)key);
+            KeybindManager.SendKeyRelease((int)WtileModKey.LAlt);
+            KeybindManager.SendKeyRelease((int)WtileModKey.LControlKey);
+        };
     }
 }

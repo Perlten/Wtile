@@ -21,16 +21,19 @@ public static class Wtile
 
     private static void SetupKeybinds()
     {
-        var keys = new List<WtileKey> { WtileKey.LShiftKey, WtileKey.D };
-        var keybind = new WtileKeybind(keys, WtileModKey.LAlt, () =>
+        var modKeys = new List<WtileModKey> { WtileModKey.LShiftKey, WtileModKey.LAlt };
+        var keybind = new WtileKeybind(WtileKey.D, modKeys, () =>
         {
-            KeybindManager.SendKeyPress((int)WtileKey.LShiftKey);
+            KeybindManager.ReleaseAllKeys();
+            KeybindManager.SendKeyPress((int)WtileModKey.LShiftKey);
             KeybindManager.SendKeyPress((int)WtileKey.D8);
             KeybindManager.SendKeyRelease((int)WtileKey.D8);
-            KeybindManager.SendKeyRelease((int)WtileKey.LShiftKey);
+            KeybindManager.SendKeyRelease((int)WtileModKey.LShiftKey);
         }
+
         );
-        KeybindManager.AddKeybind(keybind);
+        //KeybindManager.AddKeybind(keybind);
+
     }
 
     public static void Start()

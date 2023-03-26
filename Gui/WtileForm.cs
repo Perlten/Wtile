@@ -23,8 +23,8 @@ namespace Wtile.Gui
             Width = ConfigManager.Config.Width;
             Height = ConfigManager.Config.Height;
 
-            var resizeKeys = new List<WtileKey> { WtileKey.H, WtileKey.LControlKey, WtileKey.LShiftKey };
-            var resizeKeybind = new WtileKeybind(resizeKeys, WtileModKey.LWin, () => _resizable = !_resizable);
+            var resizeModKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey };
+            var resizeKeybind = new WtileKeybind(WtileKey.H, resizeModKeys, () => _resizable = !_resizable);
             KeybindManager.AddKeybind(resizeKeybind);
 
             System.Windows.Forms.Timer mainTimer = new()
