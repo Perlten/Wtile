@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wtile.Core.Config;
+using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
 using static Wtile.Core.Config.WtileConfig;
@@ -14,6 +16,7 @@ internal enum Direction { LEFT, RIGHT, UP, DOWN }
 
 internal class KeyMouse
 {
+
     private enum MouseClickState { DOWN, UP }
 
     private const int MOUSEEVENTF_MOVE = 0x0001;
@@ -24,6 +27,7 @@ internal class KeyMouse
     private const int MOUSEEVENTF_WHEEL = 0x0800;
     private const int MOUSEEVENTF_MIDDLEDOWN = 0x0020;
     private const int MOUSEEVENTF_MIDDLEUP = 0x0040;
+    private const int MOUSEEVENTF_ABSOLUTE = 0x8000;
 
     internal static ConfigKeyMouse Config { get; set; } = new();
     private static bool _leftHeld = false;
@@ -41,14 +45,6 @@ internal class KeyMouse
             case Direction.UP: ExternalFunctions.mouse_event(MOUSEEVENTF_MOVE, 0, -Speed, 0, 0); break;
             case Direction.DOWN: ExternalFunctions.mouse_event(MOUSEEVENTF_MOVE, 0, Speed, 0, 0); break;
         }
-    }
-
-    private static void MiddleClick(MouseClickState state)
-    {
-        if (state == MouseClickState.DOWN)
-            ExternalFunctions.mouse_event(MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0);
-        else
-            ExternalFunctions.mouse_event(MOUSEEVENTF_MIDDLEUP, 0, 0, 0, 0);
     }
 
     private static void LeftClick(MouseClickState state)
@@ -86,6 +82,8 @@ internal class KeyMouse
 
     internal static void Update()
     {
+        var pos = System.Windows.Forms.Cursor.Position;
+        Debug.WriteLine($"X: {pos.X} -- Y: {pos.Y}");
         if (KeybindManager.IsKeyPressed(Config.ModKey))
         {
             if (HandleScroll()) return;
@@ -151,4 +149,16 @@ internal class KeyMouse
             RightClick(MouseClickState.UP);
         }
     }
+
+    internal static void CenterMouseInWindow(Window window)
+    {
+        if (Screen.PrimaryScreen == null) return;
+        var rect = window.Location;
+
+        int centerX = (rect.Left + rect.Right) / 2;
+        int centerY = (rect.Top + rect.Bottom) / 2;
+
+        Cursor.Position = new Point(centerX, centerY);
+    }
+
 }

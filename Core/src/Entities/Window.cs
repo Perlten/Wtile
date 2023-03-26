@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using Wtile.Core.KeyMouse;
 using Wtile.Core.Utils;
 
 namespace Wtile.Core.Entities;
@@ -8,6 +9,8 @@ public class Window
 {
     public readonly IntPtr WindowPtr;
     public readonly string ApplicationName;
+    public ExternalFunctions.WindowRect Location { get; }
+    public Screen Screen { get; }
     public string Name { get; }
     public readonly int Id;
 
@@ -18,6 +21,12 @@ public class Window
     {
         WindowPtr = windowPtr;
         Name = GetName(WindowPtr);
+
+        Screen = Screen.FromHandle(WindowPtr);
+
+        ExternalFunctions.WindowRect windowRect;
+        ExternalFunctions.GetWindowRect(WindowPtr, out windowRect);
+        Location = windowRect;
 
         ExternalFunctions.GetWindowThreadProcessId(WindowPtr, out uint processId);
         Id = (int)processId;
@@ -39,6 +48,7 @@ public class Window
     public void Activate()
     {
         ExternalFunctions.SetForegroundWindow(WindowPtr);
+        KeyMouse.KeyMouse.CenterMouseInWindow(this);
     }
 
     public override string ToString()

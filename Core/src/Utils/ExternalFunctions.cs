@@ -26,8 +26,16 @@ namespace Wtile.Core.Utils
         internal const int KEYEVENTF_KEYDOWN = 0x0000;
         internal const int KEYEVENTF_KEYUP = 0x0002;
 
+        internal const uint WM_CLOSE = 0x0010;
 
-        internal const UInt32 WM_CLOSE = 0x0010;
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WindowRect
+        {
+            public int Left;        // x-coordinate of the upper-left corner
+            public int Top;         // y-coordinate of the upper-left corner
+            public int Right;       // x-coordinate of the lower-right corner
+            public int Bottom;      // y-coordinate of the lower-right corner
+        }
 
 
 
@@ -87,5 +95,8 @@ namespace Wtile.Core.Utils
 
         [DllImport("user32.dll")]
         public static extern void mouse_event(uint dwFlags, int dx, int dy, int dwData, UIntPtr dwExtraInfo);
+
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hWnd, out WindowRect lpRect);
     }
 }
