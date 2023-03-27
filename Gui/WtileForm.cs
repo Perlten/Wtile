@@ -8,7 +8,6 @@ namespace Wtile.Gui
 {
     public partial class WtileForm : Form
     {
-        private bool _resizable = false;
         private PerformanceCounter _cpuCounter;
 
         public WtileForm()
@@ -22,10 +21,6 @@ namespace Wtile.Gui
             Left = ConfigManager.Config.Left;
             Width = ConfigManager.Config.Width;
             Height = ConfigManager.Config.Height;
-
-            //var resizeModKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey };
-            //var resizeKeybind = new WtileKeybind(WtileKey.H, resizeModKeys, () => _resizable = !_resizable);
-            //KeybindManager.AddKeybind(resizeKeybind);
 
             System.Windows.Forms.Timer mainTimer = new()
             {
@@ -78,12 +73,15 @@ namespace Wtile.Gui
             var timeString = DateTime.Now.ToString("ddd dd/MM/yyyy HH:mm:ss"); ;
 
             var deviceEnumerator = new MMDeviceEnumerator();
-            var defaultDevice = deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia); int volume = (int)(defaultDevice.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
+            var defaultDevice = deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            var isMute = defaultDevice.AudioEndpointVolume.Mute;
+            int volume = (int)(defaultDevice.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
+            string volumeString = isMute ? "Mute" : $"{volume}%";
 
             int cpuUsage = (int)_cpuCounter.NextValue();
 
 
-            return $"CPU: {cpuUsage}% | Volume: {volume} | {timeString}";
+            return $"CPU: {cpuUsage}% | Volume: {volumeString} | {timeString}";
         }
 
         private void ToggleResize()

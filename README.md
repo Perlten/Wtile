@@ -1,7 +1,7 @@
 # Wtile
 
 ## Bugs:
-Can only close windows that are part of a workspace[]
+Can only close windows that are part of a workspace (Should close current window regardless of which workspace you are in)[]
 If i quit a window it does not always get removed from workspace []
 ## Features:
 Switch to last window function [x]

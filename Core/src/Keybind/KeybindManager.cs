@@ -17,6 +17,7 @@ public static class KeybindManager
     const int WM_KEYUP = 0x101;
     const int WM_SYSKEYUP = 0x0105;
 
+    private static bool _keymouseMode = false;
     private static bool _ignoreEvent = false;
     private static int _keySinceLastLwin = 0;
 
@@ -57,6 +58,19 @@ public static class KeybindManager
     private static bool IsWparamUp(IntPtr wParam)
     {
         return wParam == WM_KEYUP || wParam == WM_SYSKEYUP;
+    }
+
+    private static int HandleKeyMouseEvents()
+    {
+        if (IsKeyPressed(WtileModKey.LAlt) && IsKeyPressed(WtileModKey.LShiftKey) && IsKeyPressed(KeyMouse.KeyMouse.Config.ModKey))
+        {
+            ReleaseAllKeys();
+            SendKeyPress((int)KeyMouse.KeyMouse.Config.ModKey);
+            SendKeyRelease((int)KeyMouse.KeyMouse.Config.ModKey);
+            return 1;
+        }
+        _keymouseMode = IsKeyPressed(KeyMouse.KeyMouse.Config.ModKey);
+        return _keymouseMode ? 1 : 0;
     }
 
     private static int HandleKeybindEvent()
@@ -127,6 +141,7 @@ public static class KeybindManager
         else if (IsWparamUp(wParam))
             _keymap.Remove(vkCode);
 
+        if (HandleKeyMouseEvents() != 0) return 1;
         if (HandleKeybindEvent() != 0) return 1;
         if (HandleLWinKey(vkCode, wParam) != 0) return 1;
 

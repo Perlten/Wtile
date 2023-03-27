@@ -35,6 +35,7 @@ public static class FunctionMapping
         rm.Add(")", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D9));
         rm.Add("/", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D7));
         rm.Add("\"", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D2));
+        rm.Add("=", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D0));
         rm.Add("Back", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Left));
         rm.Add("Forward", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Right));
 
@@ -56,7 +57,6 @@ public static class FunctionMapping
         rm.Add("VolumeDown", CreateSingleKeyRebind(WtileKey.VolumeDown));
         rm.Add("VolumeUp", CreateSingleKeyRebind(WtileKey.VolumeUp));
         rm.Add("Escape", CreateSingleKeyRebind(WtileKey.Escape));
-        rm.Add("AE", CreateSingleKeyRebind(WtileKey.AE));
     }
 
     private static Action CreateSingleKeyRebind(WtileKey key)
