@@ -1,12 +1,11 @@
 # Wtile
 
-## Bugs:
-When any mod key is pressed another key in keybind will trigger AE + D now i cant trigger Alt+d []
-Gui flicker on Workspace change []
-If you press Window and then switch quickly between 1-2 2-1 it will write 1 or 2 []
-For some reason when wtilebar is invisible i cant click some buttoms (task manager order by name) []
-Cant press ctrl + click in keymouse mode []
+## Rebinds/Keybinds needed 
+Move left Right Up Down [x]
+Volume controls []
 
+## Bugs:
+Can only close windows that are part of a workspace[]
 ## Features:
 Switch to last window function [x]
 Switch to last workspace function [x]
@@ -15,14 +14,11 @@ Hide gui Function [x]
 Keymouse [x]
 Rebinds[x]
 Move mouse to middle of the screen on window change [x]
-
+Setup default keybinds [x]
 Quit Function []
-
-Setup default keybinds []
-
 Create release pipeline on github actions []
 
 
 
 
-dotnet publish -c Release --sc -p:PublishSingleFile=true
+dotnet publish -c Release --sc 

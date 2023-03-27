@@ -22,59 +22,32 @@ namespace Wtile.Core.Config
 
         private static List<ConfigKeybinds> GetDefaultRebinds()
         {
-            var rebinds = new List<ConfigKeybinds>();
-
-            var modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-            var keybind = new ConfigKeybinds() { Action = "(", Key = WtileKey.D, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = ")", Key = WtileKey.F, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "/", Key = WtileKey.R, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "\"", Key = WtileKey.J, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "{", Key = WtileKey.K, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "}", Key = WtileKey.L, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "[", Key = WtileKey.C, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "]", Key = WtileKey.V, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "$", Key = WtileKey.G, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LControlKey };
-            keybind = new ConfigKeybinds() { Action = "Enter", Key = WtileKey.W, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey };
-            keybind = new ConfigKeybinds() { Action = "MediaPlayPause", Key = WtileKey.I, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey };
-            keybind = new ConfigKeybinds() { Action = "MediaNextTrack", Key = WtileKey.O, ModKeys = modKeys };
-            rebinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey };
-            keybind = new ConfigKeybinds() { Action = "MediaPreviousTrack", Key = WtileKey.U, ModKeys = modKeys };
-            rebinds.Add(keybind);
+            var rebinds = new List<ConfigKeybinds>
+            {
+                new ConfigKeybinds() { Action = "(", Key = WtileKey.D, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = ")", Key = WtileKey.F, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "/", Key = WtileKey.R, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "\"", Key = WtileKey.J, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "{", Key = WtileKey.K, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "}", Key = WtileKey.L, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "[", Key = WtileKey.C, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "]", Key = WtileKey.V, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "$", Key = WtileKey.G, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "Enter", Key = WtileKey.W, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "Escape", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "MediaPlayPause", Key = WtileKey.I, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "MediaNextTrack", Key = WtileKey.O, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "MediaPreviousTrack", Key = WtileKey.U, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "Up", Key = WtileKey.K, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "Down", Key = WtileKey.J, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "Left", Key = WtileKey.H, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "Right", Key = WtileKey.L, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "VolumeMute", Key = WtileKey.M, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "VolumeUp", Key = WtileKey.N, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "VolumeDown", Key = WtileKey.B, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "Forward", Key = WtileKey.D, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "Back", Key = WtileKey.A, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } }
+            };
 
             return rebinds;
         }
@@ -82,58 +55,22 @@ namespace Wtile.Core.Config
         private static List<ConfigKeybinds> GetDefaultKeybinds()
         {
             var keybinds = new List<ConfigKeybinds>();
-            _ = new List<WtileModKey>();
-            _ = new ConfigKeybinds();
-            List<WtileModKey>? modKeys;
-            ConfigKeybinds? keybind;
 
             var numKeys = new List<WtileKey> { WtileKey.D1, WtileKey.D2, WtileKey.D3, WtileKey.D4, WtileKey.D5, WtileKey.D6, WtileKey.D7, WtileKey.D8, WtileKey.D9 };
             for (var i = 0; i < 9; i++)
             {
-                modKeys = new List<WtileModKey> { WtileModKey.LWin };
-                keybind = new ConfigKeybinds() { Action = $"ChangeWorkspace({i})", Key = numKeys[i], ModKeys = modKeys };
-                keybinds.Add(keybind);
-
-                modKeys = new List<WtileModKey> { WtileModKey.LAlt };
-                keybind = new ConfigKeybinds() { Action = $"ChangeWindow({i})", Key = numKeys[i], ModKeys = modKeys };
-                keybinds.Add(keybind);
-
-                modKeys = new List<WtileModKey> { WtileModKey.LAlt, WtileModKey.LShiftKey };
-                keybind = new ConfigKeybinds() { Action = $"CurrentWindowChangeOrder({i})", Key = numKeys[i], ModKeys = modKeys };
-                keybinds.Add(keybind);
-
-                modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LShiftKey };
-                keybind = new ConfigKeybinds() { Action = $"MoveCurrentWindowToWorkspace({i})", Key = numKeys[i], ModKeys = modKeys };
-                keybinds.Add(keybind);
+                keybinds.Add(new ConfigKeybinds() { Action = $"ChangeWorkspace({i})", Key = numKeys[i], ModKeys = { WtileModKey.LWin } });
+                keybinds.Add(new ConfigKeybinds() { Action = $"ChangeWindow({i})", Key = numKeys[i], ModKeys = { WtileModKey.LAlt } });
+                keybinds.Add(new ConfigKeybinds() { Action = $"CurrentWindowChangeOrder({i})", Key = numKeys[i], ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } });
+                keybinds.Add(new ConfigKeybinds() { Action = $"MoveCurrentWindowToWorkspace({i})", Key = numKeys[i], ModKeys = { WtileModKey.LWin, WtileModKey.LShiftKey } });
             }
-
-            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "SaveConfig()", Key = WtileKey.S, ModKeys = modKeys };
-            keybinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LWin };
-            keybind = new ConfigKeybinds() { Action = "AddActiveWindow()", Key = WtileKey.W, ModKeys = modKeys };
-            keybinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "QuitCurrentWindow()", Key = WtileKey.Q, ModKeys = modKeys };
-            keybinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "RemoveCurrentWindow()", Key = WtileKey.W, ModKeys = modKeys };
-            keybinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LAlt };
-            keybind = new ConfigKeybinds() { Action = "ChangeToPreviousWindow()", Key = WtileKey.Q, ModKeys = modKeys };
-            keybinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LWin };
-            keybind = new ConfigKeybinds() { Action = "ChangeToPreviousWorkspace()", Key = WtileKey.Q, ModKeys = modKeys };
-            keybinds.Add(keybind);
-
-            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey };
-            keybind = new ConfigKeybinds() { Action = "ToggleResizeBar()", Key = WtileKey.H, ModKeys = modKeys };
-            keybinds.Add(keybind);
+            keybinds.Add(new ConfigKeybinds() { Action = "SaveConfig()", Key = WtileKey.S, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey } });
+            keybinds.Add(new ConfigKeybinds() { Action = "ToggleResizeBar()", Key = WtileKey.H, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey } });
+            keybinds.Add(new ConfigKeybinds() { Action = "AddActiveWindow()", Key = WtileKey.W, ModKeys = { WtileModKey.LWin } });
+            keybinds.Add(new ConfigKeybinds() { Action = "QuitCurrentWindow()", Key = WtileKey.Q, ModKeys = { WtileModKey.LWin, WtileModKey.LShiftKey } });
+            keybinds.Add(new ConfigKeybinds() { Action = "RemoveCurrentWindow()", Key = WtileKey.W, ModKeys = { WtileModKey.LWin, WtileModKey.LShiftKey } });
+            keybinds.Add(new ConfigKeybinds() { Action = "ChangeToPreviousWindow()", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt } });
+            keybinds.Add(new ConfigKeybinds() { Action = "ChangeToPreviousWorkspace()", Key = WtileKey.Q, ModKeys = { WtileModKey.LWin } });
 
             return keybinds;
         }

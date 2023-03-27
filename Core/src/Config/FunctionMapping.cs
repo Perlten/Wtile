@@ -35,15 +35,27 @@ public static class FunctionMapping
         rm.Add(")", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D9));
         rm.Add("/", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D7));
         rm.Add("\"", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D2));
+        rm.Add("Back", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Left));
+        rm.Add("Forward", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Right));
+
         rm.Add("{", CreateAltGrRebind(WtileKey.D7));
         rm.Add("}", CreateAltGrRebind(WtileKey.D0));
         rm.Add("[", CreateAltGrRebind(WtileKey.D8));
         rm.Add("]", CreateAltGrRebind(WtileKey.D9));
         rm.Add("$", CreateAltGrRebind(WtileKey.D4));
+
         rm.Add("MediaPlayPause", CreateSingleKeyRebind(WtileKey.MediaPlayPause));
         rm.Add("MediaNextTrack", CreateSingleKeyRebind(WtileKey.MediaNextTrack));
         rm.Add("MediaPreviousTrack", CreateSingleKeyRebind(WtileKey.MediaPreviousTrack));
         rm.Add("Enter", CreateSingleKeyRebind(WtileKey.Enter));
+        rm.Add("Left", CreateSingleKeyRebind(WtileKey.Left));
+        rm.Add("Right", CreateSingleKeyRebind(WtileKey.Right));
+        rm.Add("Up", CreateSingleKeyRebind(WtileKey.Up));
+        rm.Add("Down", CreateSingleKeyRebind(WtileKey.Down));
+        rm.Add("VolumeMute", CreateSingleKeyRebind(WtileKey.VolumeMute));
+        rm.Add("VolumeDown", CreateSingleKeyRebind(WtileKey.VolumeDown));
+        rm.Add("VolumeUp", CreateSingleKeyRebind(WtileKey.VolumeUp));
+        rm.Add("Escape", CreateSingleKeyRebind(WtileKey.Escape));
     }
 
     private static Action CreateSingleKeyRebind(WtileKey key)
