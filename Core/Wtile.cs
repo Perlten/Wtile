@@ -1,19 +1,16 @@
-﻿
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using Microsoft.VisualBasic.Devices;
 using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
-using Wtile.Core.Utils;
 
 namespace Wtile.Core;
 
-public class Wtile
+public static class Wtile
 {
-    private List<Workspace> _workspaces = new();
-    private Workspace _currentWorkspace;
+    internal static List<Workspace> _workspaces = new();
+    internal static Workspace _currentWorkspace;
+    internal static Workspace? _previousWorkspace;
 
-    public Wtile()
+    static Wtile()
     {
         for (int i = 0; i < 10; i++)
         {
@@ -22,50 +19,89 @@ public class Wtile
         _currentWorkspace = _workspaces[0];
     }
 
-    private void SetupKeybinds()
+    private static void SetupKeybinds()
     {
-        var l = new List<WtileKey> { WtileKey.LWin, WtileKey.D1 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => SwitchWorkspace(0)));
+        var modKeys = new List<WtileModKey> { WtileModKey.LShiftKey, WtileModKey.LAlt };
+        var keybind = new WtileKeybind(WtileKey.D, modKeys, () =>
+        {
+            KeybindManager.ReleaseAllKeys();
+            KeybindManager.SendKeyPress((int)WtileModKey.LShiftKey);
+            KeybindManager.SendKeyPress((int)WtileKey.D8);
+            KeybindManager.SendKeyRelease((int)WtileKey.D8);
+            KeybindManager.SendKeyRelease((int)WtileModKey.LShiftKey);
+        }
 
-        l = new List<WtileKey> { WtileKey.LWin, WtileKey.D2 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => SwitchWorkspace(1)));
-
-        l = new List<WtileKey> { WtileKey.LAlt, WtileKey.D1 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(0)));
-
-        l = new List<WtileKey> { WtileKey.LAlt, WtileKey.D2 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(1)));
-
-        l = new List<WtileKey> { WtileKey.LAlt, WtileKey.D3 };
-        KeybindManager.AddKeybind(new WtileKeybind(l, () => _currentWorkspace.SwitchWindow(2)));
+        );
+        //KeybindManager.AddKeybind(keybind);
 
     }
 
-    public void Start()
+    public static void Start()
     {
-        KeybindManager.StartEventLoop();
+        KeybindManager.AddToEventLoop();
         SetupKeybinds();
-        _ = WindowHandler.GetNewWindows();
+
         while (true)
         {
-            var newWindows = WindowHandler.GetNewWindows();
-            _currentWorkspace.AddWindows(newWindows);
-            Console.WriteLine(_currentWorkspace.ToString());
-
-            Thread.Sleep(16);
+            KeyMouse.KeyMouse.Update();
+            Thread.Sleep(8);
         }
     }
 
-    private void SwitchWorkspace(int index)
+    public static void ChangeWorkspace(int index)
     {
-        if (index > _workspaces.Count) return;
-        Console.WriteLine(index);
-        _currentWorkspace = _workspaces[index];
+        if (index >= _workspaces.Count) return;
+        var workspace = _workspaces[index];
+        ChangeWorkspace(workspace);
     }
 
-    public string GetWtileString()
+    public static void ChangeWorkspace(Workspace workspace)
     {
-        return $"Workspace: {_currentWorkspace._index}";
+        _previousWorkspace = _currentWorkspace;
+        _currentWorkspace = workspace;
+        _currentWorkspace.CurrentWindow?.Activate();
+    }
+
+
+    internal static Workspace GetCw()
+    {
+        return _currentWorkspace;
+    }
+
+    public static bool AddWindow(IntPtr windowPtr)
+    {
+        _currentWorkspace.AddWindow(windowPtr);
+        return true;
+    }
+
+    public static void ChangeToPreviousWorkspace()
+    {
+        if (_previousWorkspace == null) return;
+        ChangeWorkspace(_previousWorkspace);
+    }
+
+    public static bool RemoveWindow(IntPtr windowPtr)
+    {
+        foreach (var workspace in _workspaces)
+        {
+            foreach (var window in workspace.Windows)
+            {
+                if (window.WindowPtr == windowPtr)
+                {
+                    workspace.Windows.Remove(window);
+                    break;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static string GetWtileString()
+    {
+        int workspaceIndex = _currentWorkspace.Index + 1;
+        int windowIndex = _currentWorkspace.WindowIndex + 1;
+        string windowNames = string.Join(" / ", _currentWorkspace.Windows.Select((x, i) => $"{i + 1}: {x.ApplicationName}").ToArray());
+        return $"Workspace: {workspaceIndex} | Window: {windowIndex} | {windowNames}";
     }
 
 }

@@ -5,12 +5,11 @@ namespace Wtile.Gui
         [STAThread]
         static void Main()
         {
-            var wtile = new Core.Wtile();
-            Thread wtileThread = new(wtile.Start);
+            Thread wtileThread = new(Core.Wtile.Start);
             wtileThread.Start();
 
             ApplicationConfiguration.Initialize();
-            Application.Run(new WtileForm(wtile));
+            Application.Run(new WtileForm());
         }
     }
 }
