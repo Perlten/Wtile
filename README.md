@@ -1,11 +1,8 @@
 # Wtile
 
-## Rebinds/Keybinds needed 
-Move left Right Up Down [x]
-Volume controls []
-
 ## Bugs:
 Can only close windows that are part of a workspace[]
+If i quit a window it does not always get removed from workspace []
 ## Features:
 Switch to last window function [x]
 Switch to last workspace function [x]

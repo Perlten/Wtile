@@ -56,6 +56,7 @@ public static class FunctionMapping
         rm.Add("VolumeDown", CreateSingleKeyRebind(WtileKey.VolumeDown));
         rm.Add("VolumeUp", CreateSingleKeyRebind(WtileKey.VolumeUp));
         rm.Add("Escape", CreateSingleKeyRebind(WtileKey.Escape));
+        rm.Add("AE", CreateSingleKeyRebind(WtileKey.AE));
     }
 
     private static Action CreateSingleKeyRebind(WtileKey key)

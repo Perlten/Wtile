@@ -23,6 +23,8 @@ public enum WtileModKey
 [JsonConverter(typeof(StringEnumConverter))]
 public enum WtileKey
 {
+    [EnumMember(Value = "AE")]
+    AE = 192,
     [EnumMember(Value = "None")]
     None = Keys.None,
     [EnumMember(Value = "Pause")]

@@ -33,6 +33,7 @@ namespace Wtile.Core.Config
                 new ConfigKeybinds() { Action = "[", Key = WtileKey.C, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "]", Key = WtileKey.V, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "$", Key = WtileKey.G, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "AE", Key = WtileKey.AE, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "Enter", Key = WtileKey.W, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Escape", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "MediaPlayPause", Key = WtileKey.I, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
@@ -46,7 +47,7 @@ namespace Wtile.Core.Config
                 new ConfigKeybinds() { Action = "VolumeUp", Key = WtileKey.N, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "VolumeDown", Key = WtileKey.B, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Forward", Key = WtileKey.D, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
-                new ConfigKeybinds() { Action = "Back", Key = WtileKey.A, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } }
+                new ConfigKeybinds() { Action = "Back", Key = WtileKey.A, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
             };
 
             return rebinds;
