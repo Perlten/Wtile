@@ -23,9 +23,9 @@ namespace Wtile.Gui
             Width = ConfigManager.Config.Width;
             Height = ConfigManager.Config.Height;
 
-            var resizeModKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey };
-            var resizeKeybind = new WtileKeybind(WtileKey.H, resizeModKeys, () => _resizable = !_resizable);
-            KeybindManager.AddKeybind(resizeKeybind);
+            //var resizeModKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey };
+            //var resizeKeybind = new WtileKeybind(WtileKey.H, resizeModKeys, () => _resizable = !_resizable);
+            //KeybindManager.AddKeybind(resizeKeybind);
 
             System.Windows.Forms.Timer mainTimer = new()
             {
@@ -88,7 +88,7 @@ namespace Wtile.Gui
 
         private void ToggleResize()
         {
-            if (_resizable)
+            if (State.RESIZEABLE)
                 FormBorderStyle = FormBorderStyle.SizableToolWindow;
             else
                 FormBorderStyle = FormBorderStyle.None;

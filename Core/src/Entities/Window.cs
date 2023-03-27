@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Wtile.Core.KeyMouse;
 using Wtile.Core.Utils;
@@ -9,7 +10,7 @@ public class Window
 {
     public readonly IntPtr WindowPtr;
     public readonly string ApplicationName;
-    public ExternalFunctions.WindowRect Location { get; }
+    public ExternalFunctions.WindowRect Location { get => GetLocation(); }
     public Screen WindowScreen { get; }
     public string Name { get; }
     public readonly int Id;
@@ -23,15 +24,16 @@ public class Window
         Name = GetName(WindowPtr);
 
         WindowScreen = Screen.FromHandle(WindowPtr);
-
-        ExternalFunctions.WindowRect windowRect;
-        ExternalFunctions.GetWindowRect(WindowPtr, out windowRect);
-        Location = windowRect;
-
         ExternalFunctions.GetWindowThreadProcessId(WindowPtr, out uint processId);
         Id = (int)processId;
         ApplicationName = Process.GetProcessById(Id).ProcessName.ToString();
         Workspace = workspace;
+    }
+
+    private ExternalFunctions.WindowRect GetLocation()
+    {
+        ExternalFunctions.GetWindowRect(WindowPtr, out ExternalFunctions.WindowRect windowRect);
+        return windowRect;
     }
 
     public void Quit()

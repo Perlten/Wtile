@@ -50,7 +50,7 @@ namespace Wtile.Core.Config
 
     public static class ConfigManager
     {
-        public static WtileConfig Config { get; private set; }
+        public static WtileConfig Config { get; internal set; }
 
         static ConfigManager()
         {
@@ -81,11 +81,9 @@ namespace Wtile.Core.Config
                 WtileConfig? config = JsonConvert.DeserializeObject<WtileConfig>(json);
                 if (config != null)
                     return config;
-                else
-                    return new WtileConfig();
+
             }
-            else
-                return new WtileConfig();
+            return DefaultSettings.GetDefaultConfig();
         }
         private static void SetupRebinds(List<WtileConfig.ConfigKeybinds> Keybinds)
         {

@@ -1,5 +1,6 @@
 ﻿using System.Security.AccessControl;
 using Wtile.Core.Keybind;
+using Wtile.Core.Utils;
 
 namespace Wtile.Core.Config;
 
@@ -26,11 +27,14 @@ public static class FunctionMapping
         fm.Add("RemoveCurrentWindow()", () => Wtile.GetCw().RemoveCurrentWindow());
         fm.Add("ChangeToPreviousWindow()", () => Wtile.GetCw().ChangeToPreviousWindow());
         fm.Add("ChangeToPreviousWorkspace()", () => Wtile.ChangeToPreviousWorkspace());
+        fm.Add("ToggleResizeBar()", () => State.RESIZEABLE = !State.RESIZEABLE);
 
         // Rebinds
         var rm = RebindMap;
         rm.Add("(", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D8));
         rm.Add(")", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D9));
+        rm.Add("/", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D7));
+        rm.Add("\"", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D2));
         rm.Add("{", CreateAltGrRebind(WtileKey.D7));
         rm.Add("}", CreateAltGrRebind(WtileKey.D0));
         rm.Add("[", CreateAltGrRebind(WtileKey.D8));
