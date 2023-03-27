@@ -25,7 +25,7 @@ public enum WtileKey
 {
     [EnumMember(Value = "None")]
     None = Keys.None,
-    [EnumMember(Value = "Pauase")]
+    [EnumMember(Value = "Pause")]
     Pause = Keys.Pause,
     [EnumMember(Value = "Enter")]
     Enter = Keys.Enter,
@@ -47,6 +47,12 @@ public enum WtileKey
     Right = Keys.Right,
     [EnumMember(Value = "Down")]
     Down = Keys.Down,
+    [EnumMember(Value = "MediaPlayPause")]
+    MediaPlayPause = Keys.MediaPlayPause,
+    [EnumMember(Value = "MediaPlayPause")]
+    MediaNextTrack = Keys.MediaNextTrack,
+    [EnumMember(Value = "MediaPlayPause")]
+    MediaPreviousTrack = Keys.MediaPreviousTrack,
     [EnumMember(Value = "D0")]
     D0 = Keys.D0,
     [EnumMember(Value = "D1")]

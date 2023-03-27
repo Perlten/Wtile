@@ -40,6 +40,9 @@ public static class FunctionMapping
         rm.Add("[", CreateAltGrRebind(WtileKey.D8));
         rm.Add("]", CreateAltGrRebind(WtileKey.D9));
         rm.Add("$", CreateAltGrRebind(WtileKey.D4));
+        rm.Add("MediaPlayPause", CreateSingleKeyRebind(WtileKey.MediaPlayPause));
+        rm.Add("MediaNextTrack", CreateSingleKeyRebind(WtileKey.MediaNextTrack));
+        rm.Add("MediaPreviousTrack", CreateSingleKeyRebind(WtileKey.MediaPreviousTrack));
         rm.Add("Enter", CreateSingleKeyRebind(WtileKey.Enter));
     }
 

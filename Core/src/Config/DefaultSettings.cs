@@ -64,6 +64,18 @@ namespace Wtile.Core.Config
             keybind = new ConfigKeybinds() { Action = "Enter", Key = WtileKey.W, ModKeys = modKeys };
             rebinds.Add(keybind);
 
+            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey };
+            keybind = new ConfigKeybinds() { Action = "MediaPlayPause", Key = WtileKey.I, ModKeys = modKeys };
+            rebinds.Add(keybind);
+
+            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey };
+            keybind = new ConfigKeybinds() { Action = "MediaNextTrack", Key = WtileKey.O, ModKeys = modKeys };
+            rebinds.Add(keybind);
+
+            modKeys = new List<WtileModKey> { WtileModKey.LWin, WtileModKey.LControlKey };
+            keybind = new ConfigKeybinds() { Action = "MediaPreviousTrack", Key = WtileKey.U, ModKeys = modKeys };
+            rebinds.Add(keybind);
+
             return rebinds;
         }
 
