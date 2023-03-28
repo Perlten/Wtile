@@ -48,6 +48,8 @@ namespace Wtile.Core.Config
                 new ConfigKeybinds() { Action = "VolumeDown", Key = WtileKey.B, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Forward", Key = WtileKey.D, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Back", Key = WtileKey.A, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "Home", Key = WtileKey.X, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "End", Key = WtileKey.C, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
             };
 
             return rebinds;
