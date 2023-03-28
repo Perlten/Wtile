@@ -62,7 +62,7 @@ public static class KeybindManager
 
     private static int HandleKeyMouseEvents()
     {
-        if (IsKeyPressed(WtileModKey.LAlt) && IsKeyPressed(WtileModKey.LShiftKey) && IsKeyPressed(KeyMouse.KeyMouse.Config.ModKey))
+        if (IsKeyPressed(WtileModKey.LWin) && IsKeyPressed(KeyMouse.KeyMouse.Config.ModKey))
         {
             ReleaseAllKeys();
             SendKeyPress((int)KeyMouse.KeyMouse.Config.ModKey);
