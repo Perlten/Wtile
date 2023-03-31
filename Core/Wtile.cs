@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.Devices;
 using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
+using Wtile.Core.Utils;
 
 namespace Wtile.Core;
 
@@ -94,6 +95,13 @@ public static class Wtile
             }
         }
         return true;
+    }
+
+    public static Window GetActiveWindow()
+    {
+        var windowPtr = ExternalFunctions.GetForegroundWindow();
+        var window = new Window(windowPtr);
+        return window;
     }
 
     public static string GetWtileString()

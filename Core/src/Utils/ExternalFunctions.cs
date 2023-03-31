@@ -38,6 +38,9 @@ namespace Wtile.Core.Utils
         }
 
 
+        internal const int SW_MAXIMIZE = 3;
+        internal const int SW_RESTORE = 9;
+
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -98,5 +101,8 @@ namespace Wtile.Core.Utils
 
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hWnd, out WindowRect lpRect);
+
+        [DllImport("user32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
     }
 }

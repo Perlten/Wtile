@@ -1,4 +1,5 @@
-﻿using System.Security.AccessControl;
+﻿using System.Diagnostics;
+using System.Security.AccessControl;
 using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
 
@@ -23,11 +24,13 @@ public static class FunctionMapping
         }
         fm.Add("SaveConfig()", ConfigManager.SaveConfig);
         fm.Add("AddActiveWindow()", () => Wtile.GetCw().AddActiveWindow());
-        fm.Add("QuitCurrentWindow()", () => Wtile.GetCw().CurrentWindow?.Quit());
         fm.Add("RemoveCurrentWindow()", () => Wtile.GetCw().RemoveCurrentWindow());
         fm.Add("ChangeToPreviousWindow()", () => Wtile.GetCw().ChangeToPreviousWindow());
         fm.Add("ChangeToPreviousWorkspace()", () => Wtile.ChangeToPreviousWorkspace());
         fm.Add("ToggleResizeBar()", () => State.RESIZEABLE = !State.RESIZEABLE);
+        fm.Add("QuitCurrentWindow()", () => Wtile.GetActiveWindow().Quit());
+        fm.Add("MaximizeWindow()", () => Wtile.GetActiveWindow().Maximize());
+        fm.Add("RestoreWindow()", () => Wtile.GetActiveWindow().Restore());
 
         // Rebinds
         var rm = RebindMap;

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Wtile.Core.KeyMouse;
 using Wtile.Core.Utils;
@@ -15,10 +16,12 @@ public class Window
     public string Name { get; }
     public readonly int Id;
 
-    internal Workspace Workspace { get; set; }
+    internal Workspace? Workspace { get; set; }
+
+    public Window(IntPtr windowPtr) : this(windowPtr, null) { }
 
 
-    public Window(IntPtr windowPtr, Workspace workspace)
+    public Window(IntPtr windowPtr, Workspace? workspace)
     {
         WindowPtr = windowPtr;
         Name = GetName(WindowPtr);
@@ -39,6 +42,8 @@ public class Window
     public void Quit()
     {
         ExternalFunctions.SendMessage(WindowPtr, ExternalFunctions.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+        if (Workspace == null) return;
+
         var newWindow = Workspace.Windows.FirstOrDefault();
         if (newWindow != null)
         {
@@ -51,6 +56,15 @@ public class Window
     {
         ExternalFunctions.SetForegroundWindow(WindowPtr);
         KeyMouse.KeyMouse.CenterMouseInWindow(this);
+    }
+
+    internal void Maximize()
+    {
+        ExternalFunctions.ShowWindow(WindowPtr, ExternalFunctions.SW_MAXIMIZE);
+    }
+    internal void Restore()
+    {
+        ExternalFunctions.ShowWindow(WindowPtr, ExternalFunctions.SW_RESTORE);
     }
 
     public override string ToString()

@@ -25,6 +25,7 @@ namespace Wtile.Core.Config
                 Left = 400,
                 Width = 1500,
                 Height = 150,
+                Font = new Font("Segoe UI", 14)
             };
         }
 
@@ -83,6 +84,9 @@ namespace Wtile.Core.Config
             keybinds.Add(new ConfigKeybinds() { Action = "RemoveCurrentWindow()", Key = WtileKey.W, ModKeys = { WtileModKey.LWin, WtileModKey.LShiftKey } });
             keybinds.Add(new ConfigKeybinds() { Action = "ChangeToPreviousWindow()", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt } });
             keybinds.Add(new ConfigKeybinds() { Action = "ChangeToPreviousWorkspace()", Key = WtileKey.Q, ModKeys = { WtileModKey.LWin } });
+            keybinds.Add(new ConfigKeybinds() { Action = "MaximizeWindow()", Key = WtileKey.K, ModKeys = { WtileModKey.LWin } });
+            keybinds.Add(new ConfigKeybinds() { Action = "RestoreWindow()", Key = WtileKey.J, ModKeys = { WtileModKey.LWin } });
+
 
             return keybinds;
         }
