@@ -25,6 +25,7 @@ internal class KeyMouse
     private const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
     private const int MOUSEEVENTF_RIGHTUP = 0x0010;
     private const int MOUSEEVENTF_WHEEL = 0x0800;
+    private const int MOUSEEVENTF_HWHEEL = 0x01000;
     private const int MOUSEEVENTF_MIDDLEDOWN = 0x0020;
     private const int MOUSEEVENTF_MIDDLEUP = 0x0040;
 
@@ -71,12 +72,16 @@ internal class KeyMouse
             ExternalFunctions.mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
     }
 
-    private static void Scroll(MouseClickState state, int speed)
+    private static void Scroll(Direction state, int speed)
     {
-        if (state == MouseClickState.UP)
+        if (state == Direction.UP)
             ExternalFunctions.mouse_event(MOUSEEVENTF_WHEEL, 0, 0, speed, 0);
-        else
+        else if (state == Direction.DOWN)
             ExternalFunctions.mouse_event(MOUSEEVENTF_WHEEL, 0, 0, -speed, 0);
+        else if (state == Direction.LEFT)
+            ExternalFunctions.mouse_event(MOUSEEVENTF_HWHEEL, 0, 0, -speed, 0);
+        else if (state == Direction.RIGHT)
+            ExternalFunctions.mouse_event(MOUSEEVENTF_HWHEEL, 0, 0, speed, 0);
     }
 
     internal static void Update()
@@ -99,21 +104,30 @@ internal class KeyMouse
     }
     private static bool HandleScroll()
     {
+        if (!KeybindManager.IsKeyPressed(Config.ScrollMode)) return false;
+
         var speed = Config.ScrollSpeed;
         if (KeybindManager.IsKeyPressed(Config.SlowDown)) speed = Config.ScrollSpeed / 2;
         else if (KeybindManager.IsKeyPressed(Config.SpeedUp)) speed = Config.ScrollSpeed * 2;
 
-
-        if (KeybindManager.IsKeyPressed(Config.ScrollMode)
-            && KeybindManager.IsKeyPressed(Config.Down))
+        if (KeybindManager.IsKeyPressed(Config.Down))
         {
-            Scroll(MouseClickState.DOWN, speed);
+            Scroll(Direction.DOWN, speed);
             return true;
         }
-        if (KeybindManager.IsKeyPressed(Config.ScrollMode)
-            && KeybindManager.IsKeyPressed(Config.Up))
+        if (KeybindManager.IsKeyPressed(Config.Up))
         {
-            Scroll(MouseClickState.UP, speed);
+            Scroll(Direction.UP, speed);
+            return true;
+        }
+        if (KeybindManager.IsKeyPressed(Config.Left))
+        {
+            Scroll(Direction.LEFT, speed * 2);
+            return true;
+        }
+        if (KeybindManager.IsKeyPressed(Config.Right))
+        {
+            Scroll(Direction.RIGHT, speed * 2);
             return true;
         }
         return false;
