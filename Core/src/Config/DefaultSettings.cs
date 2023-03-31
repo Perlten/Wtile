@@ -9,15 +9,23 @@ namespace Wtile.Core.Config
         {
             var config = new WtileConfig()
             {
-                Top = 400,
-                Left = 400,
-                Width = 1500,
-                Height = 150,
+                Gui = GetDefaultGuiConfig(),
                 KeyMouse = GetDefaultKeymouse(),
                 Keybinds = GetDefaultKeybinds(),
                 Rebinds = GetDefaultRebinds()
             };
             return config;
+        }
+
+        private static ConfigGui GetDefaultGuiConfig()
+        {
+            return new ConfigGui()
+            {
+                Top = 400,
+                Left = 400,
+                Width = 1500,
+                Height = 150,
+            };
         }
 
         private static List<ConfigKeybinds> GetDefaultRebinds()

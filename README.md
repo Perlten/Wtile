@@ -17,10 +17,10 @@ Look into window creation hook. Currently it will create a window on slack notif
 Cant focus windows in build project []
 If a keybind/rebind is not present in config use the one from default configs []
 Should be able to move windows around and maximize/minimize them []
-Allow to change to font size []
+Allow to change to font size [x]
 Create home/end rebinds [x]
 Quit Function []
-Scroll left and right []
+Scroll left and right [x]
 Create release pipeline on github actions []
 
 
