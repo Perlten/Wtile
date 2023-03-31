@@ -41,6 +41,7 @@ namespace Wtile.Core.Config
                 new ConfigKeybinds() { Action = "[", Key = WtileKey.C, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "]", Key = WtileKey.V, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "$", Key = WtileKey.G, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "!", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "=", Key = WtileKey.E, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "Enter", Key = WtileKey.W, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Escape", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
