@@ -54,8 +54,29 @@ public class Window
 
     public void Activate()
     {
-        ExternalFunctions.SetForegroundWindow(WindowPtr);
-        KeyMouse.KeyMouse.CenterMouseInWindow(this);
+        // Get the thread ID of the current thread and the thread ID of the window's thread
+        int currentThreadId = ExternalFunctions.GetCurrentThreadId();
+        int windowThreadId = ExternalFunctions.GetWindowThreadProcessId(WindowPtr, IntPtr.Zero);
+
+        // Attach the input processing mechanism of the current thread to the window's thread
+        bool attached = ExternalFunctions.AttachThreadInput(windowThreadId, currentThreadId, true);
+        if (attached)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                // Activate the window
+                var sucessfullActivated = ExternalFunctions.SetForegroundWindow(WindowPtr);
+
+                if (sucessfullActivated)
+                    break;
+                Thread.Sleep(10);
+            }
+            // Detach the input processing mechanism of the two threads
+            ExternalFunctions.AttachThreadInput(windowThreadId, currentThreadId, false);
+
+            // Center the mouse in the window
+            KeyMouse.KeyMouse.CenterMouseInWindow(this);
+        }
     }
 
     internal void Maximize()

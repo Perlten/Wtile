@@ -104,5 +104,16 @@ namespace Wtile.Core.Utils
 
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        [DllImport("user32.dll")]
+        public static extern bool AttachThreadInput(int idAttach, int idAttachTo, bool fAttach);
+
+        [DllImport("user32.dll")]
+        public static extern int GetWindowThreadProcessId(IntPtr hWnd, IntPtr lpProcessId);
+
+        [DllImport("kernel32.dll")]
+        public static extern int GetCurrentThreadId();
+
+
     }
 }

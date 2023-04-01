@@ -31,6 +31,7 @@ public static class FunctionMapping
         fm.Add("QuitCurrentWindow()", () => Wtile.GetActiveWindow().Quit());
         fm.Add("MaximizeWindow()", () => Wtile.GetActiveWindow().Maximize());
         fm.Add("RestoreWindow()", () => Wtile.GetActiveWindow().Restore());
+        fm.Add("Quit()", () => Wtile.Quit());
 
         // Rebinds
         var rm = RebindMap;

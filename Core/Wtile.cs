@@ -104,6 +104,12 @@ public static class Wtile
         return window;
     }
 
+    public static void Quit()
+    {
+        Application.Exit();
+        System.Environment.Exit(0);
+    }
+
     public static string GetWtileString()
     {
         int workspaceIndex = _currentWorkspace.Index + 1;

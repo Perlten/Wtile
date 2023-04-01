@@ -82,7 +82,6 @@ namespace Wtile.Gui
 
             int cpuUsage = (int)_cpuCounter.NextValue();
 
-
             return $"CPU: {cpuUsage}% | Volume: {volumeString} | {timeString}";
         }
 

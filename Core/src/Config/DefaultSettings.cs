@@ -86,6 +86,7 @@ namespace Wtile.Core.Config
             keybinds.Add(new ConfigKeybinds() { Action = "ChangeToPreviousWorkspace()", Key = WtileKey.Q, ModKeys = { WtileModKey.LWin } });
             keybinds.Add(new ConfigKeybinds() { Action = "MaximizeWindow()", Key = WtileKey.K, ModKeys = { WtileModKey.LWin } });
             keybinds.Add(new ConfigKeybinds() { Action = "RestoreWindow()", Key = WtileKey.J, ModKeys = { WtileModKey.LWin } });
+            keybinds.Add(new ConfigKeybinds() { Action = "Quit()", Key = WtileKey.Escape, ModKeys = { WtileModKey.LWin } });
 
 
             return keybinds;
