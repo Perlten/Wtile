@@ -24,8 +24,15 @@ jobs:
       - name: Publish
         run: dotnet dotnet publish -c Release --sc
 
-      - name: Zip Folder
-        run: zip -r wtile.zip Gui/bin/Release/net7.0-windows/win-x64/publish/
+      - name: Install 7-Zip
+        run: |
+          Invoke-WebRequest https://www.7-zip.org/a/7z1900-x64.msi -OutFile 7z.msi
+          Start-Process msiexec.exe -Wait -ArgumentList '/i 7z.msi /quiet /norestart'
+          Remove-Item -Path 7z.msi
+
+      - name: Zip folder
+        run: |
+          & "C:\Program Files\7-Zip\7z.exe" a -r wtile.zip ./Gui/bin/Release/net7.0-windows/win-x64/publish/
 
       - name: Release
         uses: softprops/action-gh-release@v1
