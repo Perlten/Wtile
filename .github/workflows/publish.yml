@@ -22,3 +22,14 @@ jobs:
         run: dotnet test --no-build --verbosity normal
       - name: Publish
         run: dotnet dotnet publish -c Release --sc
+
+      - uses: rymndhng/release-on-push-action@master
+        with:
+          bump_version_scheme: minor
+          tag_prefix: v
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Wtile
+          path: Gui/bin/Release/net7.0-windows/win-x64/publish/
