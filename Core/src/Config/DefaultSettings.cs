@@ -60,6 +60,8 @@ namespace Wtile.Core.Config
                 new ConfigKeybinds() { Action = "Back", Key = WtileKey.A, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Home", Key = WtileKey.X, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "End", Key = WtileKey.C, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "MoveWindowLeft", Key = WtileKey.Left, ModKeys = { WtileModKey.LWin } },
+                new ConfigKeybinds() { Action = "MoveWindowRight", Key = WtileKey.Right, ModKeys = { WtileModKey.LWin } },
             };
 
             return rebinds;

@@ -43,6 +43,8 @@ public static class FunctionMapping
         rm.Add("=", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D0));
         rm.Add("Back", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Left));
         rm.Add("Forward", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Right));
+        rm.Add("MoveWindowLeft", CreateSimpleRebind(WtileModKey.LWin, WtileKey.Left));
+        rm.Add("MoveWindowRight", CreateSimpleRebind(WtileModKey.LWin, WtileKey.Right));
 
         rm.Add("{", CreateAltGrRebind(WtileKey.D7));
         rm.Add("}", CreateAltGrRebind(WtileKey.D0));
