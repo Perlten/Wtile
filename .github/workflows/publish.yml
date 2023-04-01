@@ -24,20 +24,28 @@ jobs:
       - name: Publish
         run: dotnet dotnet publish -c Release --sc
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: Wtile release ${{ github.ref }}
-          draft: false
-          prerelease: false
+      - name: Zip Folder
+        run: zip -r wtile.zip Gui/bin/Release/net7.0-windows/win-x64/publish/
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: Wtile
-          path: Gui/bin/Release/net7.0-windows/win-x64/publish/
+          files: wtile.zip
+
+      # - name: Create Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ github.ref }}
+      #     release_name: Release ${{ github.ref }}
+      #     body: Wtile release ${{ github.ref }}
+      #     draft: false
+      #     prerelease: false
+
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Wtile
+      #     path: Gui/bin/Release/net7.0-windows/win-x64/publish/
