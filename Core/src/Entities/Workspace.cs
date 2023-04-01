@@ -46,6 +46,7 @@ public class Workspace
     }
     public void ChangeWindow(Window window)
     {
+        if (window == CurrentWindow) return;
         PreviousWindow = CurrentWindow;
         CurrentWindow = window;
         CurrentWindow.Activate();

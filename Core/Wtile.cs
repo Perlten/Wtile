@@ -58,6 +58,7 @@ public static class Wtile
 
     public static void ChangeWorkspace(Workspace workspace)
     {
+        if (workspace == _currentWorkspace) return;
         _previousWorkspace = _currentWorkspace;
         _currentWorkspace = workspace;
         _currentWorkspace.CurrentWindow?.Activate();

@@ -42,6 +42,8 @@ public class Window
     public void Quit()
     {
         ExternalFunctions.SendMessage(WindowPtr, ExternalFunctions.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+        Wtile.RemoveWindow(WindowPtr);
+
         if (Workspace == null) return;
 
         var newWindow = Workspace.Windows.FirstOrDefault();
