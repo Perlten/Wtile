@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics;
 using Wtile.Core.Keybind;
-using Wtile.Core.KeyMouse;
 
 namespace Wtile.Core.Config
 {

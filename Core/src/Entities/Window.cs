@@ -1,8 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Wtile.Core.KeyMouse;
 using Wtile.Core.Utils;
 
 namespace Wtile.Core.Entities;
@@ -64,7 +61,7 @@ public class Window
         bool attached = ExternalFunctions.AttachThreadInput(windowThreadId, currentThreadId, true);
         if (attached)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 20; i++)
             {
                 // Activate the window
                 var sucessfullActivated = ExternalFunctions.SetForegroundWindow(WindowPtr);

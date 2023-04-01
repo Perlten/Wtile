@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Wtile.Core.Config;
-using Wtile.Core.Entities;
+﻿using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
 using static Wtile.Core.Config.WtileConfig;

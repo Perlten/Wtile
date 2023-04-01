@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic.Devices;
-using Wtile.Core.Entities;
+﻿using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
 

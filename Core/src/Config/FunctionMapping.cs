@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Security.AccessControl;
-using Wtile.Core.Keybind;
+﻿using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
 
 namespace Wtile.Core.Config;
