@@ -1,4 +1,5 @@
-﻿using System.Security.AccessControl;
+﻿using System.Diagnostics;
+using System.Security.AccessControl;
 using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
 
@@ -23,11 +24,14 @@ public static class FunctionMapping
         }
         fm.Add("SaveConfig()", ConfigManager.SaveConfig);
         fm.Add("AddActiveWindow()", () => Wtile.GetCw().AddActiveWindow());
-        fm.Add("QuitCurrentWindow()", () => Wtile.GetCw().CurrentWindow?.Quit());
         fm.Add("RemoveCurrentWindow()", () => Wtile.GetCw().RemoveCurrentWindow());
         fm.Add("ChangeToPreviousWindow()", () => Wtile.GetCw().ChangeToPreviousWindow());
         fm.Add("ChangeToPreviousWorkspace()", () => Wtile.ChangeToPreviousWorkspace());
         fm.Add("ToggleResizeBar()", () => State.RESIZEABLE = !State.RESIZEABLE);
+        fm.Add("QuitCurrentWindow()", () => Wtile.GetActiveWindow().Quit());
+        fm.Add("MaximizeWindow()", () => Wtile.GetActiveWindow().Maximize());
+        fm.Add("RestoreWindow()", () => Wtile.GetActiveWindow().Restore());
+        fm.Add("Quit()", () => Wtile.Quit());
 
         // Rebinds
         var rm = RebindMap;
@@ -35,9 +39,12 @@ public static class FunctionMapping
         rm.Add(")", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D9));
         rm.Add("/", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D7));
         rm.Add("\"", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D2));
+        rm.Add("!", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D1));
         rm.Add("=", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D0));
         rm.Add("Back", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Left));
         rm.Add("Forward", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Right));
+        rm.Add("MoveWindowLeft", CreateSimpleRebind(WtileModKey.LWin, WtileKey.Left));
+        rm.Add("MoveWindowRight", CreateSimpleRebind(WtileModKey.LWin, WtileKey.Right));
 
         rm.Add("{", CreateAltGrRebind(WtileKey.D7));
         rm.Add("}", CreateAltGrRebind(WtileKey.D0));

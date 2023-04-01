@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.Devices;
 using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
+using Wtile.Core.Utils;
 
 namespace Wtile.Core;
 
@@ -57,6 +58,7 @@ public static class Wtile
 
     public static void ChangeWorkspace(Workspace workspace)
     {
+        if (workspace == _currentWorkspace) return;
         _previousWorkspace = _currentWorkspace;
         _currentWorkspace = workspace;
         _currentWorkspace.CurrentWindow?.Activate();
@@ -94,6 +96,19 @@ public static class Wtile
             }
         }
         return true;
+    }
+
+    public static Window GetActiveWindow()
+    {
+        var windowPtr = ExternalFunctions.GetForegroundWindow();
+        var window = new Window(windowPtr);
+        return window;
+    }
+
+    public static void Quit()
+    {
+        Application.Exit();
+        System.Environment.Exit(0);
     }
 
     public static string GetWtileString()

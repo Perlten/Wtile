@@ -10,5 +10,6 @@ namespace Wtile.Core.Utils
     {
         public static bool RUNNING = true;
         public static bool RESIZEABLE = false;
+        public static string DEBUG_MESSAGE = "";
     }
 }

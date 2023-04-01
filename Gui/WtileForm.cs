@@ -17,10 +17,12 @@ namespace Wtile.Gui
             _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
 
             StartPosition = FormStartPosition.Manual;
-            Top = ConfigManager.Config.Top;
-            Left = ConfigManager.Config.Left;
-            Width = ConfigManager.Config.Width;
-            Height = ConfigManager.Config.Height;
+            Top = ConfigManager.Config.Gui.Top;
+            Left = ConfigManager.Config.Gui.Left;
+            Width = ConfigManager.Config.Gui.Width;
+            Height = ConfigManager.Config.Gui.Height;
+            leftLabel.Font = ConfigManager.Config.Gui.Font;
+            rightLabel.Font = ConfigManager.Config.Gui.Font;
 
             System.Windows.Forms.Timer mainTimer = new()
             {
@@ -49,7 +51,7 @@ namespace Wtile.Gui
 
             leftLabel.Text = Core.Wtile.GetWtileString();
 
-            var config = ConfigManager.Config;
+            var config = ConfigManager.Config.Gui;
             config.X = Location.X;
             config.Y = Location.Y;
             config.Width = Width;
@@ -79,7 +81,6 @@ namespace Wtile.Gui
             string volumeString = isMute ? "Mute" : $"{volume}%";
 
             int cpuUsage = (int)_cpuCounter.NextValue();
-
 
             return $"CPU: {cpuUsage}% | Volume: {volumeString} | {timeString}";
         }

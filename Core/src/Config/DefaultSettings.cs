@@ -9,15 +9,24 @@ namespace Wtile.Core.Config
         {
             var config = new WtileConfig()
             {
-                Top = 400,
-                Left = 400,
-                Width = 1500,
-                Height = 150,
+                Gui = GetDefaultGuiConfig(),
                 KeyMouse = GetDefaultKeymouse(),
                 Keybinds = GetDefaultKeybinds(),
                 Rebinds = GetDefaultRebinds()
             };
             return config;
+        }
+
+        private static ConfigGui GetDefaultGuiConfig()
+        {
+            return new ConfigGui()
+            {
+                Top = 400,
+                Left = 400,
+                Width = 1500,
+                Height = 150,
+                Font = new Font("Segoe UI", 14)
+            };
         }
 
         private static List<ConfigKeybinds> GetDefaultRebinds()
@@ -33,6 +42,7 @@ namespace Wtile.Core.Config
                 new ConfigKeybinds() { Action = "[", Key = WtileKey.C, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "]", Key = WtileKey.V, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "$", Key = WtileKey.G, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "!", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "=", Key = WtileKey.E, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "Enter", Key = WtileKey.W, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Escape", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
@@ -50,6 +60,8 @@ namespace Wtile.Core.Config
                 new ConfigKeybinds() { Action = "Back", Key = WtileKey.A, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Home", Key = WtileKey.X, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "End", Key = WtileKey.C, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "MoveWindowLeft", Key = WtileKey.Left, ModKeys = { WtileModKey.LWin } },
+                new ConfigKeybinds() { Action = "MoveWindowRight", Key = WtileKey.Right, ModKeys = { WtileModKey.LWin } },
             };
 
             return rebinds;
@@ -74,6 +86,10 @@ namespace Wtile.Core.Config
             keybinds.Add(new ConfigKeybinds() { Action = "RemoveCurrentWindow()", Key = WtileKey.W, ModKeys = { WtileModKey.LWin, WtileModKey.LShiftKey } });
             keybinds.Add(new ConfigKeybinds() { Action = "ChangeToPreviousWindow()", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt } });
             keybinds.Add(new ConfigKeybinds() { Action = "ChangeToPreviousWorkspace()", Key = WtileKey.Q, ModKeys = { WtileModKey.LWin } });
+            keybinds.Add(new ConfigKeybinds() { Action = "MaximizeWindow()", Key = WtileKey.K, ModKeys = { WtileModKey.LWin } });
+            keybinds.Add(new ConfigKeybinds() { Action = "RestoreWindow()", Key = WtileKey.J, ModKeys = { WtileModKey.LWin } });
+            keybinds.Add(new ConfigKeybinds() { Action = "Quit()", Key = WtileKey.Escape, ModKeys = { WtileModKey.LWin } });
+
 
             return keybinds;
         }

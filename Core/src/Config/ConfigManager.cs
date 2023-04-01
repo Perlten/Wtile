@@ -8,16 +8,23 @@ namespace Wtile.Core.Config
 
     public class WtileConfig
     {
-        public int X { get; set; } = 0;
-        public int Y { get; set; } = 0;
-        public int Width { get; set; } = 0;
-        public int Height { get; set; } = 0;
-        public int Left { get; set; } = 0;
-        public int Top { get; set; } = 0;
         public ConfigKeyMouse KeyMouse { get; set; } = new();
         public List<ConfigKeybinds> Keybinds { get; set; } = new();
         public List<ConfigKeybinds> Rebinds { get; set; } = new();
+        public ConfigGui Gui { get; set; } = new();
 
+
+        public class ConfigGui
+        {
+            public int X { get; set; } = 0;
+            public int Y { get; set; } = 0;
+            public int Width { get; set; } = 0;
+            public int Height { get; set; } = 0;
+            public int Left { get; set; } = 0;
+            public int Top { get; set; } = 0;
+            public Font Font { get; set; } = new Font("Segoe UI", 13);
+
+        }
 
         public class ConfigKeybinds
         {
@@ -80,7 +87,7 @@ namespace Wtile.Core.Config
                 string json = File.ReadAllText(configFilePath);
                 WtileConfig? config = JsonConvert.DeserializeObject<WtileConfig>(json);
                 if (config != null)
-                    return config;
+                    return HandleUnsetKeybindsAndRebinds(config);
 
             }
             return DefaultSettings.GetDefaultConfig();
@@ -105,6 +112,21 @@ namespace Wtile.Core.Config
                 var keybind = new WtileKeybind(Configkeybind.Key, Configkeybind.ModKeys, actionMap[Configkeybind.Action]);
                 KeybindManager.AddKeybind(keybind);
             }
+        }
+
+        private static WtileConfig HandleUnsetKeybindsAndRebinds(WtileConfig config)
+        {
+            var defaultConfig = DefaultSettings.GetDefaultConfig();
+            var keybindsActions = config.Keybinds.Select(e => e.Action).ToHashSet();
+
+            var missingKeybinds = defaultConfig.Keybinds.Where(k => !keybindsActions.Contains(k.Action));
+            config.Keybinds.AddRange(missingKeybinds);
+
+            var rebindsActions = config.Rebinds.Select(e => e.Action).ToHashSet();
+            var missingRebinds = defaultConfig.Rebinds.Where(r => !rebindsActions.Contains(r.Action));
+            config.Rebinds.AddRange(missingRebinds);
+
+            return config;
         }
 
     }
