@@ -2,7 +2,7 @@ name: Publish
 on:
   push:
     branches:
-      - "feature/gh-action"
+      - "master"
 
 jobs:
   build:
@@ -31,9 +31,3 @@ jobs:
           title: "Wtile Build"
           files: |
             Gui/bin/Release/net7.0-windows/win-x64/publish
-
-      # - name: Upload Artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: Wtile
-      #     path: Gui/bin/Release/net7.0-windows/win-x64/publish/
