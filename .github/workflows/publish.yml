@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - "main"
+    tags:
+      - "v*"
 
 jobs:
   build:
@@ -23,11 +25,20 @@ jobs:
       - name: Publish
         run: dotnet dotnet publish -c Release --sc
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Rename published folder
+        shell: bash
+        run: mv ./Gui/bin/Release/net7.0-windows/win-x64/publish/ ./Gui/bin/Release/wtile
+
+      - name: Install Zip
+        run: |
+          Invoke-WebRequest https://www.7-zip.org/a/7z1900-x64.msi -OutFile 7z.msi
+          Start-Process msiexec.exe -Wait -ArgumentList '/i 7z.msi /quiet /norestart'
+          Remove-Item -Path 7z.msi
+      - name: Zip
+        run: |
+          & "C:\Program Files\7-Zip\7z.exe" a -r wtile.zip ./Gui/bin/Release/wtile/
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: false
-          title: "Wtile Build"
-          files: |
-            Gui/bin/Release/net7.0-windows/win-x64/publish
+          files: wtile.zip
