@@ -6,7 +6,7 @@ If i quit a window it does not always get removed from workspace [x]
 You if you switch to the current window Alt+Q does not change window [x]
 Cant focus windows in build project [x]
 The current keymouse middle click soultion does not work for links []
-If in keymouse mode and i press go fast (Lshift) i will enter a � [x]
+If in keymouse mode and i press go fast (Lshift) i will enter a æ [x]
 
 ## Features:
 Switch to last window function [x]
@@ -25,7 +25,7 @@ Create home/end rebinds [x]
 Quit Function [x]
 Scroll left and right [x]
 Release all keys when last key is released []
-Find a way to distribute Wtile []
+Find a way to distribute Wtile [x]
 
 
 
