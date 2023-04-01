@@ -23,13 +23,17 @@ jobs:
       - name: Publish
         run: dotnet dotnet publish -c Release --sc
 
-      - uses: rymndhng/release-on-push-action@master
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          bump_version_scheme: minor
-          tag_prefix: v
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "Wtile Build"
+          files: |
+            Gui/bin/Release/net7.0-windows/win-x64/publish
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: Wtile
-          path: Gui/bin/Release/net7.0-windows/win-x64/publish/
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Wtile
+      #     path: Gui/bin/Release/net7.0-windows/win-x64/publish/
