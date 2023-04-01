@@ -26,7 +26,7 @@ jobs:
 
       - name: Rename published folder
         shell: bash
-        run: mv ./Gui/bin/Release/net7.0-windows/win-x64/publish/ ./Gui/bin/Release/net7.0-windows/win-x64/wtile/
+        run: mv ./Gui/bin/Release/net7.0-windows/win-x64/publish/ ./Gui/bin/Release/wtile
 
       - name: Install Zip
         run: |
@@ -35,7 +35,7 @@ jobs:
           Remove-Item -Path 7z.msi
       - name: Zip
         run: |
-          & "C:\Program Files\7-Zip\7z.exe" a -r wtile.zip ./Gui/bin/Release/net7.0-windows/win-x64/publish/
+          & "C:\Program Files\7-Zip\7z.exe" a -r wtile.zip ./Gui/bin/Release/wtile/
 
       - name: Release
         uses: softprops/action-gh-release@v1
