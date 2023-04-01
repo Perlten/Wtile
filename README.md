@@ -5,6 +5,9 @@ Can only close windows that are part of a workspace (Should close current window
 If i quit a window it does not always get removed from workspace [x]
 You if you switch to the current window Alt+Q does not change window [x]
 Cant focus windows in build project [x]
+The current keymouse middle click soultion does not work for links []
+If in keymouse mode and i press go fast (Lshift) i will enter a æ [x]
+
 ## Features:
 Switch to last window function [x]
 Switch to last workspace function [x]
