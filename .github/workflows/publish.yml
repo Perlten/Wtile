@@ -56,6 +56,6 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: false
-          title: "Wtile latest build"
+          title: "Wtile latest build2"
           files: |
             wtile.zip
