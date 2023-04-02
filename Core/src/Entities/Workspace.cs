@@ -18,13 +18,14 @@ public class Workspace
     public void AddWindow(IntPtr windowPtr)
     {
         var window = new Window(windowPtr, this);
-        Windows.Add(window);
-        CurrentWindow ??= window;
+        AddWindow(window);
     }
     public void AddWindow(Window window)
     {
         Windows.Add(window);
-        CurrentWindow ??= window;
+        PreviousWindow = CurrentWindow;
+        CurrentWindow = window;
+        SetWindowIndex();
     }
 
     public void RemoveWindow(Window window)
