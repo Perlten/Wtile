@@ -43,9 +43,19 @@ jobs:
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: latest
+      #     name: Latest Release
+      #     files: wtile.zip
+
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          tag_name: latest
-          name: Latest Release
-          files: wtile.zip
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "Wtile latest build"
+          files: |
+            wtile.zip
