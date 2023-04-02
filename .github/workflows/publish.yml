@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - "main"
-      - "dev"
 
 jobs:
   build:
@@ -37,25 +36,12 @@ jobs:
         run: |
           & "C:\Program Files\7-Zip\7z.exe" a -r wtile.zip ./Gui/bin/Release/wtile/
 
-      # - name: Bump version and push tag
-      #   id: tag_version
-      #   uses: mathieudutour/github-tag-action@v6.1
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     tag_name: latest
-      #     name: Latest Release
-      #     files: wtile.zip
-
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: false
-          title: "Wtile latest build2"
+          title: "Wtile"
           files: |
             wtile.zip
