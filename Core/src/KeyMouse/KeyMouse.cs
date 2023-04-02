@@ -45,17 +45,17 @@ internal class KeyMouse
         if (state == MouseClickState.DOWN)
         {
             if (KeybindManager.IsKeyPressed(WtileModKey.LControlKey))
-                ExternalFunctions.mouse_event(MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0);
+            {
+                KeybindManager.SendKeyPress(WtileModKey.LControlKey);
+                ExternalFunctions.mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+                ExternalFunctions.mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+                KeybindManager.SendKeyRelease(WtileModKey.LControlKey);
+            }
             else
                 ExternalFunctions.mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
         }
         else
-        {
-            if (KeybindManager.IsKeyPressed(WtileModKey.LControlKey))
-                ExternalFunctions.mouse_event(MOUSEEVENTF_MIDDLEUP, 0, 0, 0, 0);
-            else
-                ExternalFunctions.mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-        }
+            ExternalFunctions.mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
     }
     private static void RightClick(MouseClickState state)
     {

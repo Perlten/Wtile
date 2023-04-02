@@ -158,11 +158,18 @@ public static class KeybindManager
         return _keymap.ContainsKey((int)key);
     }
 
+    internal static void SendKeyPress(WtileModKey key) { SendKeyPress((int)key); }
+    internal static void SendKeyPress(WtileKey key) { SendKeyPress((int)key); }
+
     internal static void SendKeyPress(int key)
     {
         _ignoreEvent = true;
         ExternalFunctions.keybd_event((byte)key, 0, ExternalFunctions.KEYEVENTF_KEYDOWN, 0);
     }
+
+    internal static void SendKeyRelease(WtileModKey key) { SendKeyRelease((int)key); }
+    internal static void SendKeyRelease(WtileKey key) { SendKeyRelease((int)key); }
+
     internal static void SendKeyRelease(int key)
     {
         _ignoreEvent = true;
