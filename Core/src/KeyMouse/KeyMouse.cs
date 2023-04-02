@@ -9,7 +9,6 @@ internal enum Direction { LEFT, RIGHT, UP, DOWN }
 
 internal class KeyMouse
 {
-
     private enum MouseClickState { DOWN, UP }
 
     private const int MOUSEEVENTF_MOVE = 0x0001;
@@ -19,8 +18,6 @@ internal class KeyMouse
     private const int MOUSEEVENTF_RIGHTUP = 0x0010;
     private const int MOUSEEVENTF_WHEEL = 0x0800;
     private const int MOUSEEVENTF_HWHEEL = 0x01000;
-    private const int MOUSEEVENTF_MIDDLEDOWN = 0x0020;
-    private const int MOUSEEVENTF_MIDDLEUP = 0x0040;
 
     internal static ConfigKeyMouse Config { get; set; } = new();
     private static bool _leftHeld = false;
@@ -29,7 +26,7 @@ internal class KeyMouse
     internal static int Speed { get; private set; } = 15;
 
 
-    internal static void MoveMouse(Direction direction)
+    private static void MoveMouse(Direction direction)
     {
         switch (direction)
         {
