@@ -44,6 +44,8 @@ namespace Wtile.Core.Config
                 new ConfigKeybinds() { Action = "$", Key = WtileKey.G, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "!", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "=", Key = WtileKey.E, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = "_", Key = WtileKey.X, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
+                new ConfigKeybinds() { Action = ":", Key = WtileKey.S, ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } },
                 new ConfigKeybinds() { Action = "Enter", Key = WtileKey.W, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Escape", Key = WtileKey.Q, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "MediaPlayPause", Key = WtileKey.I, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey } },
@@ -60,6 +62,7 @@ namespace Wtile.Core.Config
                 new ConfigKeybinds() { Action = "Back", Key = WtileKey.A, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "Home", Key = WtileKey.X, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "End", Key = WtileKey.C, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
+                new ConfigKeybinds() { Action = "Backspace", Key = WtileKey.S, ModKeys = { WtileModKey.LAlt, WtileModKey.LControlKey } },
                 new ConfigKeybinds() { Action = "MoveWindowLeft", Key = WtileKey.Left, ModKeys = { WtileModKey.LWin } },
                 new ConfigKeybinds() { Action = "MoveWindowRight", Key = WtileKey.Right, ModKeys = { WtileModKey.LWin } },
             };

@@ -119,6 +119,7 @@ public static class KeybindManager
     {
         if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
         int vkCode = Marshal.ReadInt32(lParam);
+        Debug.WriteLine(vkCode);
 
         if ((int)WtileKey.Pause == vkCode && IsWparamDown(wParam))
         {

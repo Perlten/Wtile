@@ -23,6 +23,12 @@ public enum WtileModKey
 [JsonConverter(typeof(StringEnumConverter))]
 public enum WtileKey
 {
+    [EnumMember(Value = "Dot")]
+    Dot = 190,
+    [EnumMember(Value = "Backspace")]
+    Backspace = Keys.Back,
+    [EnumMember(Value = "Dash")]
+    Dash = 189,
     [EnumMember(Value = "AE")]
     AE = 192,
     [EnumMember(Value = "None")]
