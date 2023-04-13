@@ -11,7 +11,13 @@ namespace Wtile.Core.Config
         public List<ConfigKeybinds> Keybinds { get; set; } = new();
         public List<ConfigKeybinds> Rebinds { get; set; } = new();
         public ConfigGui Gui { get; set; } = new();
+        public ConfigGeneral General { get; set; } = new();
 
+
+        public class ConfigGeneral
+        {
+            public HashSet<string> IgnoredApplications { get; set; } = new();
+        }
 
         public class ConfigGui
         {
@@ -51,7 +57,6 @@ namespace Wtile.Core.Config
             public int FastSpeed = 25;
             public int SlowSpeed = 5;
         }
-
     }
 
     public static class ConfigManager
@@ -124,6 +129,9 @@ namespace Wtile.Core.Config
             var rebindsActions = config.Rebinds.Select(e => e.Action).ToHashSet();
             var missingRebinds = defaultConfig.Rebinds.Where(r => !rebindsActions.Contains(r.Action));
             config.Rebinds.AddRange(missingRebinds);
+
+            var missingIgnoredApplications = defaultConfig.General.IgnoredApplications.Where(e => !config.General.IgnoredApplications.Contains(e));
+            config.General.IgnoredApplications.UnionWith(missingIgnoredApplications);
 
             return config;
         }

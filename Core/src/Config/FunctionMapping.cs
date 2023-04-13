@@ -19,6 +19,7 @@ public static class FunctionMapping
             fm.Add($"ChangeWindow({index})", () => Wtile.GetCw().ChangeWindow(index));
             fm.Add($"CurrentWindowChangeOrder({index})", () => Wtile.GetCw().CurrentWindowChangeOrder(index));
             fm.Add($"MoveCurrentWindowToWorkspace({index})", () => Wtile.GetCw().MoveCurrentWindowToWorkspace(index));
+            fm.Add($"AddActiveWindowToWorkspace({index})", () => Wtile.AddActiveWindowToWorkspace(index));
         }
         fm.Add("SaveConfig()", ConfigManager.SaveConfig);
         fm.Add("AddActiveWindow()", () => Wtile.GetCw().AddActiveWindow());
@@ -33,18 +34,19 @@ public static class FunctionMapping
 
         // Rebinds
         var rm = RebindMap;
-        rm.Add("(", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D8));
-        rm.Add(")", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D9));
-        rm.Add("/", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D7));
-        rm.Add("\"", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D2));
-        rm.Add("!", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D1));
-        rm.Add("=", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.D0));
-        rm.Add("Back", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Left));
-        rm.Add("Forward", CreateSimpleRebind(WtileModKey.LAlt, WtileKey.Right));
-        rm.Add("MoveWindowLeft", CreateSimpleRebind(WtileModKey.LWin, WtileKey.Left));
-        rm.Add("MoveWindowRight", CreateSimpleRebind(WtileModKey.LWin, WtileKey.Right));
-        rm.Add("_", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.Dash));
-        rm.Add(":", CreateSimpleRebind(WtileModKey.LShiftKey, WtileKey.Dot));
+        rm.Add("(", CreateDoubleRebind(WtileModKey.LShiftKey, WtileKey.D8));
+        rm.Add(")", CreateDoubleRebind(WtileModKey.LShiftKey, WtileKey.D9));
+        rm.Add("/", CreateDoubleRebind(WtileModKey.LShiftKey, WtileKey.D7));
+        rm.Add("\"", CreateDoubleRebind(WtileModKey.LShiftKey, WtileKey.D2));
+        rm.Add("!", CreateDoubleRebind(WtileModKey.LShiftKey, WtileKey.D1));
+        rm.Add("=", CreateDoubleRebind(WtileModKey.LShiftKey, WtileKey.D0));
+        rm.Add("Back", CreateDoubleRebind(WtileModKey.LAlt, WtileKey.Left));
+        rm.Add("Forward", CreateDoubleRebind(WtileModKey.LAlt, WtileKey.Right));
+        rm.Add("_", CreateDoubleRebind(WtileModKey.LShiftKey, WtileKey.Dash));
+        rm.Add(":", CreateDoubleRebind(WtileModKey.LShiftKey, WtileKey.Dot));
+
+        rm.Add("MoveWindowLeft", CreateTripleRebind(WtileModKey.LWin, WtileModKey.LShiftKey, WtileKey.Left));
+        rm.Add("MoveWindowRight", CreateTripleRebind(WtileModKey.LWin, WtileModKey.LShiftKey, WtileKey.Right));
 
         rm.Add("{", CreateAltGrRebind(WtileKey.D7));
         rm.Add("}", CreateAltGrRebind(WtileKey.D0));
@@ -79,7 +81,7 @@ public static class FunctionMapping
         };
     }
 
-    private static Action CreateSimpleRebind(WtileModKey modkey, WtileKey key)
+    private static Action CreateDoubleRebind(WtileModKey modkey, WtileKey key)
     {
         return () =>
         {
@@ -87,6 +89,19 @@ public static class FunctionMapping
             KeybindManager.SendKeyPress((int)modkey);
             KeybindManager.SendKeyPress((int)key);
             KeybindManager.SendKeyRelease((int)key);
+            KeybindManager.SendKeyRelease((int)modkey);
+        };
+    }
+    private static Action CreateTripleRebind(WtileModKey modkey, WtileModKey modkey2, WtileKey key)
+    {
+        return () =>
+        {
+            KeybindManager.ReleaseAllKeys();
+            KeybindManager.SendKeyPress((int)modkey);
+            KeybindManager.SendKeyPress((int)modkey2);
+            KeybindManager.SendKeyPress((int)key);
+            KeybindManager.SendKeyRelease((int)key);
+            KeybindManager.SendKeyRelease((int)modkey2);
             KeybindManager.SendKeyRelease((int)modkey);
         };
     }

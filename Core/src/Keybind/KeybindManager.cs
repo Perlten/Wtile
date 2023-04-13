@@ -10,6 +10,7 @@ public static class KeybindManager
 
     private static List<WtileKeybind> _keybinds = new();
     private static Dictionary<int, bool> _keymap = new();
+    private static HashSet<int> _keysSinceLastGlobalRelease = new();
 
     const int WM_KEYDOWN = 0x100;
     const int WM_SYSKEYDOWN = 0x104;
@@ -103,12 +104,6 @@ public static class KeybindManager
         return 0;
     }
 
-    private static void PrintPressedKeys()
-    {
-        foreach (var key in _keymap.Keys)
-            Debug.WriteLine(key);
-    }
-
     internal static void ReleaseAllKeys()
     {
         foreach (var key in _keymap.Keys)
@@ -119,7 +114,6 @@ public static class KeybindManager
     {
         if (code < 0) return ExternalFunctions.CallNextHookEx(IntPtr.Zero, code, (int)wParam, lParam);
         int vkCode = Marshal.ReadInt32(lParam);
-        Debug.WriteLine(vkCode);
 
         if ((int)WtileKey.Pause == vkCode && IsWparamDown(wParam))
         {
@@ -137,9 +131,18 @@ public static class KeybindManager
         {
             _keymap[vkCode] = true;
             _keySinceLastLwin++;
+            _keysSinceLastGlobalRelease.Add(vkCode);
         }
         else if (IsWparamUp(wParam))
             _keymap.Remove(vkCode);
+
+
+        if (_keymap.Count == 0 && _keysSinceLastGlobalRelease.Count != 0)
+        {
+            foreach (var key in _keysSinceLastGlobalRelease)
+                SendKeyRelease(key);
+            _keysSinceLastGlobalRelease.Clear();
+        }
 
         if (HandleKeyMouseEvents() != 0) return 1;
         if (HandleKeybindEvent() != 0) return 1;

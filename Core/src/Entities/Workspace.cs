@@ -1,4 +1,5 @@
-﻿using Wtile.Core.Utils;
+﻿using Wtile.Core.Config;
+using Wtile.Core.Utils;
 
 namespace Wtile.Core.Entities;
 public class Workspace
@@ -22,6 +23,9 @@ public class Workspace
     }
     public void AddWindow(Window window)
     {
+        if (ConfigManager.Config.General.IgnoredApplications.Contains(window.ApplicationName))
+            return;
+
         Windows.Add(window);
         PreviousWindow = CurrentWindow;
         CurrentWindow = window;

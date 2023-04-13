@@ -75,6 +75,14 @@ public static class Wtile
         return true;
     }
 
+    public static void AddActiveWindowToWorkspace(int index)
+    {
+        var windowPtr = ExternalFunctions.GetForegroundWindow();
+        if (index >= _workspaces.Count) return;
+        var workspace = _workspaces[index];
+        workspace.AddWindow(windowPtr);
+    }
+
     public static void ChangeToPreviousWorkspace()
     {
         if (_previousWorkspace == null) return;
