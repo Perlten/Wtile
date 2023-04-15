@@ -1,4 +1,5 @@
-﻿using Wtile.Core.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
 
@@ -75,12 +76,25 @@ public static class Wtile
         return true;
     }
 
-    public static void AddActiveWindowToWorkspace(int index)
+    public static void MoveCurrentWindowToWorkspace(int workspaceIndex)
     {
+        if (workspaceIndex >= _workspaces.Count) return;
         var windowPtr = ExternalFunctions.GetForegroundWindow();
-        if (index >= _workspaces.Count) return;
-        var workspace = _workspaces[index];
-        workspace.AddWindow(windowPtr);
+        Window? windowToMove = null;
+        foreach (var workspace in _workspaces)
+        {
+            foreach (var window in workspace.Windows)
+            {
+                if (window.WindowPtr == windowPtr)
+                {
+                    workspace.Windows.Remove(window);
+                    windowToMove = window;
+                    break;
+                }
+            }
+        }
+        windowToMove ??= new Window(windowPtr, _workspaces[workspaceIndex]);
+        _workspaces[workspaceIndex].AddWindow(windowToMove);
     }
 
     public static void ChangeToPreviousWorkspace()
@@ -97,7 +111,7 @@ public static class Wtile
             {
                 if (window.WindowPtr == windowPtr)
                 {
-                    workspace.Windows.Remove(window);
+                    workspace.RemoveWindow(window);
                     break;
                 }
             }

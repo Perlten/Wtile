@@ -35,6 +35,12 @@ public class Workspace
     public void RemoveWindow(Window window)
     {
         Windows.Remove(window);
+        if (window == CurrentWindow)
+        {
+            CurrentWindow = PreviousWindow;
+            PreviousWindow = null;
+        }
+        SetWindowIndex();
     }
 
     public void ChangeToPreviousWindow()
@@ -56,14 +62,6 @@ public class Workspace
         CurrentWindow = window;
         CurrentWindow.Activate();
         SetWindowIndex();
-    }
-
-    public void MoveCurrentWindowToWorkspace(int workspaceIndex)
-    {
-        if (CurrentWindow == null) return;
-        var tempWindow = CurrentWindow;
-        RemoveCurrentWindow();
-        Wtile._workspaces[workspaceIndex].AddWindow(tempWindow);
     }
 
     public void RemoveCurrentWindow()
@@ -94,8 +92,7 @@ public class Workspace
     {
         var windowPtr = ExternalFunctions.GetForegroundWindow();
         var window = new Window(windowPtr, this);
-        Windows.Add(window);
-        CurrentWindow ??= window;
+        AddWindow(window);
     }
 
     public override string ToString()
