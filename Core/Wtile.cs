@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Wtile.Core.Entities;
 using Wtile.Core.Keybind;
 using Wtile.Core.Utils;
@@ -20,27 +21,10 @@ public static class Wtile
         _currentWorkspace = _workspaces[0];
     }
 
-    private static void SetupKeybinds()
-    {
-        var modKeys = new List<WtileModKey> { WtileModKey.LShiftKey, WtileModKey.LAlt };
-        var keybind = new WtileKeybind(WtileKey.D, modKeys, () =>
-        {
-            KeybindManager.ReleaseAllKeys();
-            KeybindManager.SendKeyPress((int)WtileModKey.LShiftKey);
-            KeybindManager.SendKeyPress((int)WtileKey.D8);
-            KeybindManager.SendKeyRelease((int)WtileKey.D8);
-            KeybindManager.SendKeyRelease((int)WtileModKey.LShiftKey);
-        }
-
-        );
-        //KeybindManager.AddKeybind(keybind);
-
-    }
-
     public static void Start()
     {
+        AppDomain.CurrentDomain.UnhandledException += Logging.WriteUnhandledExceptionToLog;
         KeybindManager.AddToEventLoop();
-        SetupKeybinds();
 
         while (true)
         {

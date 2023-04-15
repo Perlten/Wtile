@@ -112,6 +112,7 @@ namespace Wtile.Core.Config
             var actionMap = FunctionMapping.FunctionMap;
             foreach (var Configkeybind in Keybinds)
             {
+                if (!actionMap.ContainsKey(Configkeybind.Action)) continue;
                 var action = actionMap[Configkeybind.Action];
                 var keybind = new WtileKeybind(Configkeybind.Key, Configkeybind.ModKeys, actionMap[Configkeybind.Action]);
                 KeybindManager.AddKeybind(keybind);
