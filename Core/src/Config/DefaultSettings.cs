@@ -22,7 +22,7 @@ namespace Wtile.Core.Config
         {
             return new ConfigGeneral()
             {
-                IgnoredApplications = new HashSet<string> { "LockApp", "SearchApp", "StartMenuExperienceHost", "HxOutlook", "ApplicationFrameHost" }
+                IgnoredApplications = new HashSet<string> { "LockApp", "SearchApp", "StartMenuExperienceHost", "HxOutlook", "ApplicationFrameHost", "SystemSettings" }
             };
         }
 
