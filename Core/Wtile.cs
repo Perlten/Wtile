@@ -45,9 +45,8 @@ public static class Wtile
         if (workspace == _currentWorkspace) return;
         _previousWorkspace = _currentWorkspace;
         _currentWorkspace = workspace;
-        _currentWorkspace.CurrentWindow?.Activate();
+        _currentWorkspace.ChangeToWorkspace();
     }
-
 
     internal static Workspace GetCw()
     {

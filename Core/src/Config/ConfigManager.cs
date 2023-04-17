@@ -17,6 +17,7 @@ namespace Wtile.Core.Config
         public class ConfigGeneral
         {
             public HashSet<string> IgnoredApplications { get; set; } = new();
+            public int WindowOverlapOffset = 10;
         }
 
         public class ConfigGui

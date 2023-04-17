@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using Wtile.Core.Config;
 using Wtile.Core.Utils;
 
 namespace Wtile.Core.Entities;
@@ -51,7 +52,7 @@ public class Window
         Workspace.SetWindowIndex();
     }
 
-    public void Activate()
+    public void Activate(bool skipMouseCenter = false)
     {
         // Get the thread ID of the current thread and the thread ID of the window's thread
         int currentThreadId = ExternalFunctions.GetCurrentThreadId();
@@ -74,8 +75,14 @@ public class Window
             ExternalFunctions.AttachThreadInput(windowThreadId, currentThreadId, false);
 
             // Center the mouse in the window
-            KeyMouse.KeyMouse.CenterMouseInWindow(this);
+            if (!skipMouseCenter)
+                CenterMouse();
         }
+    }
+
+    internal void CenterMouse()
+    {
+        KeyMouse.KeyMouse.CenterMouseInWindow(this);
     }
 
     internal void Maximize()
@@ -85,6 +92,18 @@ public class Window
     internal void Restore()
     {
         ExternalFunctions.ShowWindow(WindowPtr, ExternalFunctions.SW_RESTORE);
+    }
+    internal bool IsOverlapping(Window other)
+    {
+        var rect1 = Location;
+        var rect2 = other.Location;
+
+        int offset = ConfigManager.Config.General.WindowOverlapOffset;
+
+        return !(rect1.Right - offset < rect2.Left + offset
+            || rect1.Left + offset > rect2.Right - offset
+            || rect1.Bottom - offset < rect2.Top + offset
+            || rect1.Top + offset > rect2.Bottom - offset);
     }
 
     public override string ToString()
