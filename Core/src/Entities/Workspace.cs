@@ -5,8 +5,10 @@ namespace Wtile.Core.Entities;
 public class Workspace
 {
     internal List<Window> Windows = new();
-    internal Window? CurrentWindow { get; private set; }
-    internal Window? PreviousWindow { get; private set; }
+    internal Window? CurrentWindow { get { return GetWindowStackIndex(0); } }
+
+    private readonly List<Window> WindowStack = new();
+
     public readonly int Index;
     public int WindowIndex { get; private set; }
 
@@ -27,8 +29,7 @@ public class Workspace
             return;
 
         Windows.Add(window);
-        PreviousWindow = CurrentWindow;
-        CurrentWindow = window;
+        AddWindowToStack(window);
         SetWindowIndex();
     }
 
@@ -37,8 +38,7 @@ public class Workspace
         Windows.Remove(window);
         if (window == CurrentWindow)
         {
-            CurrentWindow = PreviousWindow;
-            PreviousWindow = null;
+            RemoveWindowFromStack(window);
             CurrentWindow?.Activate();
         }
         SetWindowIndex();
@@ -46,8 +46,7 @@ public class Workspace
 
     public void ChangeToPreviousWindow()
     {
-        if (PreviousWindow == null || CurrentWindow == null) return;
-        ChangeWindow(PreviousWindow);
+        ChangeWindow(GetWindowStackIndex(1));
     }
 
     public void ChangeWindow(int index)
@@ -56,12 +55,11 @@ public class Workspace
         var window = Windows[index];
         ChangeWindow(window);
     }
-    public void ChangeWindow(Window window)
+    public void ChangeWindow(Window? window)
     {
-        if (window == CurrentWindow) return;
-        PreviousWindow = CurrentWindow;
-        CurrentWindow = window;
-        CurrentWindow.Activate();
+        if (window == null || window == CurrentWindow) return;
+        AddWindowToStack(window);
+        CurrentWindow?.Activate();
         SetWindowIndex();
     }
 
@@ -69,24 +67,25 @@ public class Workspace
     {
         if (CurrentWindow == null) return;
         RemoveWindow(CurrentWindow);
-        CurrentWindow = Windows.FirstOrDefault(defaultValue: null);
         SetWindowIndex();
     }
 
     public void CurrentWindowChangeOrder(int newIndex)
     {
-        if (CurrentWindow == null || newIndex >= Windows.Count) return;
-        Windows.Remove(CurrentWindow);
-        Windows.Insert(newIndex, CurrentWindow);
+        var currentWindow = CurrentWindow;
+        if (currentWindow == null || newIndex >= Windows.Count) return;
+        Windows.Remove(currentWindow);
+        Windows.Insert(newIndex, currentWindow);
         SetWindowIndex();
     }
 
     public void SetWindowIndex()
     {
-        if (CurrentWindow == null)
+        var currentWindow = CurrentWindow;
+        if (currentWindow == null)
             WindowIndex = 0;
         else
-            WindowIndex = Windows.IndexOf(CurrentWindow);
+            WindowIndex = Windows.IndexOf(currentWindow);
     }
 
     public void AddActiveWindow()
@@ -96,13 +95,20 @@ public class Workspace
         AddWindow(window);
     }
 
-    public override string ToString()
+    private void AddWindowToStack(Window window)
     {
-        string str = string.Empty;
-        foreach (Window window in Windows)
-        {
-            str += window.ToString();
-        }
-        return str;
+        WindowStack.Remove(window);
+        WindowStack.Insert(0, window);
+    }
+
+    private void RemoveWindowFromStack(Window window)
+    {
+        WindowStack.Remove(window);
+    }
+
+    private Window? GetWindowStackIndex(int index)
+    {
+        if (index >= WindowStack.Count) return null;
+        return WindowStack[index];
     }
 }
