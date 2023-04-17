@@ -71,7 +71,7 @@ public static class Wtile
             {
                 if (window.WindowPtr == windowPtr)
                 {
-                    workspace.Windows.Remove(window);
+                    workspace.RemoveWindow(window);
                     windowToMove = window;
                     break;
                 }

@@ -39,6 +39,7 @@ public class Workspace
         {
             CurrentWindow = PreviousWindow;
             PreviousWindow = null;
+            CurrentWindow?.Activate();
         }
         SetWindowIndex();
     }

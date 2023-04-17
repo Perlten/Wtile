@@ -90,7 +90,6 @@ namespace Wtile.Core.Config
                 keybinds.Add(new ConfigKeybinds() { Action = $"ChangeWindow({i})", Key = numKeys[i], ModKeys = { WtileModKey.LAlt } });
                 keybinds.Add(new ConfigKeybinds() { Action = $"CurrentWindowChangeOrder({i})", Key = numKeys[i], ModKeys = { WtileModKey.LAlt, WtileModKey.LShiftKey } });
                 keybinds.Add(new ConfigKeybinds() { Action = $"MoveCurrentWindowToWorkspace({i})", Key = numKeys[i], ModKeys = { WtileModKey.LWin, WtileModKey.LShiftKey } });
-                keybinds.Add(new ConfigKeybinds() { Action = $"AddActiveWindowToWorkspace({i})", Key = numKeys[i], ModKeys = { WtileModKey.LWin, WtileModKey.LAlt } });
             }
             keybinds.Add(new ConfigKeybinds() { Action = "SaveConfig()", Key = WtileKey.S, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey } });
             keybinds.Add(new ConfigKeybinds() { Action = "ToggleResizeBar()", Key = WtileKey.H, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey } });
