@@ -74,7 +74,8 @@ public class Window
             // Detach the input processing mechanism of the two threads
             ExternalFunctions.AttachThreadInput(windowThreadId, currentThreadId, false);
 
-            // Center the mouse in the window
+            if (ExternalFunctions.IsIconic(WindowPtr))
+                ExternalFunctions.ShowWindow(WindowPtr, ExternalFunctions.SW_RESTORE);
             if (!skipMouseCenter)
                 CenterMouse();
         }

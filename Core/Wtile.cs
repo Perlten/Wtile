@@ -126,8 +126,8 @@ public static class Wtile
             .Select((w, i) => _currentWorkspace == w ? $"[{w.Index + 1}]" : $"{w.Index + 1}").ToArray());
 
         string windowNames = string.Join(" ", _currentWorkspace.Windows
-            .Select((w, i) => _currentWorkspace.CurrentWindow == w ? $"[{i + 1}]: {w.ApplicationName}" : $"{i + 1}: {w.ApplicationName}").ToArray());
-        return $"Workspace: {workspaceNames} | Window {windowNames}";
+            .Select((w, i) => _currentWorkspace.CurrentWindow == w ? $"[{i + 1}] {w.ApplicationName}" : $"{i + 1} {w.ApplicationName}").ToArray());
+        return $"Workspace: {workspaceNames} | Window: {windowNames}";
     }
 
 }
