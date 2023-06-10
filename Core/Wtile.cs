@@ -122,10 +122,12 @@ public static class Wtile
 
     public static string GetWtileString()
     {
-        int workspaceIndex = _currentWorkspace.Index + 1;
-        int windowIndex = _currentWorkspace.WindowIndex + 1;
-        string windowNames = string.Join(" / ", _currentWorkspace.Windows.Select((x, i) => $"{i + 1}: {x.ApplicationName}").ToArray());
-        return $"Workspace: {workspaceIndex} | Window: {windowIndex} | {windowNames}";
+        string workspaceNames = string.Join(" ", _workspaces.Where(w => w.Windows.Count > 0 || _currentWorkspace == w)
+            .Select((w, i) => _currentWorkspace == w ? $"[{w.Index + 1}]" : $"{w.Index + 1}").ToArray());
+
+        string windowNames = string.Join(" ", _currentWorkspace.Windows
+            .Select((w, i) => _currentWorkspace.CurrentWindow == w ? $"[{i + 1}]: {w.ApplicationName}" : $"{i + 1}: {w.ApplicationName}").ToArray());
+        return $"Workspace: {workspaceNames} | Window {windowNames}";
     }
 
 }
