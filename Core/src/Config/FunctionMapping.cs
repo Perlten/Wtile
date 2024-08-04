@@ -24,12 +24,13 @@ public static class FunctionMapping
         fm.Add("AddActiveWindow()", () => Wtile.GetCw().AddActiveWindow());
         fm.Add("RemoveCurrentWindow()", () => Wtile.GetCw().RemoveCurrentWindow());
         fm.Add("ChangeToPreviousWindow()", () => Wtile.GetCw().ChangeToPreviousWindow());
-        fm.Add("ChangeToPreviousWorkspace()", () => Wtile.ChangeToPreviousWorkspace());
+        fm.Add("ChangeToPreviousWorkspace()", Wtile.ChangeToPreviousWorkspace);
         fm.Add("ToggleResizeBar()", () => State.RESIZEABLE = !State.RESIZEABLE);
         fm.Add("QuitCurrentWindow()", () => Wtile.GetActiveWindow().Quit());
         fm.Add("MaximizeWindow()", () => Wtile.GetActiveWindow().Maximize());
         fm.Add("RestoreWindow()", () => Wtile.GetActiveWindow().Restore());
-        fm.Add("Quit()", () => Wtile.Quit());
+        fm.Add("Quit()", Wtile.Quit);
+        fm.Add("Hibernate()", ExternalFunctions.Hibernate);
 
         // Rebinds
         var rm = RebindMap;

@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Wtile.Core.Utils
@@ -118,7 +119,10 @@ namespace Wtile.Core.Utils
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsIconic(IntPtr hWnd);
 
-
-
+        public static void Hibernate()
+        {
+            Process.Start(Environment.ExpandEnvironmentVariables("%windir%\\system32\\shutdown.exe"), "-h -f");
+        }
+        
     }
 }

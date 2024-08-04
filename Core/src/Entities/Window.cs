@@ -16,10 +16,8 @@ public class Window
 
     internal Workspace? Workspace { get; set; }
 
-    public Window(IntPtr windowPtr) : this(windowPtr, null) { }
 
-
-    public Window(IntPtr windowPtr, Workspace? workspace)
+    public Window(IntPtr windowPtr, Workspace? workspace = null)
     {
         WindowPtr = windowPtr;
         Name = GetName(WindowPtr);

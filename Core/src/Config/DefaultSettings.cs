@@ -22,7 +22,7 @@ namespace Wtile.Core.Config
         {
             return new ConfigGeneral()
             {
-                IgnoredApplications = new HashSet<string> { "LockApp", "SearchApp", "StartMenuExperienceHost", "HxOutlook", "ApplicationFrameHost", "SystemSettings" }
+                IgnoredApplications = new HashSet<string> { "LockApp", "SearchApp", "StartMenuExperienceHost", "HxOutlook", "ApplicationFrameHost", "SystemSettings", "shutdown" }
             };
         }
 
@@ -101,6 +101,7 @@ namespace Wtile.Core.Config
             keybinds.Add(new ConfigKeybinds() { Action = "MaximizeWindow()", Key = WtileKey.K, ModKeys = { WtileModKey.LWin } });
             keybinds.Add(new ConfigKeybinds() { Action = "RestoreWindow()", Key = WtileKey.J, ModKeys = { WtileModKey.LWin } });
             keybinds.Add(new ConfigKeybinds() { Action = "Quit()", Key = WtileKey.Escape, ModKeys = { WtileModKey.LWin } });
+            keybinds.Add(new ConfigKeybinds() { Action = "Hibernate()", Key = WtileKey.Escape, ModKeys = { WtileModKey.LWin, WtileModKey.LControlKey, WtileModKey.LShiftKey } });
 
 
             return keybinds;
